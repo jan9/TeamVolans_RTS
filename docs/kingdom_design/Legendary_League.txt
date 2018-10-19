@@ -1,0 +1,10 @@
+This kingdom is a bonus kingdom which will only be built out if either of the two conditions are met:
+1. There is an issue with the design or development of one of the other kingdoms.
+2. There is excess time.
+
+
+Kingdom_Name: Legendary League
+Start_Gold_Amount: 200
+Starting_Units: 4 Swordsman, 2 Archer, 1 Priest, 1 Miner, 2 Villager
+Starting_Buildings: 1 Castle
+Gameplay_Bonus: Units can be upgraded to LVL 2 at half the cost. At game start, all of the kingdom's units are already at lvl 2

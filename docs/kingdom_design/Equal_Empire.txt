@@ -1,0 +1,5 @@
+Kingdom_Name: Equal Empire
+Start_Gold_Amount: 200
+Starting_Units: 2 Swordsman, 2 Archer, 2 Miner, 2 Villager, 2 Priest, 2 Royal, 2 Catapults
+Starting_Buildings: 1 Castle, 1 Town Center
+Gameplay_Bonus: Town Centers are 15% cheaper to make and a Villager can be created in 8 seconds
