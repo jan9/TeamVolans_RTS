@@ -48,6 +48,15 @@ class Title extends Phaser.Scene {
         button3.setInteractive({useHandCursor:true});
         button3.on('pointerdown', function(pointer) {this.scene.start('Instructions');}, this);
 
+        // button for starting a new game
+          var shadow4 = this.add.sprite(410,510,'button');
+          shadow4.tint = 0x000000;
+          shadow4.alpha = 0.6;
+          var button4 = this.add.sprite(400,500,'button');
+          var text4 = this.add.text(400, 500, "Test AI", style).setOrigin(0.5,0.5);
+          button4.setInteractive({useHandCursor:true});
+          button4.on('pointerdown', function(pointer) {this.scene.start('TestAI');}, this);
+
        console.log('in title; finished making buttons');
   }
 }
