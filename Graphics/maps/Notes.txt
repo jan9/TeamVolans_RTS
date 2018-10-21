@@ -1,0 +1,8 @@
+Tile--> Image connection
+
+Background1.tsx --> Background1.png
+Background2.tsx --> Background2.png
+Background3.tsx --> Background3.png
+Background4.tsx --> Background4.png
+Background5.tsx --> Background5.png
+water_tiles.tsx --> water.png
