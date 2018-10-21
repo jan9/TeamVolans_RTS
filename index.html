@@ -3,35 +3,46 @@
   <head>
     <meta charset="UTF-8"/>
       <title>Medieval Mayhem by Volans</title>
-      <!-- loading phaser library -->
-      <script type="text/javascript" src="src/vendor/phaser.min.js"></script>
-      <script type="text/javascript" src="style.css"></script>
-      <script type="text/javascript" src="docs/unit_information/archer.js"></script>
-      <script type="text/javascript" src="docs/unit_information/catapult.js"></script>
-      <script type="text/javascript" src="docs/unit_information/miner.js"></script>
-      <script type="text/javascript" src="docs/unit_information/priest.js"></script>
-      <script type="text/javascript" src="docs/unit_information/royalty.js"></script>
-      <script type="text/javascript" src="docs/unit_information/swordsman.js"></script>
-      <script type="text/javascript" src="docs/unit_information/villager.js"></script>
-      <script type="text/javascript" src="docs/structure_information/archeryRange.js"></script>
-      <script type="text/javascript" src="docs/structure_information/barracks.js"></script>
-      <script type="text/javascript" src="docs/structure_information/castle.js"></script>
-      <script type="text/javascript" src="docs/structure_information/machinery.js"></script>
-      <script type="text/javascript" src="docs/structure_information/mine.js"></script>
-      <script type="text/javascript" src="docs/structure_information/temple.js"></script>
-      <script type="text/javascript" src="docs/structure_information/townCenter.js"></script>
-      <script type="text/javascript" src="docs/kingdom_information/fortuneFederation.js"></script>
-      <script type="text/javascript" src="src/js/gameplay/unitActions.js"></script>
-      <script type="text/javascript" src="src/js/gameplay/structureClass.js"></script>
-      <script type="text/javascript" src="src/js/gameplay/unitClass.js"></script>
-      <script type="text/javascript" src="src/js/gameplay/kingdomClass.js"></script>
-      <script type="text/javascript" src="src/js/gameplay/aiKingdomClass.js"></script>
-      <script type="text/javascript" src="src/js/ai/testAI.js"></script>
-      <script type="text/javascript" src="src/js/titlescreen.js"></script>
-      <script type="text/javascript" src="src/js/newgame.js"></script>
-      <script type="text/javascript" src="src/js/loadSaved.js"></script>
-      <script type="text/javascript" src="src/js/instructions.js"></script>
-      <script type="text/javascript" src="src/js/main.js"></script>
+      <link rel = "stylesheet" type = "text/css" href = "style.css" />
+
+      <!-- loading phaser library 3.15.1 -->
+      <script src="src/library/phaser.min.js"></script>
+      <script src="src/library/phaser.js"></script>
+
+      <!-- UI helper functions  -->
+      <script src="src/js/util/input.js"></script>
+      <script src="src/js/util/HUD.js"></script>
+
+      <!-- units -->
+      <script src="src/js/units/unit.js"></script>
+      <script src="src/js/units/archer.js"></script>
+      <script src="src/js/units/catapult.js"></script>
+      <script src="src/js/units/miner.js"></script>
+      <script src="src/js/units/priest.js"></script>
+      <script src="src/js/units/royalty.js"></script>
+      <script src="src/js/units/swordsman.js"></script>
+      <script src="src/js/units/villager.js"></script>
+
+      <!-- buildings  -->
+      <script src="src/js/buildings/building.js"></script>
+      <script src="src/js/buildings/archeryRange.js"></script>
+      <script src="src/js/buildings/barracks.js"></script>
+      <script src="src/js/buildings/castle.js"></script>
+      <script src="src/js/buildings/machinery.js"></script>
+      <script src="src/js/buildings/mine.js"></script>
+      <script src="src/js/buildings/temple.js"></script>
+      <script src="src/js/buildings/townCenter.js"></script>
+      <script src="src/js/buildings/wall.js"></script>
+
+      <!-- scenes -->
+      <script src="src/js/scenes/titlescreen.js"></script>
+      <script src="src/js/scenes/loadSaved.js"></script>
+      <script src="src/js/scenes/instructions.js"></script>
+      <script src="src/js/scenes/selection.js"></script>
+      <script src="src/js/scenes/levels/level1.js"></script>
+      <script src="src/js/scenes/levels/level2.js"></script>
+      <script src="src/js/scenes/levels/level3.js"></script>
+      <script src="src/js/scenes/main.js"></script>
   </head>
   <body>
   </body>
