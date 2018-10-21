@@ -29,4 +29,7 @@ updateHealth(points, type){
     this.health += points;
   }
 }
+getType(){
+  return this.type;
+}
 }

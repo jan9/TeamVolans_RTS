@@ -1,11 +1,13 @@
-function attack(attackingUnit){
-
-}
-
+//TO DO: Move the unit actions into the unit class
 function attackUnit(attackingUnit, attackedUnit){
 
 }
 
+//Need to figure out a smart way to move the unit
+//potentially v3 of http://phaser.io/docs/2.6.2/Phaser.Physics.Arcade.html#moveToXY ?
+//but then need to time (becuse apparently the method doesn't stop the unit velocity once it reaches the location...)
+//it and so speed might be different unless we set it up so distances are tiered?
+//So if distance is 100-200 do move in 2 seconds, 200-300, 3 seconds, etc?
 function move(movingUnit, xLocation, yLocation){
 
   xDistance = xLocation - movingUnit.x;
@@ -67,11 +69,13 @@ function finishBuildUnit(buildingUnit, buildingType, kingdom){
   }
 }
 
-function mine(miningUnit, kingdom){
+function mine(miningUnit, kingdom, game){
+
+  miningUnit.setState("Mine");
 
   //TIMER INFO
   //https://phaser.io/phaser3/devlog/87
-  var miningEvent = this.time.addEvent({ delay: 30000, callback: mineGold,
+  var miningEvent = game.time.addEvent({ delay: 30000, callback: mineGold,
     callbackScope: this, loop: false, args: [miningUnit, kingdom] });
 }
 function mineGold(miningUnit, kingdom){
@@ -80,7 +84,7 @@ function mineGold(miningUnit, kingdom){
   if(miningUnit.health > 0){
 
     //check to make sure the unit is still meant to be mining
-    if(miningUnit.getState() === "mine"){
+    if(miningUnit.getState() === "Mine"){
 
       //if the unit is a villager, they mine 3 gold every 30 seconds
       if(miningUnit.type === "Villager"){
@@ -92,10 +96,10 @@ function mineGold(miningUnit, kingdom){
         kingdom.gold += 6;
       }
 
-      //call mine again after current mining is done if the state is still mine
-      mine(miningUnit, kingdom);
+      miningUnit.setState("Idle");
     }
   }
+  console.log(kingdom);
 }
 
 //has the guarding unit guard their current area

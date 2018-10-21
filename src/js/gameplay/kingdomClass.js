@@ -53,7 +53,7 @@ class Kingdom {
 
       for(var j = 0; j < amount; j++){
         this.buildingsAmount++;
-          this.buildings.push(new Structure(buildingInfo, this.startingX, this.startingY, this.game, 'square_unit'));
+          this.buildings.push(new Structure(buildingInfo, this.startingX+i, this.startingY+j, this.game, 'square_unit'));
       }
   }
 }
@@ -92,7 +92,7 @@ class Kingdom {
 
       for(var j = 0; j < amount; j++){
           this.unitAmount++;
-          this.units.push(new Unit(unitInfo, this.startingX, this.startingY, this.game, 'square_unit'));
+          this.units.push(new Unit(unitInfo, this.startingX-i, this.startingY-j, this.game, 'square_unit'));
       }
     }
   }

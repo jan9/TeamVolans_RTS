@@ -24,8 +24,6 @@ class TestAI extends Phaser.Scene {
   }
 
   update(){
-    console.log(ai);
       ai.updateAIKingdom();
-
   }
 }

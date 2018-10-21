@@ -14,7 +14,13 @@ class AIKingdom extends Kingdom{
 
     updateAIKingdom(){
 
-      console.log(this.buildOrder[this.currentBuild]);
+      for(var i = 0; i < this.units.length; i++){
+        if(this.units[i].getType() === "Miner" || this.units[i].getType() === "Villager" ){
+            if(this.units[i].getState() === "Idle" ){
+              mine(this.units[i], this, this.game);
+            }
+        }
+      }
 
     }
 
