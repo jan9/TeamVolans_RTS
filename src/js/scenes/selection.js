@@ -18,13 +18,13 @@ class Selection extends Phaser.Scene {
     this.load.image('Dueling Dominion', 'assets/UI/emblem/Dueling Dominion.svg');
     this.load.image('Equal Empire', 'assets/UI/emblem/Equal Empire.svg');
     this.load.image('Fortune Federation', 'assets/UI/emblem/Fortune Federation.svg');
-    //this.load.image('Legendary League', 'assets/UI/emblem/Legendary League.svg');
     this.load.image('Remote Realm', 'assets/UI/emblem/Remote Realm.svg');
     this.load.image('Security Syndicate', 'assets/UI/emblem/Security Syndicate.svg');
+    //this.load.image('Legendary League', 'assets/UI/emblem/Legendary League.svg');
   }
 
   create() {
-    // 0. load the background and buttons
+    // 0. load the background and button to go back to the main menu
     this.add.image(400,300,'title_g');
     this.backbutton();
 
@@ -46,13 +46,11 @@ class Selection extends Phaser.Scene {
 
     //3. Random assignment of the AI kingdom
     var text2 = this.add.text(_width/10, _height*0.7, "Your AI opponent's kingdom will be randomly assigned.",{font: "40px Georgia", color: "white", backgroundColor: "#00b8ff"}).setPadding(1,1);
-    value = Phaser.Math.Between(0, 5);
+    value = Phaser.Math.Between(0, 5);  // Phaser's random number generator
     opponentKingdom = kingdomPool[value];
-    //Math.floor(Math.random()*5)];
 
     // 4. Start the Game
-    // optional: player provides a kingdom name (to be used when saving/loading a game)
-
+    // optional: player provides a kingdom name (to be used when saving/loading a game)?
     console.log('[Selection] create() complete');
     }
 
@@ -61,6 +59,7 @@ class Selection extends Phaser.Scene {
       this.level1Button(); //hide until all the selection has been made
     }
   }
+
   backbutton() {
     // button for going back to the main menu
     var button1 = this.add.sprite(0,0,'button');
@@ -101,7 +100,7 @@ class Selection extends Phaser.Scene {
       text.setBackgroundColor('#99e699');
       kingdomSelection.chosen = 'yes';
     }
-    console.log(kingdomSelection);
+    //console.log(kingdomSelection);
     }, this);
   }
 
@@ -125,8 +124,8 @@ class Selection extends Phaser.Scene {
         gameMode.name ='';
         text.setBackgroundColor('#ffffff');
       }
-      console.log(gameMode);}, this);
-      }
-
+      //console.log(gameMode);
+    }, this);
+  }
 
 }
