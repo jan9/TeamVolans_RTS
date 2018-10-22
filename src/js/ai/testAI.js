@@ -42,6 +42,7 @@ class TestAI extends Phaser.Scene {
         callbackScope: this, loop: true, args: [] });
   }
 
+//updates the target list of the ai (done every 10 seconds)
 aiUpdate(aiKingdom, playerKingdome){
   aiKingdom.updateCurrentTargetList(playerKingdome);
 }

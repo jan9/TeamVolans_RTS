@@ -31,26 +31,30 @@ class AIKingdom extends Kingdom{
     this.currentTargets.push(this.findClosest(playersKingdom.units));
 };
 
+  //finds the closest enemy in the given array
   findClosest(enemyArr){
 
     if(enemyArr.length > 0){
-    var closestItem= {'x': enemyArr[0].x, 'y': enemyArr[0].y};
+    var closestEnemey= {'x': enemyArr[0].x, 'y': enemyArr[0].y};
+
+    //goes through the array and finds the location of the closest enemy
     for(var i = 0; i < enemyArr.length; i++){
-      if(distance(closestItem.x, closestItem.y, this.startingX, this.startingY) >
+      if(distance(closestEnemey.x, closestEnemey.y, this.startingX, this.startingY) >
       distance(enemyArr[i].x, enemyArr[i].y, this.startingX, this.startingY)){
-        closestItem.x = enemyArr[i].x;
-        closestItem.y = enemyArr[i].y;
+        closestEnemey.x = enemyArr[i].x;
+        closestEnemey.y = enemyArr[i].y;
       }
     }
-      return closestItem;
+      return closestEnemey;
     }
   }
 
-
+  //updates the ai kingdom
     updateAIKingdom(){
 
-      if(this.currentBuildOrder >= this.buildOrder.length){
-        this.currentBuildOrder = 0;
+      //resets the buildOrder when the end is reached
+      if(this.currentBuild >= this.buildOrder.length){
+        this.currentBuild = 0;
       }
 
       //have the miners mine
@@ -61,12 +65,14 @@ class AIKingdom extends Kingdom{
             }
         }
 
-        //have the swordsman move
+        //have the swordsman move to the nearest enemy
         if(this.units[i].getType()==="Swordsman"){
             if(this.currentTargets.length > 0){
               move(this.units[i], this.currentTargets[1].x, this.currentTargets[1].y, this.game);
             }
         }
+
+        //have the Villager build structures
         if(this.units[i].getType() === "Villager"){
             if(this.units[i].isIdle()){
 
@@ -76,9 +82,10 @@ class AIKingdom extends Kingdom{
                   this.currentBuild++;
                 startBuildStructure(this.units[i], this.buildOrder[this.currentBuild], this, this.game, 'square_unit');
             }
-            }
+          }
         }
 
+        //if the unit is moving, the check to see if it has found its destination
         if(this.units[i].getState() === "Move"){
 
           //if the unit has stopped moving, have them find the closest enemy and attack
@@ -88,6 +95,9 @@ class AIKingdom extends Kingdom{
         }
       }
 
+      //goes through the list of buildings and if the building is able to make
+      //the current item in the build order and is currently idle,
+      //then build the unit
       for(var i = 0; i < this.buildings.length; i++){
         if(this.buildings[i].isIdle()){
           if(this.buildOrder[this.currentBuild] === this.buildings[i].unitProduced){

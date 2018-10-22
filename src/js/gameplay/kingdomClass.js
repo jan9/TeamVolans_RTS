@@ -20,6 +20,7 @@ class Kingdom {
 
     var keys = Object.keys(buildings);
 
+    //goes through and creates the starting buildings based on the given kingdom's information
     for(var i = 0; i < keys.length; i++){
 
       var buildingInfo;
@@ -51,15 +52,21 @@ class Kingdom {
           buildingInfo=townCenterInfo;
       }
 
+      //creates the correct amount of buildings for the current type
       for(var j = 0; j < amount; j++){
         this.buildingsAmount++;
           this.buildings.push(new Structure(buildingInfo, this.startingX+(i*2), this.startingY+(j*2), this.game, 'square_unit'));
       }
   }
 }
+
+//creates all the starting units
   createStartingUnits(units){
+
+    //gets all the types of the starting units
     var keys = Object.keys(units);
 
+    //goes through the different types of units the kingdom starts with and creates the given kingdom's base starting units
     for(var i = 0; i < keys.length; i++){
       var unitInfo;
       var amount = units[keys[i]];
@@ -90,6 +97,7 @@ class Kingdom {
           unitInfo=villagerInfo;
       }
 
+      //goes through and creates the starting units
       for(var j = 0; j < amount; j++){
           this.unitAmount++;
           this.units.push(new Unit(unitInfo, this.startingX-(i*2), this.startingY-(j*2), this.game, 'square_unit'));
@@ -97,6 +105,7 @@ class Kingdom {
     }
   }
 
+  //removes the dead units (occurs at the end of the update function)
   removeDeadUnits(){
     for(var i = 0; i < this.units.length; i++){
       if(this.units[i].isDead()){

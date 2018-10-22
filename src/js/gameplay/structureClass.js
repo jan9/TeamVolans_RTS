@@ -39,12 +39,9 @@ class Structure extends Phaser.GameObjects.Sprite{
   setState(state){
     this.state = state;
   }
-  updateHealth(points, type){
-    if(type === "attack"){
+
+  //updates the health of the structure based on how many points it's been hurt by
+  updateHealth(points){
       this.health -= points;
-    }
-    else if (type === "heal"){
-      this.health += points;
-    }
   }
 }

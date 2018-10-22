@@ -3,7 +3,7 @@ var fortuneFederationInfo = {
   "gold" : 400,
   "unitAmount": 10,
   "buildingAmount": 2,
-  "buildOrder": ["Miner", "Miner", "Miner", "Mine", "Barracks", "Miner", "Miner", "Barracks", "Swordsman", "Mine", "Miner", "Town Center", "Temple", "Swordsman", "Priest"],
+  "buildOrder": ["Miner", "Miner", "Miner", "Barracks", "Swordsman", "Miner", "Miner", "Swordsman", "Mine", "Miner", "Town Center", "Temple", "Swordsman", "Priest"],
   "units":{
     "swordsman": 3,
     "archer": 1,

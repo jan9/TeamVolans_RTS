@@ -39,6 +39,8 @@ class Unit extends Phaser.GameObjects.Sprite{
   getHealth(){
     return this.health;
   }
+
+  //updates the health of the unit based on whether it's being healed or attacked
 updateHealth(points, type){
   if(type === "attack"){
     this.health -= points;
@@ -49,16 +51,11 @@ updateHealth(points, type){
 }
 
 
+//checks to see whether or not the unit is dead
 isDead(){
-  var unitDied = false;
-
-  if(this.health <= 0){
-    unitDied = true;
+  return this.health <= 0;
+}
+  getType(){
+    return this.type;
   }
-
-  return unitDied;
-}
-getType(){
-  return this.type;
-}
 }

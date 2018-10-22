@@ -1,7 +1,10 @@
 //TO DO: Move the unit actions into the unit class
 function attackUnit(attackingUnit, attackedUnit){
 
+  //attack if unit isn't dead (dead units get removed at end of each update but
+  // there's a chance it might have been killed in between)
   if(!attackingUnit.isDead()){
+
     //unit has 50% chance of attack landing a hit
     var chance = Math.floor(Math.random() * 2) + 1;
 
@@ -15,28 +18,33 @@ function attackUnit(attackingUnit, attackedUnit){
 //moves the unit to the desired location
 function move(movingUnit, xLocation, yLocation, game){
 
-  if(movingUnit.getState() != "Move"){
+  //if unit is already moving, then we need to stop the movement
+  if(movingUnit.getState() === "Move"){
+    stopMovement(movingUnit);
+
+  }
+
+    //sets what the unit's destination is and gives it the Move state
     movingUnit.destinationX = xLocation;
     movingUnit.destinationY = yLocation;
     movingUnit.setState("Move");
+
+    //uses built in phaser moveTo function to move the unit
+    //this function does not stop the unit's movement so had to create a function which checks to see if unit reached destination yet
     game.physics.moveTo(movingUnit, xLocation, yLocation, 2);
-    }
-    else{
-      movingUnit.destinationX = xLocation;
-      movingUnit.destinationY = yLocation;
-      stopMovement(movingUnit);
-      movingUnit.setState("Move");
-      game.physics.moveTo(movingUnit, xLocation, yLocation, 2);
-    }
+
 }
 
 //checks if the moving unit is at it's destination (right now have it set up to be in a radius of the actual destination)
 //and if so stops the unit from moving
+//returns true if the unit has finished moving
 function checkMovement(movingUnit){
 
   var finishedMoving = false;
   var radius = 2.5;
-  if(movingUnit.getHealth() > 0 && movingUnit.getState() === "Move"){
+
+  //checks to see if the unit is alive and still moving, then stop their movement if they're close enough
+  if(!movingUnit.isDead() && movingUnit.getState() === "Move"){
 
     if((movingUnit.destinationX < movingUnit.x + radius &&
       movingUnit.destinationX > movingUnit.x - radius)
@@ -61,6 +69,8 @@ function stopMovement(movingUnit){
 function startBuildStructure(buildingUnit, buildingType, kingdom, game, texture){
 
   var buildingInfo;
+
+  //depending on which type of structure is being built we need different details
   switch(buildingType) {
     case "Temple":
       buildingInfo= templeInfo;
@@ -98,6 +108,8 @@ function startBuildStructure(buildingUnit, buildingType, kingdom, game, texture)
 
       //takes the gold right away from the kingdom
       kingdom.gold -= buildingInfo.cost;
+
+      //builds the structure in 30 seconds
     var buildingEvent = game.time.addEvent({ delay: 30000, callback: finishBuildStructure,
       callbackScope: this, loop: false, args: [buildingUnit, buildingInfo, kingdom, game, texture] });
     }
@@ -124,6 +136,7 @@ function finishBuildStructure(buildingUnit, buildingInfo, kingdom, game, texture
   }
 }
 
+//mines for gold (every 30 seconds miner gets 6 gold, villager gets 3)
 function mine(miningUnit, kingdom, game){
 
   miningUnit.setState("Mine");
@@ -133,6 +146,8 @@ function mine(miningUnit, kingdom, game){
   var miningEvent = game.time.addEvent({ delay: 30000, callback: mineGold,
     callbackScope: this, loop: false, args: [miningUnit, kingdom] });
 }
+
+//callback function after 30 seconds elapses to give the kingdom the mined gold
 function mineGold(miningUnit, kingdom){
 
   //check to make sure the unit is still alive
@@ -183,6 +198,7 @@ function findClosestUnit(unitToCheck, unitArray){
   for(let unit of unitArray){
     var currentDistance = distance(unitToCheck.x, unitToCheck.y, unit.x, unit.y);
 
+    //if the current distance is closer than the closest distance then set the closest distance to the current distance
     if(currentDistance < closestDistance){
       closestUnit = unit;
       closestDistance = currentDistance;
