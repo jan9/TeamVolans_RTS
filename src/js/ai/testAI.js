@@ -17,6 +17,9 @@ class TestAI extends Phaser.Scene {
 
 
   create() {
+
+    this.physics.start();
+
     ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
     console.log('[TestAI]:');
     console.log(ai);

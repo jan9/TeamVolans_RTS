@@ -15,10 +15,21 @@ class AIKingdom extends Kingdom{
     updateAIKingdom(){
 
       for(var i = 0; i < this.units.length; i++){
-        if(this.units[i].getType() === "Miner" || this.units[i].getType() === "Villager" ){
+        if(this.units[i].getType() === "Miner"){
             if(this.units[i].getState() === "Idle" ){
               mine(this.units[i], this, this.game);
             }
+        }
+        if(this.units[i].getType()==="Swordsman"){
+          if(this.units[i].isIdle() || this.units[i].getState() === "Guard"){
+          startBuildStructure(  this.units[i], this.units[i].buildingProduced, this, this.game, 'square_unit');
+          }
+        }
+        if(this.units[i].getType() === "Villager"){
+          move(this.units[i], 500, 500, this.game);
+        }
+        if(this.units[i].getState() === "Move"){
+          checkMovement(this.units[i]);
         }
       }
 

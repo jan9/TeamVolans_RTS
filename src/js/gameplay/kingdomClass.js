@@ -96,4 +96,13 @@ class Kingdom {
       }
     }
   }
+
+  removeDeadUnits(){
+    for(var i = 0; i < this.units.length; i++){
+      if(this.units[i].isDead()){
+        this.units.splice(i, 1);
+        this.unitsAmount--;
+      }
+    }
+  }
 }
