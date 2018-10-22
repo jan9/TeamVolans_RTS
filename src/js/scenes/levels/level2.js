@@ -21,6 +21,7 @@ class Level2 extends Phaser.Scene {
     // checking to have received correct data
     console.log(gameMode.name);
     console.log(kingdomSelection.name);
+    console.log(opponentKingdom);
 
     console.log('[Level2] create() complete');
   }

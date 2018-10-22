@@ -1,7 +1,9 @@
 var style = { fontSize: '15px', fontFamily: 'Georgia', color: 'white'};
 var kingdomSelection = {name: '', chosen:'no'};
 var gameMode = {name:''}; // default mode is easy;
-//var AIkingdom = {name: }
+var opponentKingdom = '';
+var kingdomPool = ["Dueling Dominion","Equal Empire", "Fortune Federation", "Security Syndicate", "Remote Realm"];
+
 class Selection extends Phaser.Scene {
 
   constructor() {
@@ -40,9 +42,9 @@ class Selection extends Phaser.Scene {
     var easyMode = this.modeSetup(_width*0.6, _height*0.52, "easy");
     var hardMode = this.modeSetup(_width*0.8, _height*0.52, "hard");
 
-    // TO DO
     //3. Random assignment of the AI kingdom
     var text2 = this.add.text(_width/10, _height*0.7, "Your AI opponent's kingdom will be randomly assigned.",{font: "40px Georgia", color: "white", backgroundColor: "#00b8ff"}).setPadding(1,1);
+    opponentKingdom = kingdomPool[Math.floor(Math.random()*5)];
 
     // 4. Start the Game
     // optional: player provides a kingdom name (to be used when saving/loading a game)

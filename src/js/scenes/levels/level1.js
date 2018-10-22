@@ -35,8 +35,9 @@ class Level1 extends Phaser.Scene {
   }
 
   create() {
-    //this.add.image(screen.width/2, screen.height/2, 'map1');
-
+    this.add.image(screen.width, screen.height, 'map1');
+    this.buttons();
+    /* todo: use tileset and tilemap
     var map = this.make.tilemap({ key: 'map' });
 
     // The first parameter is the name of the tileset in Tiled and the second parameter is the key
@@ -46,12 +47,15 @@ class Level1 extends Phaser.Scene {
     // You can load a layer from the map using the layer name from Tiled, or by using the layer
     // index (0 in this case).
     var layer = map.createStaticLayer(0, tiles, 0, 0);
+
+    */
     // have a message box?
     this.add.text(100,100,'in level1');
 
     // checking to have received correct data
     console.log(gameMode.name);
     console.log(kingdomSelection.name);
+    console.log(opponentKingdom);
 
     // set up the player kingdom
 
@@ -66,7 +70,8 @@ class Level1 extends Phaser.Scene {
 
   update() {
     // 10 minute timer
-
+    // proceed to the next level if successfully complete:
+    //
     // player movement
   }
 
