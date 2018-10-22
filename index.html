@@ -3,9 +3,12 @@
   <head>
     <meta charset="UTF-8"/>
       <title>Medieval Mayhem by Volans</title>
-      <!-- loading phaser library -->
-      <script type="text/javascript" src="src/vendor/phaser.min.js"></script>
-      <script type="text/javascript" src="style.css"></script>
+      <link rel = "stylesheet" type = "text/css" href = "style.css" />
+      <!-- loading phaser library 3.15.1 -->
+      <script type="text/javascript" src="src/library/phaser.min.js"></script>
+      <script type="text/javascript" src="src/library/phaser.js"></script>
+\
+      <!-- Kingdom, structure, and unit data files -->
       <script type="text/javascript" src="docs/unit_information/archer.js"></script>
       <script type="text/javascript" src="docs/unit_information/catapult.js"></script>
       <script type="text/javascript" src="docs/unit_information/miner.js"></script>
@@ -21,17 +24,24 @@
       <script type="text/javascript" src="docs/structure_information/temple.js"></script>
       <script type="text/javascript" src="docs/structure_information/townCenter.js"></script>
       <script type="text/javascript" src="docs/kingdom_information/fortuneFederation.js"></script>
+      <!-- Game object classes -->
       <script type="text/javascript" src="src/js/gameplay/unitActions.js"></script>
       <script type="text/javascript" src="src/js/gameplay/structureClass.js"></script>
       <script type="text/javascript" src="src/js/gameplay/unitClass.js"></script>
       <script type="text/javascript" src="src/js/gameplay/kingdomClass.js"></script>
       <script type="text/javascript" src="src/js/gameplay/aiKingdomClass.js"></script>
+      <!-- scenes -->
       <script type="text/javascript" src="src/js/ai/testAI.js"></script>
-      <script type="text/javascript" src="src/js/titlescreen.js"></script>
-      <script type="text/javascript" src="src/js/newgame.js"></script>
-      <script type="text/javascript" src="src/js/loadSaved.js"></script>
-      <script type="text/javascript" src="src/js/instructions.js"></script>
-      <script type="text/javascript" src="src/js/main.js"></script>
+      <!-- scenes -->
+      <script type="text/javascript" src="src/js/scenes/titlescreen.js"></script>
+      <script type="text/javascript" src="src/js/scenes/loadSaved.js"></script>
+      <script type="text/javascript" src="src/js/scenes/instructions.js"></script>
+      <script type="text/javascript" src="src/js/scenes/selection.js"></script>
+      <script type="text/javascript" src="src/js/scenes/levels/level1.js"></script>
+      <script type="text/javascript" src="src/js/scenes/levels/level2.js"></script>
+      <script type="text/javascript" src="src/js/scenes/levels/level3.js"></script>
+      <script type="text/javascript" src="src/js/scenes/main.js"></script>
+
   </head>
   <body>
   </body>
