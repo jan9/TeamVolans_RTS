@@ -1,71 +1,114 @@
 //TO DO: Move the unit actions into the unit class
 function attackUnit(attackingUnit, attackedUnit){
 
+  if(!attackingUnit.isDead()){
+    //unit has 50% chance of attack landing a hit
+    var chance = Math.floor(Math.random() * 2) + 1;
+
+    if(chance % 2 == 0 ){
+      attackedUnit.updateHealth(attackingUnit.getAttack());
+    }
+  }
 }
 
-//Need to figure out a smart way to move the unit
-//potentially v3 of http://phaser.io/docs/2.6.2/Phaser.Physics.Arcade.html#moveToXY ?
-//but then need to time (becuse apparently the method doesn't stop the unit velocity once it reaches the location...)
-//it and so speed might be different unless we set it up so distances are tiered?
-//So if distance is 100-200 do move in 2 seconds, 200-300, 3 seconds, etc?
-function move(movingUnit, xLocation, yLocation){
 
-  xDistance = xLocation - movingUnit.x;
-  yDistance = yLocation - movingUnit.y;
+//moves the unit to the desired location
+function move(movingUnit, xLocation, yLocation, game){
 
+  if(movingUnit.getState() != "Move"){
+    movingUnit.destinationX = xLocation;
+    movingUnit.destinationY = yLocation;
+    movingUnit.setState("Move");
+    game.physics.moveTo(movingUnit, xLocation, yLocation, 2);
+    }
+}
+
+//checks if the moving unit is at it's destination (right now have it set up to be in a radius of the actual destination)
+//and if so stops the unit from moving
+function checkMovement(movingUnit){
+  var radius = 2.5;
+  if(movingUnit.getHealth() > 0 && movingUnit.getState() === "Move"){
+
+    if((movingUnit.destinationX < movingUnit.x + radius &&
+      movingUnit.destinationX > movingUnit.x - radius)
+      && (movingUnit.destinationY < movingUnit.y + radius
+      && movingUnit.destinationY > movingUnit.y - radius)){
+        stopMovement(movingUnit);
+    }
+  }
+}
+
+//stops the unit's movement and sets the state to idle
+function stopMovement(movingUnit){
+  movingUnit.body.velocity.x = 0;
+  movingUnit.body.velocity.y = 0;
+  movingUnit.setState("Idle");
 }
 
 //starts building the structure
-function startBuildUnit(buildingUnit, buildingType, kingdom){
+function startBuildStructure(buildingUnit, buildingType, kingdom, game, texture){
 
-
-  //set the state to build
-  buildingUnit.setState("Build");
+  var buildingInfo;
+  switch(buildingType) {
+    case "Temple":
+      buildingInfo= templeInfo;
+      break;
+    case "Castle":
+      buildingInfo= castleInfo;
+      break;
+    case "Archery Range":
+      buildingInfo=archeryRangeInfo;
+      break;
+    case "Machinery":
+      buildingInfo= machineryInfo;
+      break;
+    case "Barracks":
+      buildingInfo=barracksInfo;
+      break;
+    case "Town Center":
+      buildingInfo= townCenterInfo;
+      break;
+    case "Mine":
+      buildingInfo= mineInfo;
+      break;
+    default:
+      buildingInfo=townCenterInfo;
+  }
 
   //a villager can make all buildings except Castle
   //other units can only make their building type
   if((buildingUnit.type === "Villager" && buildingType != "Castle") || buildingUnit.buildingProduced === buildingType){
-    var buildingEvent = this.time.addEvent({ delay: 30000, callback: finishBuildUnit,
-      callbackScope: this, loop: false, args: [buildingUnit, buildingType, kingdom] });
+  //can only build if the money is there for it
+    if(buildingInfo.cost < kingdom.gold){
+
+      //set the state to build
+      buildingUnit.setState("Build");
+
+      //takes the gold right away from the kingdom
+      kingdom.gold -= buildingInfo.cost;
+    var buildingEvent = game.time.addEvent({ delay: 30000, callback: finishBuildStructure,
+      callbackScope: this, loop: false, args: [buildingUnit, buildingInfo, kingdom, game, texture] });
+    }
   }
 
 }
 
 //finished building the structure. occurs 30 seconds after start
-function finishBuildUnit(buildingUnit, buildingType, kingdom){
+function finishBuildStructure(buildingUnit, buildingInfo, kingdom, game, texture){
+
 
   //if unit is still alive and still has their state set to build, build the building
   if(buildingUnit.getState() === "Build" && buildingUnit.health > 0){
-
-    var buildingInfo;
-    switch(buildingType) {
-      case "Temple":
-        buildingInfo= templeInfo;
-        break;
-      case "Castle":
-        buildingInfo= castleInfo;
-        break;
-      case "Archery Range":
-        buildingInfo=archeryRangeInfo;
-        break;
-      case "Machinery":
-        buildingInfo= machineryInfo;
-        break;
-      case "Barracks":
-        buildingInfo=barracksInfo;
-        break;
-      case "Town Center":
-        buildingInfo= townCenterInfo;
-        break;
-      case "Mine":
-        buildingInfo= mineInfo;
-        break;
-      default:
-        buildingInfo=townCenterInfo;
-    }
-      kingdom.buildings.push(new Structure(buildingInfo, buildingUnit.x+1, buildingUnit.y+1));
-      kingdom.gold-=buildingInfo.cost;
+      kingdom.buildings.push(new Structure(buildingInfo, buildingUnit.x+1, buildingUnit.y+1, game, texture));
+      kingdom.buildingsAmount++;
       buildingUnit.setState("Idle");
+  }
+
+  //if the unit has been killed or isn't making the building anymore, give the kingdom back the gold from the buildings
+  //not sure if this is the best way to do it. I don't think units/buildings should have
+  //invincibility while building but should they get back the money at all from a failed build? Should it come right away?
+  else{
+    kingdom.gold += buildingInfo.cost;
   }
 }
 
@@ -135,7 +178,7 @@ function findClosestUnit(unitToCheck, unitArray){
     }
   }
 
-  return closestUnit
+  return closestUnit;
 }
 
 
@@ -146,8 +189,4 @@ function findClosestUnit(unitToCheck, unitArray){
     yDistance = oneY - twoY;
 
     return Math.sqrt((xDistance*xDistance) + (yDistance * yDistance));
-  }
-
-  function createUnit(unitType){
-
   }
