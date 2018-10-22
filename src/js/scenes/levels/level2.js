@@ -26,6 +26,10 @@ class Level2 extends Phaser.Scene {
     console.log('[Level2] create() complete');
   }
 
+  update() {
+    // randomly assign different AI?
+  }
+
   buttons() {
     var style = { fontSize: '15px', fontFamily: 'Georgia', color: '#ffffff'};
     // button for going back to the main menu
