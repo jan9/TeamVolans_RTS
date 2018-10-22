@@ -21,11 +21,20 @@ function move(movingUnit, xLocation, yLocation, game){
     movingUnit.setState("Move");
     game.physics.moveTo(movingUnit, xLocation, yLocation, 2);
     }
+    else{
+      movingUnit.destinationX = xLocation;
+      movingUnit.destinationY = yLocation;
+      stopMovement(movingUnit);
+      movingUnit.setState("Move");
+      game.physics.moveTo(movingUnit, xLocation, yLocation, 2);
+    }
 }
 
 //checks if the moving unit is at it's destination (right now have it set up to be in a radius of the actual destination)
 //and if so stops the unit from moving
 function checkMovement(movingUnit){
+
+  var finishedMoving = false;
   var radius = 2.5;
   if(movingUnit.getHealth() > 0 && movingUnit.getState() === "Move"){
 
@@ -34,8 +43,11 @@ function checkMovement(movingUnit){
       && (movingUnit.destinationY < movingUnit.y + radius
       && movingUnit.destinationY > movingUnit.y - radius)){
         stopMovement(movingUnit);
+        finishedMoving = true;
     }
   }
+
+  return finishedMoving;
 }
 
 //stops the unit's movement and sets the state to idle
@@ -99,7 +111,7 @@ function finishBuildStructure(buildingUnit, buildingInfo, kingdom, game, texture
 
   //if unit is still alive and still has their state set to build, build the building
   if(buildingUnit.getState() === "Build" && buildingUnit.health > 0){
-      kingdom.buildings.push(new Structure(buildingInfo, buildingUnit.x+1, buildingUnit.y+1, game, texture));
+      kingdom.buildings.push(new Structure(buildingInfo, buildingUnit.x+5, buildingUnit.y+5, game, texture));
       kingdom.buildingsAmount++;
       buildingUnit.setState("Idle");
   }
@@ -142,7 +154,6 @@ function mineGold(miningUnit, kingdom){
       miningUnit.setState("Idle");
     }
   }
-  console.log(kingdom);
 }
 
 //has the guarding unit guard their current area

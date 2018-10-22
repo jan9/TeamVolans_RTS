@@ -1,6 +1,6 @@
 
 var ai;
-
+var ai2;
 class TestAI extends Phaser.Scene {
 
   constructor() {
@@ -21,15 +21,36 @@ class TestAI extends Phaser.Scene {
     this.physics.start();
 
     ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
+    ai2 = new AIKingdom(fortuneFederationInfo, 400, 400, this);
+
     console.log('[TestAI]:');
     console.log(ai);
     this.key_D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.key_A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.buttons();
+
+    //runs every 10 seconds to get the ai priority attack locations
+    var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,
+      callbackScope: this, loop: true, args: [ai, ai2] });
+
+      //runs every 10 seconds to get the ai priority attack locations
+      var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,
+        callbackScope: this, loop: true, args: [ai2, ai] });
+
+    //outputs to the console the kingdom info for testing purposes
+    var outputInfo = this.time.addEvent({ delay: 20000, callback: this.outputTestingInfo,
+        callbackScope: this, loop: true, args: [] });
   }
 
+aiUpdate(aiKingdom, playerKingdome){
+  aiKingdom.updateCurrentTargetList(playerKingdome);
+}
+  outputTestingInfo(){
+    console.log(ai);
+  }
   update(){
       ai.updateAIKingdom();
+      ai2.updateAIKingdom();
   }
   buttons() {
     var style = {

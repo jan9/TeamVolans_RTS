@@ -32,6 +32,10 @@ class Structure extends Phaser.GameObjects.Sprite{
     return this.unitProduced;
   }
 
+  isIdle(){
+    return this.state === "Idle";
+  }
+
   setState(state){
     this.state = state;
   }

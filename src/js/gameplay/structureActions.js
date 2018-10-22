@@ -50,8 +50,8 @@ function finishBuildUnit(buildingStructure, unitInfo, kingdom, game, texture){
 
   //if unit is still alive and still has their state set to build, build the building
   if(buildingStructure.getState() === "Build" && buildingStructure.health > 0){
-      kingdom.units.push(new Unit(unitInfo, buildingStructure.x+1, buildingStructure.y+1, game, texture));
-      kingdom.unitsAmount++;
+      kingdom.units.push(new Unit(unitInfo, buildingStructure.x+5, buildingStructure.y+5, game, texture));
+      kingdom.unitAmount++;
       buildingStructure.setState("Idle");
   }
   else{
