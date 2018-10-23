@@ -1,35 +1,42 @@
-FRAMES: 20 x 5 @ 32x32 px each (file size: 360 x 1440)
+FRAMES: 5 x 20 = 100  Characters: 32x32 px each  Frames: 72 x 72 (file size: 360 x 1440)
 
-Walk N 		[1, 6, 11, 16, 21]
-Walk NE		[2, 7, 12, 17, 22]
-Walk E		[3, 8, 13, 18, 23]
-Walk SE		[4, 9, 14, 19, 24]
-Walk S		[5, 10, 15, 20, 25]
+FROM ARCHER.PNG
+Walk N 		[0, 5, 10, 15, 20]
+Walk NE		[1, 6, 11, 16, 21]
+Walk E		[2, 7, 12, 17, 22]
+Walk SE		[3, 8, 13, 18, 23]
+Walk S		[4, 9, 14, 19, 24]
+
+
+Shoot N		[25, 30, 35, 40, 45, 50]
+Shoot NE	[26, 31, 36, 41, 46, 51]
+Shoot E		[27, 32, 37, 42, 47, 52]
+Shoot SE	[28, 33, 38, 43, 48, 53]
+Shoot S		[29, 34, 39, 44, 49, 54]
+
+
+Die N,NE	[55, 60, 65]
+Die E,SE	[56, 61, 66]
+
+Melee N		[70, 75, 80, 85, 90, 95]
+Melee NE	[71, 76, 81, 86, 91, 96]
+Melee E		[72, 77, 82, 87, 92, 97]
+Melee SE	[73, 78, 83, 88, 93, 98]
+Melee S		[74, 79, 84, 89, 94, 99]
+
+FROM ARCHER_REV.PNG
+
 Walk SW		xxxxx
 Walk W		xxxxx
 Walk NW		xxxxx
 
-
-Shoot N		[26, 31, 36, 41, 46, 51]
-Shoot NE	[27, 32, 37, 42, 47, 52]
-Shoot E		[28, 33, 38, 43, 48, 53]
-Shoot SE	[29, 34, 39, 44, 49, 54]
-Shoot S		[30, 35, 40, 45, 50, 55]
 Shoot SW	xxxxx
 Shoot W		xxxxx
 Shoot NW	xxxxx
 
-
-Die N,NE	[56, 61, 66]
-Die E,SE	[57, 62, 67]
 Die S,SW	xxx
 Die W,NW	xxx
 
-Melee N		[71, 76, 81, 86, 91, 96]
-Melee NE	[72, 77, 82, 87, 92, 97]
-Melee E		[73, 78, 83, 88, 93, 98]
-Melee SE	[74, 79, 84, 89, 94, 99]
-Melee S		[75, 80, 85, 90, 95, 100]
 Melee SW	xxxxxx
 Melee W		xxxxxx
 Melee NW	xxxxxx	
