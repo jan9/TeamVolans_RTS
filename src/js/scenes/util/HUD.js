@@ -22,6 +22,9 @@ class gameHUD extends Phaser.Scene {
     this.button_Title();
     this.buildButtons();
 
+    // have a message box?
+    var currentLevel = 1;
+    var displayLevel = this.add.text(100,17,'Current Level: ' + currentLevel);
   }
 
   update(time, delta) {
@@ -33,7 +36,7 @@ class gameHUD extends Phaser.Scene {
   button_Title() {
   // button for going back to the main menu
   //var button1 = this.add.sprite(5,5,'button');
-  var text1 = this.add.text(0, 0, "Main Menu", { fontSize: '15px', fontFamily: 'Georgia', color: '#ffffff', backgroundColor: 'green'}).setOrigin(0,0).setPadding(4,4);
+  var text1 = this.add.text(5, 12, "Main Menu", { fontSize: '15px', fontFamily: 'Georgia', color: '#ffffff', backgroundColor: 'green'}).setOrigin(0,0).setPadding(4,4);
   text1.setInteractive({useHandCursor:true});
   text1.on('pointerdown', function(pointer) { backToMainMenu = 1},this);
   }
@@ -55,7 +58,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_archeryRange.setInteractive({useHandCursor:true});
     buildButton_archeryRange.on('pointerdown', function(pointer) {
       console.log("archery range button");
-      buildArcheryRange = 1;
+      build_signal = 1;
     }, this);
 
     // barracks
@@ -63,6 +66,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_barracks.setInteractive({useHandCursor:true});
     buildButton_barracks.on('pointerdown', function(pointer) {
       console.log("barracks button");
+      build_signal = 2;
     }, this);
 
     // castle
@@ -70,6 +74,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_castle.setInteractive({useHandCursor:true});
     buildButton_castle.on('pointerdown', function(pointer) {
       console.log("castle button");
+      build_signal = 3;
     }, this);
 
     // machinery
@@ -77,6 +82,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_machinery.setInteractive({useHandCursor:true});
     buildButton_machinery.on('pointerdown', function(pointer) {
       console.log("machinery button");
+      build_signal = 4;
     }, this);
 
     // mine
@@ -84,6 +90,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_mine.setInteractive({useHandCursor:true});
     buildButton_mine.on('pointerdown', function(pointer) {
       console.log("mine button");
+      build_signal = 5;
     }, this);
 
     // temple
@@ -91,6 +98,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_temple.setInteractive({useHandCursor:true});
     buildButton_temple.on('pointerdown', function(pointer) {
       console.log("temple button");
+      build_signal = 6;
     }, this);
 
     // towncenter
@@ -98,6 +106,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_townCenter.setInteractive({useHandCursor:true});
     buildButton_townCenter.on('pointerdown', function(pointer) {
       console.log("town center button");
+      build_signal = 7;
     }, this);
   }
 

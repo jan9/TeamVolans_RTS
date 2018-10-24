@@ -5,7 +5,6 @@ class Title extends Phaser.Scene {
 
   preload() {
     this.load.image('bg_Title','Graphics/screens/StartMenu.png');
-    //this.load.image('logo','assets/UI/logo_golden.png');
     this.load.image('button', 'assets/UI/button/button1.png');
   }
 
@@ -17,6 +16,10 @@ class Title extends Phaser.Scene {
     console.log("[Title] create() complete");
   }
 
+  update() {
+    
+  }
+
   // other functions
   buttons() {
     // styling texts that go on top of buttons
@@ -25,6 +28,8 @@ class Title extends Phaser.Scene {
         fontFamily: 'Georgia',
         color: '#ffffff'
     };
+
+    //TODO: add the new buttons
     // Buttons' shadows created first; this way buttons overlays on top
     // button for starting a new game
         var shadow1 = this.add.sprite(410,210,'button');

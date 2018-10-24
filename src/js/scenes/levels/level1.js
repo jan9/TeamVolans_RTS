@@ -12,7 +12,7 @@ adding a building or unit: http://labs.phaser.io/edit.html?src=src\input\pointer
 */
 // https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 // global variables
-var buildArcheryRange = 0;
+var build_signal = 0; // 1 is build
 //var pointer;
 var x;
 var y;
@@ -25,19 +25,23 @@ class Level1 extends Phaser.Scene {
 
   preload() {
     this.load.image('map1','assets/UI/sampleMap.png');
-    this.load.spritesheet('mine',
-       'Graphics/buildings/gold_mine.png',
-       { frameWidth: 96, frameHeight: 96 }
-   );
+    this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
+    this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
+    this.load.image('tiles5', 'Graphics/TileSets/Background5.png');
+    this.load.image('tilesW', 'Graphics/TileSets/water.png');
+    this.load.tilemapTiledJSON('map', 'Graphics/maps/Level_1b.json');
     this.load.image('button', 'assets/UI/button/button.png');
     this.load.image('archer', 'assets/UI/samplePlayer.png');
+    this.load.spritesheet('mine','Graphics/buildings/gold_mine.png',{ frameWidth: 96, frameHeight: 96 });
   }
 
   create() {
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
-    let map = this.add.image(screen.width, screen.height, 'map1');
+    let map1 = this.add.image(screen.width, screen.height, 'map1');
+    //const map = this.make.tilemap({ key: "map", tileWidth: 16, tileHeight: 16 });
+    //const tileset = map.addTilesetImage("tiles");
 
 
     //this.buttons();
@@ -53,8 +57,7 @@ class Level1 extends Phaser.Scene {
     var layer = map.createStaticLayer(0, tiles, 0, 0);
 
     */
-    // have a message box?
-    this.add.text(100,100,'in level1');
+
 
     // checking to have received correct data
     console.log(gameMode.name);
@@ -78,10 +81,40 @@ class Level1 extends Phaser.Scene {
       this.input.on('pointerdown', function(pointer) {
         x = pointer.x;
         y = pointer.y;
-        if (buildArcheryRange === 1) {
-          player.buildings.push(new Structure(archeryRangeInfo, x, y, this, 'mine'));
+        if (build_signal === 1) {
+          player.buildings.push(new Structure(archeryRangeInfo, x, y, this, 'archer'));
           player.buildingsAmount++;
-          buildArcheryRange = 0;
+          build_signal = 0;
+        }
+        else if (build_signal === 2) {
+          player.buildings.push(new Structure(barracksInfo, x, y, this, 'mine'));
+          player.buildingsAmount++;
+          build_signal = 0;
+        }
+        else if (build_signal === 3) {
+          player.buildings.push(new Structure(castleInfo, x, y, this, 'mine'));
+          player.buildingsAmount++;
+          build_signal = 0;
+        }
+        else if (build_signal === 4) {
+          player.buildings.push(new Structure(machineryInfo, x, y, this, 'mine'));
+          player.buildingsAmount++;
+          build_signal = 0;
+        }
+        else if (build_signal === 5) {
+          player.buildings.push(new Structure(mineInfo, x, y, this, 'mine'));
+          player.buildingsAmount++;
+          build_signal = 0;
+        }
+        else if (build_signal === 6) {
+          player.buildings.push(new Structure(templeInfo, x, y, this, 'mine'));
+          player.buildingsAmount++;
+          build_signal = 0;
+        }
+        else if (build_signal === 7) {
+          player.buildings.push(new Structure(townCenterInfo, x, y, this, 'mine'));
+          player.buildingsAmount++;
+          build_signal = 0;
         }
       },this);
 
@@ -92,6 +125,7 @@ class Level1 extends Phaser.Scene {
       this.scene.start('Title');
       backToMainMenu = 0;
     }
+
   }
 
   buttons() {

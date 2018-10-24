@@ -63,6 +63,7 @@ class Selection extends Phaser.Scene {
     }
   }
 
+  /* Helper functions  */
   backbutton() {
     // button for going back to the main menu
     var button1 = this.add.sprite(0,0,'button');
