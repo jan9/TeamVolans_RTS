@@ -4,14 +4,15 @@ class Title extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('title_bg','assets/UI/sampleTitle.jpg');
-    this.load.image('logo','assets/UI/logo_golden.png');
+    this.load.image('bg_Title','Graphics/screens/StartMenu.png');
+    //this.load.image('logo','assets/UI/logo_golden.png');
     this.load.image('button', 'assets/UI/button/button1.png');
   }
 
   create() {
-    this.add.image((_width/2),(_height/2),'title_bg');
-    var logo = this.add.sprite(_width/2,(_height/2)/3,'logo').setOrigin(0.5,0.5);
+    this.scene.setVisible(false,'gameHUD');
+    this.add.image(0,0,'bg_Title').setOrigin(0,0).setDisplaySize(_width,_height);
+    //var logo = this.add.sprite(_width/2,(_height/2)/3,'logo').setOrigin(0.5,0.5);
     this.buttons();
     console.log("[Title] create() complete");
   }

@@ -10,6 +10,7 @@ class Load extends Phaser.Scene {
   }
 
   create() {
+    this.scene.setVisible(false,'gameHUD');
     this.add.image(_width/2,_height/2,'title_l').setDisplaySize(_width-200, _height-200);
     this.buttons();
     console.log('[Load] create() complete');

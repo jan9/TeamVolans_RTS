@@ -14,8 +14,11 @@ class Level3 extends Phaser.Scene {
   }
 
   create() {
+    this.scene.launch('gameHUD');
+    this.scene.setVisible(true,'gameHUD');
+    this.scene.bringToTop('gameHUD');
     this.add.image(screen.width/3, screen.height/3, 'map3');
-    this.buttons();
+    //this.buttons();
     this.add.text(100,100,'in level3');
 
     // checking to have received correct data
@@ -27,13 +30,10 @@ class Level3 extends Phaser.Scene {
   }
   update() {
     // randomly assign different AI?
+    if (backToMainMenu === 1) {
+      this.scene.restart('Title');
+      backToMainMenu = 0;
+    }
   }
-  buttons() {
-  var style = { fontSize: '15px', fontFamily: 'Georgia', color: '#ffffff'};
-  // button for going back to the main menu
-  var button1 = this.add.sprite(0,0,'button');
-  var text1 = this.add.text(10, 3, "Main Menu", style).setOrigin(0,0);
-  button1.setInteractive({useHandCursor:true});
-  button1.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
-  }
+
 }

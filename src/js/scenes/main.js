@@ -1,6 +1,6 @@
 // global variables
-var _width = screen.width;  // game screen width
-var _height = 640;          // game screen height
+var _width = window.innerWidth;//screen.width;  // game screen width
+var _height = window.innerHeight - 30; //screen.height; // game screen height
 
 // Phaser game config
 const config = {
@@ -10,7 +10,7 @@ const config = {
   physics: {
     default: 'arcade'
   },
-  scene:[Title,Selection,Load,Instructions,Level1,Level2,Level3,TestAI]
+  scene:[Title,Selection,Load,Instructions,Level1,Level2,Level3,TestAI,gameHUD]
 }
 
 // create a game

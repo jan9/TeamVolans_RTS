@@ -12,9 +12,11 @@ adding a building or unit: http://labs.phaser.io/edit.html?src=src\input\pointer
 */
 // https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 // global variables
-var ai;
-var player;
-
+var buildArcheryRange = 0;
+//var pointer;
+var x;
+var y;
+var pointer;
 class Level1 extends Phaser.Scene {
 
   constructor() {
@@ -23,20 +25,22 @@ class Level1 extends Phaser.Scene {
 
   preload() {
     this.load.image('map1','assets/UI/sampleMap.png');
-    this.load.image('background1','Graphics/TileSets/Background1.png');
-    this.load.image('background2','Graphics/TileSets/Background2.png');
-    this.load.image('background3','Graphics/TileSets/Background3.png');
-    this.load.image('water','Graphics/TileSets/water.png');
-    this.load.image('sprite1','Graphics/TileSets/sprite1.png');
-    this.load.image('background5','Graphics/TileSets/Background5.png');
-    this.load.tilemapTiledJSON('map','Graphics/maps/Level_1..json');
+    this.load.spritesheet('mine',
+       'Graphics/buildings/gold_mine.png',
+       { frameWidth: 96, frameHeight: 96 }
+   );
     this.load.image('button', 'assets/UI/button/button.png');
     this.load.image('archer', 'assets/UI/samplePlayer.png');
   }
 
   create() {
-    this.add.image(screen.width, screen.height, 'map1');
-    this.buttons();
+    this.scene.launch('gameHUD');
+    this.scene.setVisible(true,'gameHUD');
+    this.scene.bringToTop('gameHUD');
+    let map = this.add.image(screen.width, screen.height, 'map1');
+
+
+    //this.buttons();
     /* todo: use tileset and tilemap
     var map = this.make.tilemap({ key: 'map' });
 
@@ -54,25 +58,40 @@ class Level1 extends Phaser.Scene {
 
     // checking to have received correct data
     console.log(gameMode.name);
-    console.log(kingdomSelection.name);
-    console.log(opponentKingdom);
 
     // set up the player kingdom
+    console.log(kingdomSelection.name);
+    player = new Kingdom(fortuneFederationInfo, 100, -150, this);
 
-
-    /* set up the AI kingdom
-    if (kingdomSelection.name === "Fortune Federation") {
+    console.log(opponentKingdom);
+    if (opponentKingdom === "Fortune Federation") {
       ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);};
-    */
+
+
 
     console.log('[Level1] create() complete');
   }
 
   update() {
-    // 10 minute timer
-    // proceed to the next level if successfully complete:
-    //
-    // player movement
+
+      // TODO: work on getting the pointer XY position
+      this.input.on('pointerdown', function(pointer) {
+        x = pointer.x;
+        y = pointer.y;
+        if (buildArcheryRange === 1) {
+          player.buildings.push(new Structure(archeryRangeInfo, x, y, this, 'mine'));
+          player.buildingsAmount++;
+          buildArcheryRange = 0;
+        }
+      },this);
+
+
+
+
+    if (backToMainMenu === 1) {
+      this.scene.start('Title');
+      backToMainMenu = 0;
+    }
   }
 
   buttons() {
@@ -89,4 +108,8 @@ class Level1 extends Phaser.Scene {
     button2.on('pointerdown', function(pointer) {this.scene.start('Level2');}, this);
 
   }
+
+
+
+
 }

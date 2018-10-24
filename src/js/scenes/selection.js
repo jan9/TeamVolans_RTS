@@ -1,10 +1,12 @@
 var style = { fontSize: '15px', fontFamily: 'Georgia', color: 'white'};
+var ai;
+var player;
+var backToMainMenu = 0;
 var kingdomSelection = {name: '', chosen:'no'};
 var gameMode = {name:''}; // default mode is easy;
 var opponentKingdom = '';
 var kingdomPool = ["Dueling Dominion","Equal Empire", "Fortune Federation", "Security Syndicate", "Remote Realm"];
 var value = -1;
-
 
 class Selection extends Phaser.Scene {
 
@@ -25,6 +27,7 @@ class Selection extends Phaser.Scene {
 
   create() {
     // 0. load the background and button to go back to the main menu
+    this.scene.setVisible(false,'gameHUD');
     this.add.image(400,300,'title_g');
     this.backbutton();
 

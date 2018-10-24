@@ -14,8 +14,11 @@ class Level2 extends Phaser.Scene {
   }
 
   create() {
+    this.scene.launch('gameHUD');
+    this.scene.setVisible(true,'gameHUD');
+    this.scene.bringToTop('gameHUD');
     this.add.image(screen.width/4, screen.height/4, 'map2');
-    this.buttons();
+    //this.buttons();
     this.add.text(100,100,'in level2');
 
     // checking to have received correct data
@@ -28,6 +31,10 @@ class Level2 extends Phaser.Scene {
 
   update() {
     // randomly assign different AI?
+    if (backToMainMenu === 1) {
+      this.scene.restart('Title');
+      backToMainMenu = 0;
+    }
   }
 
   buttons() {
