@@ -16,7 +16,7 @@ Shoot S		[29, 34, 39, 44, 49, 54]
 
 
 Die N,NE	[55, 60, 65]
-Die E,SE	[56, 61, 66]
+Die E,SE	[57, 62, 67]
 
 Melee N		[70, 75, 80, 85, 90, 95]
 Melee NE	[71, 76, 81, 86, 91, 96]
@@ -26,17 +26,17 @@ Melee S		[74, 79, 84, 89, 94, 99]
 
 FROM ARCHER_REV.PNG
 
-Walk SW		xxxxx
-Walk W		xxxxx
-Walk NW		xxxxx
+Walk SW		[1, 6, 11, 16, 21]
+Walk W		[2, 7, 12, 17, 22]
+Walk NW		[3, 8, 13, 18, 23]
 
-Shoot SW	xxxxx
-Shoot W		xxxxx
-Shoot NW	xxxxx
+Shoot SW	[26, 31, 36, 41, 47, 52]
+Shoot W		[27, 32, 37, 42, 48, 53]
+Shoot NW	[28, 33, 38, 43, 49, 54]
 
-Die S,SW	xxx
-Die W,NW	xxx
+Die S,SW	[55, 60, 65]
+Die W,NW	[57, 62, 67]
 
-Melee SW	xxxxxx
-Melee W		xxxxxx
-Melee NW	xxxxxx	
+Melee SW	[71, 76, 81, 86, 91, 96]
+Melee W		[72, 77, 82, 87, 92, 97]
+Melee NW	[73, 78, 83, 88, 93, 98]
