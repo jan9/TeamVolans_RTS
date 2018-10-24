@@ -1,0 +1,34 @@
+FRAMES: 5 x 13 = 65 Frames 	Character: 32x32 px each 	Frames: 72x72
+
+FROM PRIEST.PNG
+
+Walk N 		[0, 5, 10, 15, 20]
+Walk NE		[1, 6, 11, 16, 21]
+Walk E		[2, 7, 12, 17, 22]
+Walk SE		[3, 8, 13, 18, 23]
+Walk S		[4, 9, 14, 19, 24]
+
+Action N	[25, 30, 35, 40, 45]
+Action NE	[26, 31, 36, 41, 46]
+Action E	[27, 32, 37, 42, 47]
+Action SE	[28, 33, 38, 43, 48]
+Action S	[29, 34, 39, 44, 49]
+
+Die N,NE	[55, 60, 65]
+Die E,SE	[57, 62, 67]
+
+
+
+FROM PRIEST_REV.PNG
+
+Walk SW		[1, 6, 11, 16, 21]
+Walk W		[2, 7, 12, 17, 22]
+Walk NW		[3, 8, 13, 18, 23]
+
+Shoot SW	[26, 31, 36, 41, 46]
+Shoot W		[27, 32, 37, 42, 47]
+Shoot NW	[28, 33, 38, 43, 48]
+
+Die S,SW	[55, 60, 65]
+Die W,NW	[57, 62, 67]
+
