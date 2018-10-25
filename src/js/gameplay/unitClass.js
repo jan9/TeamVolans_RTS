@@ -159,7 +159,7 @@ class Unit extends Phaser.GameObjects.Sprite{
   }
 
   //finished building the structure. occurs 30 seconds after start
-  function finishBuildStructure(buildingInfo, kingdom, game, texture){
+  finishBuildStructure(buildingInfo, kingdom, game, texture){
 
 
     //if unit is still alive and still has their state set to build, build the building
