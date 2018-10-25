@@ -61,14 +61,14 @@ class AIKingdom extends Kingdom{
       for(var i = 0; i < this.units.length; i++){
         if(this.units[i].getType() === "Miner"){
             if(this.units[i].isIdle() ){
-              mine(this.units[i], this, this.game);
+              this.units[i].mine(this, this.game);
             }
         }
 
         //have the swordsman move to the nearest enemy
         if(this.units[i].getType()==="Swordsman"){
             if(this.currentTargets.length > 0){
-              move(this.units[i], this.currentTargets[1].x, this.currentTargets[1].y, this.game);
+              this.units[i].move(this.currentTargets[1].x, this.currentTargets[1].y, this.game);
             }
         }
 
@@ -77,10 +77,12 @@ class AIKingdom extends Kingdom{
             if(this.units[i].isIdle()){
 
               if(this.buildOrder[this.currentBuild] === "Mine"
-              || this.buildOrder[this.currentBuild] === "Temple"
+              || this.buildOrder[this.currentBuild] === "Barracks"
               || this.buildOrder[this.currentBuild] === "Town Center" ){
-                  this.currentBuild++;
-                startBuildStructure(this.units[i], this.buildOrder[this.currentBuild], this, this.game, 'square_unit');
+
+              this.units[i].startBuildStructure(this.buildOrder[this.currentBuild], this, this.game, 'square_unit');
+                this.currentBuild++;
+
             }
           }
         }
@@ -101,7 +103,10 @@ class AIKingdom extends Kingdom{
       for(var i = 0; i < this.buildings.length; i++){
         if(this.buildings[i].isIdle()){
           if(this.buildOrder[this.currentBuild] === this.buildings[i].unitProduced){
-            startBuildUnit(this.buildings[i], this.buildOrder[this.currentBuild], this, this.game, 'square_unit');
+
+            //need a "check gold" function to make sure we can actually build it and to increment the currentBuild...OR
+            //make startBuild return true/false
+            this.buildings[i].startBuildUnit(this.buildOrder[this.currentBuild], this, this.game, 'square_unit');
             this.currentBuild++;
           }
         }

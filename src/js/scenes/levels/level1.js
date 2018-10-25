@@ -36,6 +36,18 @@ class Level1 extends Phaser.Scene {
   }
 
   create() {
+
+    this.map = this.add.tilemap('map');
+  	var tileset = this.map.addTilesetImage('background1','tiles1');
+    var tileset2 = this.map.addTilesetImage('background2','tiles2');
+    var tileset3 = this.map.addTilesetImage('background3','tiles5');
+
+    //I'm not really sure if this is needed or not - adding multiple layers
+    //(for each of the tiles1, tiles2, tiles5 leads to an issue but taking it  away doesn't seem to be affecting the image??)
+  	this.backgroundLayer = this.map.createDynamicLayer('backgroundLayer', tileset);
+
+
+
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');

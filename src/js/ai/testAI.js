@@ -13,12 +13,36 @@ class TestAI extends Phaser.Scene {
        'assets/units/blue_square.png',
        { frameWidth: 16, frameHeight: 16 }
    );
+
+   this.load.spritesheet('archer',
+        'Graphics/units/archer.png',
+        { frameWidth: 72, frameHeight: 72}
+    );
+
+
   }
 
 
   create() {
 
+
+    var configAnim = {
+               key: 'archers',
+               frames: this.anims.generateFrameNumbers('archer', {
+                   start: 1,
+                   end: 20
+               }),
+               repeat: -1,
+               frameRate: 1
+           };
+
+           this.anims.create(configAnim);
+
     this.physics.start();
+
+    player = this.physics.add.sprite(100, 450, 'archer');
+    player.anims.play('archers');
+
 
     ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
     ai2 = new AIKingdom(fortuneFederationInfo, 400, 400, this);
