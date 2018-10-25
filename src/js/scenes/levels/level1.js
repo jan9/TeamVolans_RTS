@@ -76,66 +76,14 @@ class Level1 extends Phaser.Scene {
   }
 
   update() {
-
-      // TODO: work on getting the pointer XY position
-      this.input.on('pointerdown', function(pointer) {
-        x = pointer.x;
-        y = pointer.y;
-        if (build_signal === 1) {
-          player.buildings.push(new Structure(archeryRangeInfo, x, y, this, 'archer'));
-          player.buildingsAmount++;
-          build_signal = 0;
-        }
-        else if (build_signal === 2) {
-          player.buildings.push(new Structure(barracksInfo, x, y, this, 'mine'));
-          player.buildingsAmount++;
-          build_signal = 0;
-        }
-        else if (build_signal === 3) {
-          player.buildings.push(new Structure(castleInfo, x, y, this, 'mine'));
-          player.buildingsAmount++;
-          build_signal = 0;
-        }
-        else if (build_signal === 4) {
-          player.buildings.push(new Structure(machineryInfo, x, y, this, 'mine'));
-          player.buildingsAmount++;
-          build_signal = 0;
-        }
-        else if (build_signal === 5) {
-          player.buildings.push(new Structure(mineInfo, x, y, this, 'mine'));
-          player.buildingsAmount++;
-          build_signal = 0;
-        }
-        else if (build_signal === 6) {
-          player.buildings.push(new Structure(templeInfo, x, y, this, 'mine'));
-          player.buildingsAmount++;
-          build_signal = 0;
-        }
-        else if (build_signal === 7) {
-          player.buildings.push(new Structure(townCenterInfo, x, y, this, 'mine'));
-          player.buildingsAmount++;
-          build_signal = 0;
-        }
-      },this);
-
-
-
-
     if (backToMainMenu === 1) {
       this.scene.start('Title');
       backToMainMenu = 0;
     }
-
+    this.addBuildings();
   }
 
   buttons() {
-    var style = { fontSize: '15px', fontFamily: 'Georgia', color: '#ffffff'};
-    // button for going back to the main menu
-    var button1 = this.add.sprite(0,0,'button');
-    var text1 = this.add.text(10, 3, "Main Menu", style).setOrigin(0,0);
-    button1.setInteractive({useHandCursor:true});
-    button1.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
-
     var button2 = this.add.sprite(400,300,'button');
     var text2 = this.add.text(400, 300, "To level 2", style).setOrigin(0,0);
     button2.setInteractive({useHandCursor:true});
@@ -143,6 +91,51 @@ class Level1 extends Phaser.Scene {
 
   }
 
+  // adds buildings to the current player's kingdom
+  // TODO: building images need to be corrected,
+  // TODO: building time needs to be reflected,
+  // TODO: building cost needs to be reflected
+  addBuildings() {
+    this.input.on('pointerdown', function(pointer) {
+      x = pointer.x;
+      y = pointer.y;
+      if (build_signal === 1) {
+        player.buildings.push(new Structure(archeryRangeInfo, x, y, this, 'archer'));
+        player.buildingsAmount++;
+        build_signal = 0;
+      }
+      else if (build_signal === 2) {
+        player.buildings.push(new Structure(barracksInfo, x, y, this, 'mine'));
+        player.buildingsAmount++;
+        build_signal = 0;
+      }
+      else if (build_signal === 3) {
+        player.buildings.push(new Structure(castleInfo, x, y, this, 'mine'));
+        player.buildingsAmount++;
+        build_signal = 0;
+      }
+      else if (build_signal === 4) {
+        player.buildings.push(new Structure(machineryInfo, x, y, this, 'mine'));
+        player.buildingsAmount++;
+        build_signal = 0;
+      }
+      else if (build_signal === 5) {
+        player.buildings.push(new Structure(mineInfo, x, y, this, 'mine'));
+        player.buildingsAmount++;
+        build_signal = 0;
+      }
+      else if (build_signal === 6) {
+        player.buildings.push(new Structure(templeInfo, x, y, this, 'mine'));
+        player.buildingsAmount++;
+        build_signal = 0;
+      }
+      else if (build_signal === 7) {
+        player.buildings.push(new Structure(townCenterInfo, x, y, this, 'mine'));
+        player.buildingsAmount++;
+        build_signal = 0;
+      }
+    },this);
+  }
 
 
 
