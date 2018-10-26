@@ -1,6 +1,7 @@
 
 var ai;
 var ai2;
+var clock;
 class TestAI extends Phaser.Scene {
 
   constructor() {
@@ -22,22 +23,13 @@ class TestAI extends Phaser.Scene {
   create() {
 
 
-    var configAnim = {
-               key: 'archers',
-               frames: this.anims.generateFrameNumbers('archer', {
-                   start: 1,
-                   end: 20
-               }),
-               repeat: -1,
-               frameRate: 1
-           };
 
-           this.anims.create(configAnim);
+    createArcherAnims(this);
 
     this.physics.start();
 
     player = this.physics.add.sprite(100, 450, 'archer');
-    player.anims.play('archers');
+    player.anims.play('archerWalkN');
 
 
     ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
@@ -70,6 +62,7 @@ aiUpdate(aiKingdom, playerKingdome){
     console.log(ai);
   }
   update(){
+    
       ai.updateAIKingdom();
       ai2.updateAIKingdom();
   }

@@ -1,3 +1,5 @@
+var currentTime;
+
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
 
@@ -25,9 +27,15 @@ class gameHUD extends Phaser.Scene {
     // have a message box?
     var currentLevel = 1;
     var displayLevel = this.add.text(100,17,'Current Level: ' + currentLevel);
+
+    currentTime = this.add.text(350, 17, 'CURRENT TIME: ');
   }
 
   update(time, delta) {
+
+    //this timer is around 15 seconds off - need to get the time a different way
+    currentTime.setText('CURRENT TIME: ' + this.time.now / 1000);
+
     // 10 minute timer
     // resource info update
 

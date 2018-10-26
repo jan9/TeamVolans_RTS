@@ -39,33 +39,45 @@ function createUnitSprites(scene){
 function createStructureSprites(scene){
   scene.load.spritesheet('archeryRange',
        'Graphics/buildings/gold_mine.png',
-       { frameWidth: 72, frameHeight: 72}
+       { frameWidth: 96, frameHeight: 96}
    );
    scene.load.spritesheet('barracks',
         'Graphics/buildings/gold_mine.png',
-        { frameWidth: 72, frameHeight: 72}
+        { frameWidth: 96, frameHeight: 96}
     );
 
   scene.load.spritesheet('castle',
        'Graphics/buildings/gold_mine.png',
-       { frameWidth: 72, frameHeight: 72}
+       { frameWidth: 96, frameHeight: 96}
    );
   scene.load.spritesheet('machinery',
       'Graphics/buildings/gold_mine.png',
-      { frameWidth: 72, frameHeight: 72}
+      { frameWidth: 96, frameHeight: 96}
   );
 
   scene.load.spritesheet('mine',
    'Graphics/buildings/gold_mine.png',
-    { frameWidth: 72, frameHeight: 72}
+    { frameWidth: 96, frameHeight: 96}
   );
 
   scene.load.spritesheet('temple',
     'Graphics/buildings/gold_mine.png',
-    { frameWidth: 72, frameHeight: 72}
+    { frameWidth: 96, frameHeight: 96}
   );
   scene.load.spritesheet('townCenter',
     'Graphics/buildings/gold_mine.png',
-    { frameWidth: 72, frameHeight: 72}
+    { frameWidth: 96, frameHeight: 96}
   );
+}
+
+function createArcherAnims(scene){
+  scene.anims.create(
+    {
+             key: 'archerWalkN',
+             frames: scene.anims.generateFrameNumbers('archer', {
+                 frames: [ 0, 5, 10, 15, 20]
+             }),
+             repeat: -1,
+             frameRate: 1
+  });
 }

@@ -24,6 +24,9 @@ class Level1 extends Phaser.Scene {
   }
 
   preload() {
+
+    createUnitSprites(this);
+    createStructureSprites(this);
     this.load.image('map1','assets/UI/sampleMap.png');
     this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
     this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
@@ -32,7 +35,6 @@ class Level1 extends Phaser.Scene {
     this.load.tilemapTiledJSON('map', 'Graphics/maps/Level_1b.json');
     this.load.image('button', 'assets/UI/button/button.png');
     this.load.image('archer', 'assets/UI/samplePlayer.png');
-    this.load.spritesheet('mine','Graphics/buildings/gold_mine.png',{ frameWidth: 96, frameHeight: 96 });
   }
 
   create() {
@@ -88,6 +90,7 @@ class Level1 extends Phaser.Scene {
   }
 
   update() {
+
     if (backToMainMenu === 1) {
       this.scene.start('Title');
       backToMainMenu = 0;
@@ -97,10 +100,10 @@ class Level1 extends Phaser.Scene {
 
   buttons() {
     var button2 = this.add.sprite(400,300,'button');
+
     var text2 = this.add.text(400, 300, "To level 2", style).setOrigin(0,0);
     button2.setInteractive({useHandCursor:true});
     button2.on('pointerdown', function(pointer) {this.scene.start('Level2');}, this);
-
   }
 
   // adds buildings to the current player's kingdom
@@ -112,37 +115,37 @@ class Level1 extends Phaser.Scene {
       x = pointer.x;
       y = pointer.y;
       if (build_signal === 1) {
-        player.buildings.push(new Structure(archeryRangeInfo, x, y, this, 'archer'));
+        player.buildings.push(new Structure(archeryRangeInfo, x, y, this));
         player.buildingsAmount++;
         build_signal = 0;
       }
       else if (build_signal === 2) {
-        player.buildings.push(new Structure(barracksInfo, x, y, this, 'mine'));
+        player.buildings.push(new Structure(barracksInfo, x, y, this));
         player.buildingsAmount++;
         build_signal = 0;
       }
       else if (build_signal === 3) {
-        player.buildings.push(new Structure(castleInfo, x, y, this, 'mine'));
+        player.buildings.push(new Structure(castleInfo, x, y, this));
         player.buildingsAmount++;
         build_signal = 0;
       }
       else if (build_signal === 4) {
-        player.buildings.push(new Structure(machineryInfo, x, y, this, 'mine'));
+        player.buildings.push(new Structure(machineryInfo, x, y, this));
         player.buildingsAmount++;
         build_signal = 0;
       }
       else if (build_signal === 5) {
-        player.buildings.push(new Structure(mineInfo, x, y, this, 'mine'));
+        player.buildings.push(new Structure(mineInfo, x, y, this));
         player.buildingsAmount++;
         build_signal = 0;
       }
       else if (build_signal === 6) {
-        player.buildings.push(new Structure(templeInfo, x, y, this, 'mine'));
+        player.buildings.push(new Structure(templeInfo, x, y, this));
         player.buildingsAmount++;
         build_signal = 0;
       }
       else if (build_signal === 7) {
-        player.buildings.push(new Structure(townCenterInfo, x, y, this, 'mine'));
+        player.buildings.push(new Structure(townCenterInfo, x, y, this));
         player.buildingsAmount++;
         build_signal = 0;
       }
