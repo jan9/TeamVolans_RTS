@@ -14,12 +14,8 @@ class TestAI extends Phaser.Scene {
        { frameWidth: 16, frameHeight: 16 }
    );
 
-   this.load.spritesheet('archer',
-        'Graphics/units/archer.png',
-        { frameWidth: 72, frameHeight: 72}
-    );
-
-
+   createUnitSprites(this);
+   createStructureSprites(this);
   }
 
 

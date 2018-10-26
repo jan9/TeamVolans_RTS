@@ -1,7 +1,7 @@
 class Unit extends Phaser.GameObjects.Sprite{
 
-  constructor(unitInformation, xCoord, yCoord, scene, texture) {
-    super(scene, xCoord, yCoord, texture);
+  constructor(unitInformation, xCoord, yCoord, scene) {
+    super(scene, xCoord, yCoord, unitInformation.texture);
     this.type = unitInformation.type;
     this.health = unitInformation.health;
     this.cost = unitInformation.cost;
@@ -107,7 +107,7 @@ class Unit extends Phaser.GameObjects.Sprite{
   }
 
   //starts building the structure
-  startBuildStructure(buildingType, kingdom, game, texture){
+  startBuildStructure(buildingType, kingdom, game){
 
     var buildingInfo;
 
@@ -140,7 +140,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //a villager can make all buildings except Castle
     //other units can only make their building type
-    if(buildingUnit.type === "Villager" || this.buildingProduced === buildingType){
+    if(this.type === "Villager" || this.buildingProduced === buildingType){
     //can only build if the money is there for it
       if(buildingInfo.cost < kingdom.gold){
 
@@ -152,19 +152,19 @@ class Unit extends Phaser.GameObjects.Sprite{
 
         //builds the structure in 30 seconds
       var buildingEvent = game.time.addEvent({ delay: 30000, callback: this.finishBuildStructure,
-        callbackScope: this, loop: false, args: [buildingInfo, kingdom, game, texture] });
+        callbackScope: this, loop: false, args: [buildingInfo, kingdom, game] });
       }
     }
 
   }
 
   //finished building the structure. occurs 30 seconds after start
-  finishBuildStructure(buildingInfo, kingdom, game, texture){
+  finishBuildStructure(buildingInfo, kingdom, game){
 
 
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && !this.isDead()){
-        kingdom.buildings.push(new Structure(buildingInfo, this.x+5, this.y+5, game, texture));
+        kingdom.buildings.push(new Structure(buildingInfo, this.x+5, this.y+5, game));
         kingdom.buildingsAmount++;
         this.setState("Idle");
     }

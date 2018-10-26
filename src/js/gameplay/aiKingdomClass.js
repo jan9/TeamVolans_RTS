@@ -80,7 +80,7 @@ class AIKingdom extends Kingdom{
               || this.buildOrder[this.currentBuild] === "Barracks"
               || this.buildOrder[this.currentBuild] === "Town Center" ){
 
-              this.units[i].startBuildStructure(this.buildOrder[this.currentBuild], this, this.game, 'square_unit');
+              this.units[i].startBuildStructure(this.buildOrder[this.currentBuild], this, this.game);
                 this.currentBuild++;
 
             }
@@ -91,7 +91,7 @@ class AIKingdom extends Kingdom{
         if(this.units[i].getState() === "Move"){
 
           //if the unit has stopped moving, have them find the closest enemy and attack
-          if(checkMovement(this.units[i])){
+          if(this.units[i].checkMovement()){
             //attack enemy here
           };
         }
@@ -106,7 +106,7 @@ class AIKingdom extends Kingdom{
 
             //need a "check gold" function to make sure we can actually build it and to increment the currentBuild...OR
             //make startBuild return true/false
-            this.buildings[i].startBuildUnit(this.buildOrder[this.currentBuild], this, this.game, 'square_unit');
+            this.buildings[i].startBuildUnit(this.buildOrder[this.currentBuild], this, this.game);
             this.currentBuild++;
           }
         }
