@@ -1,6 +1,6 @@
 FRAMES: 5 x 13 = 65 Frames 	Character: 32x32 px each 	Frames: 72x72
 
-FROM PRIEST.PNG
+FROM ROYALTY.PNG
 
 Walk N 		[0, 5, 10, 15, 20]
 Walk NE		[1, 6, 11, 16, 21]
@@ -19,7 +19,7 @@ Die E,SE	[53, 58, 63]
 
 
 
-FROM PRIEST_REV.PNG
+FROM ROYALTY_REV.PNG
 
 Walk SW		[1, 6, 11, 16, 21]
 Walk W		[2, 7, 12, 17, 22]
@@ -31,4 +31,3 @@ Shoot NW	[28, 33, 38, 43, 48]
 
 Die S,SW	[50, 55, 60]
 Die W,NW	[53, 58, 63]
-
