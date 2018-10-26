@@ -1,4 +1,5 @@
-var currentTime;
+var currentTime,
+    currentLevel;
 
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
@@ -8,6 +9,7 @@ class gameHUD extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
     this.load.image('button_mine','assets/UI/buildButtons/1.png');
     this.load.image('button_archeryRange','assets/UI/buildButtons/2.png');
     this.load.image('button_townCenter','assets/UI/buildButtons/3.png');
@@ -25,14 +27,14 @@ class gameHUD extends Phaser.Scene {
     this.buildButtons();
 
     // have a message box?
-    var currentLevel = 1;
-    var displayLevel = this.add.text(100,17,'Current Level: ' + currentLevel);
+    currentLevel = 1;
+    var displayLevel = this.add.text(150,17,'CURRENT LEVEL: ' + currentLevel);
 
     currentTime = this.add.text(350, 17, 'CURRENT TIME: ');
   }
 
   update(time, delta) {
-
+    // Ju: I think we should have a countdown timer
     //this timer is around 15 seconds off - need to get the time a different way
     currentTime.setText('CURRENT TIME: ' + this.time.now / 1000);
 
@@ -43,23 +45,13 @@ class gameHUD extends Phaser.Scene {
 
   button_Title() {
   // button for going back to the main menu
-  //var button1 = this.add.sprite(5,5,'button');
-  var text1 = this.add.text(5, 12, "Main Menu", { fontSize: '15px', fontFamily: 'Georgia', color: '#ffffff', backgroundColor: 'green'}).setOrigin(0,0).setPadding(4,4);
-  text1.setInteractive({useHandCursor:true});
-  text1.on('pointerdown', function(pointer) { backToMainMenu = 1},this);
+  var button1 = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
+  button1.setInteractive({useHandCursor:true});
+  button1.on('pointerdown', function(pointer) { backToMainMenu = 1},this);
   }
 
 
-  // build structures
-  /*// create buttons using hud and if button is clicked, then trigger it to build a buildings
-  // player needs to place the building
-
-  this.input.on('pointerdown', function (pointer) {
-
-      this.add.image(pointer.x, pointer.y, 'archer');
-
-  }, this);
-*/
+  // build structures: create buttons using hud and if button is clicked, then trigger it to build a buildings
   buildButtons() {
     // archeryRange
     var buildButton_archeryRange = this.add.sprite(_width-460, _height-25,"button_archeryRange").setOrigin(0.5,0.5);

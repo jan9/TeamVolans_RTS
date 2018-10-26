@@ -6,7 +6,7 @@ class Load extends Phaser.Scene {
 
   preload() {
     this.load.image('title_l','assets/UI/sampleSaved.jpg');
-    this.load.image('button', 'assets/UI/button/button.png');
+    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
   }
 
   create() {
@@ -21,12 +21,9 @@ class Load extends Phaser.Scene {
   }
 
   buttons() {
-    var style = { fontSize: '15px', fontFamily: 'Georgia', color: '#ffffff'};
     // button for going back to the main menu
-    var button1 = this.add.sprite(0,0,'button');
-    var text1 = this.add.text(10, 3, "Main Menu", style).setOrigin(0,0);
+    var button1 = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
     button1.setInteractive({useHandCursor:true});
     button1.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
   }
-
 }
