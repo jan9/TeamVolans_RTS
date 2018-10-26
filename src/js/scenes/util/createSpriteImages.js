@@ -103,6 +103,6 @@ function createAnims(scene, type){
   createAnim(type+'WalkNE', 'archer', walkNEFrames, scene);
   createAnim(type+'WalkE', 'archer', walkEFrames, scene);
 }
-function createArcherAnims(scene){
+function createUnitAnims(scene){
   createAnims(scene, 'archer');
 }

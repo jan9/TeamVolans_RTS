@@ -24,7 +24,7 @@ class TestAI extends Phaser.Scene {
 
 
 
-    createArcherAnims(this);
+    createUnitAnims(this);
 
     this.physics.start();
 
@@ -62,7 +62,7 @@ aiUpdate(aiKingdom, playerKingdome){
     console.log(ai);
   }
   update(){
-    
+
       ai.updateAIKingdom();
       ai2.updateAIKingdom();
   }

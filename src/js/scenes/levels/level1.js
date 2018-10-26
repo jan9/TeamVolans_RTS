@@ -32,28 +32,31 @@ class Level1 extends Phaser.Scene {
     this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
     this.load.image('tiles5', 'Graphics/TileSets/Background5.png');
     this.load.image('tilesW', 'Graphics/TileSets/water.png');
-    this.load.tilemapTiledJSON('map', 'Graphics/maps/Level_1b.json');
+    this.load.tilemapTiledJSON('map', 'Graphics/maps/Level_1.json');
     this.load.image('button', 'assets/UI/button/button.png');
-    this.load.image('archer', 'assets/UI/samplePlayer.png');
+    this.load.image('archer2', 'assets/UI/samplePlayer.png');
   }
 
   create() {
 
     this.map = this.add.tilemap('map');
-  	var tileset = this.map.addTilesetImage('background1','tiles1');
-    var tileset2 = this.map.addTilesetImage('background2','tiles2');
-    var tileset3 = this.map.addTilesetImage('background3','tiles5');
+    var tileset =[this.map.addTilesetImage('Background1', 'tiles1'),
+    this.map.addTilesetImage('Background2', 'tiles2'),
+    this.map.addTilesetImage('hyptosis_til-art-batch-2', 'tiles5'),
+    this.map.addTilesetImage('watertileset3qb2tg0', 'tilesW')];
 
-    //I'm not really sure if this is needed or not - adding multiple layers
-    //(for each of the tiles1, tiles2, tiles5 leads to an issue but taking it  away doesn't seem to be affecting the image??)
-  	this.backgroundLayer = this.map.createDynamicLayer('backgroundLayer', tileset);
+    this.map.createDynamicLayer("Tile Layer 1", tileset);
+    this.map.createDynamicLayer("Tile Layer 2", tileset);
+    this.map.createDynamicLayer("Tile Layer 3", tileset);
+
+
 
 
 
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
-    let map1 = this.add.image(screen.width, screen.height, 'map1');
+  //  let map1 = this.add.image(screen.width, screen.height, 'map1');
     //const map = this.make.tilemap({ key: "map", tileWidth: 16, tileHeight: 16 });
     //const tileset = map.addTilesetImage("tiles");
 
