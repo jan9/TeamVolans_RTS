@@ -26,8 +26,8 @@ class Level1 extends Phaser.Scene {
 
   preload() {
 
-    createUnitSprites(this);
-    createStructureSprites(this);
+    createUnitSprites(this);    // found in scenes/util/createSpriteImages.js
+    createStructureSprites(this); // found in scenes/util/createSpriteImages.js
     this.load.image('map1','assets/UI/sampleMap.png');
     this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
     this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
@@ -57,25 +57,6 @@ class Level1 extends Phaser.Scene {
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
-  //  let map1 = this.add.image(screen.width, screen.height, 'map1');
-    //const map = this.make.tilemap({ key: "map", tileWidth: 16, tileHeight: 16 });
-    //const tileset = map.addTilesetImage("tiles");
-
-
-    //this.buttons();
-    /* todo: use tileset and tilemap
-    var map = this.make.tilemap({ key: 'map' });
-
-    // The first parameter is the name of the tileset in Tiled and the second parameter is the key
-    // of the tileset image used when loading the file in preload.
-    var tiles = map.addTilesetImage('background', 'tiles');
-
-    // You can load a layer from the map using the layer name from Tiled, or by using the layer
-    // index (0 in this case).
-    var layer = map.createStaticLayer(0, tiles, 0, 0);
-
-    */
-
 
     // checking to have received correct data
     console.log(gameMode.name);
