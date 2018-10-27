@@ -1,16 +1,18 @@
 
 //calculates the time
 function calculateTime(seconds){
+
+  var timeLeft = 600-seconds;
   var minutes = 0;
 
   //if seconds isn't 0 calculate the minutes, rounding down
   if(seconds != 0){
-    minutes = Math.floor(seconds / 60);
+    minutes = Math.floor(timeLeft / 60);
 
   }
 
   //takes the seconds leftover from getting minutes and this is how many seconds elapsed
-  var secondsUpdated = Math.round(seconds % 60);
+  var secondsUpdated = Math.round(timeLeft % 60);
 
   //creates the string to display the time
   var timeString = minutes+"M:"+secondsUpdated+"S";
