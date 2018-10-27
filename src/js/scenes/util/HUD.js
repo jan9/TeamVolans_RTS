@@ -33,8 +33,7 @@ class gameHUD extends Phaser.Scene {
 
   update(time, delta) {
 
-    //this timer is around 15 seconds off - need to get the time a different way
-    currentTime.setText('CURRENT TIME: ' + this.time.now / 1000);
+    
 
     // 10 minute timer
     // resource info update

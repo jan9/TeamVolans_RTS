@@ -17,6 +17,7 @@ var build_signal = 0; // 1 is build
 var x;
 var y;
 var pointer;
+var gameStartTime;
 class Level1 extends Phaser.Scene {
 
   constructor() {
@@ -88,11 +89,22 @@ class Level1 extends Phaser.Scene {
       ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);};
 
 
-
+      gameStartTime = Date.now();
     console.log('[Level1] create() complete');
   }
 
   update() {
+    var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
+    var readableTime = calculateTime(timeElapsed);
+
+    //currentTime variable is in HUD so...need to check if it exists first
+    if(currentTime){
+      currentTime.setText('CURRENT TIME: ' + readableTime);
+    }
+
+    if(gameOver(timeElapsed)){
+      console.log("10 MINUTES - GAME OVER");
+    }
 
     if (backToMainMenu === 1) {
       this.scene.start('Title');

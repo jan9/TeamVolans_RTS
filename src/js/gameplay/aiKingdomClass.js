@@ -50,7 +50,7 @@ class AIKingdom extends Kingdom{
   }
 
   //updates the ai kingdom
-    updateAIKingdom(){
+    updateAIKingdom(enemyKingdom){
 
       //resets the buildOrder when the end is reached
       if(this.currentBuild >= this.buildOrder.length){
