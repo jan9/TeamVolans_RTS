@@ -13,11 +13,10 @@ adding a building or unit: http://labs.phaser.io/edit.html?src=src\input\pointer
 // https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 // global variables
 var build_signal = 0; // 1 is build
-//var pointer;
 var x;
 var y;
 var pointer;
-var gameStartTime;
+var playerKingdom, aiKingdom;
 class Level1 extends Phaser.Scene {
 
   constructor() {
@@ -50,10 +49,6 @@ class Level1 extends Phaser.Scene {
     this.map.createDynamicLayer("Tile Layer 2", tileset);
     this.map.createDynamicLayer("Tile Layer 3", tileset);
 
-
-
-
-
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
@@ -65,41 +60,39 @@ class Level1 extends Phaser.Scene {
     console.log(kingdomSelection.name);
     player = new Kingdom(fortuneFederationInfo, 100, -150, this);
 
+    // set up the ai kingdom
     console.log(opponentKingdom);
+
+    ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
+    /* For testing purpose, all AI kingdom are Fortune Federation
     if (opponentKingdom === "Fortune Federation") {
-      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);};
-
-
-      gameStartTime = Date.now();
+      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
+    };
+    */
+    gameStartTime = Date.now();
     console.log('[Level1] create() complete');
   }
 
   update() {
-    var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
-    var readableTime = calculateTime(timeElapsed);
-
-    //currentTime variable is in HUD so...need to check if it exists first
-    if(currentTime){
-      currentTime.setText('CURRENT TIME: ' + readableTime);
-    }
-
-    if(gameOver(timeElapsed)){
-      console.log("10 MINUTES - GAME OVER");
-    }
-
     if (backToMainMenu === 1) {
       this.scene.start('Title');
       backToMainMenu = 0;
     }
     this.addBuildings();
+
+  if (calculateWinner(player,ai) === 'true') {
+    this.bringToTop('button_goToLevel2');
+  } else if (calculateWinner(player,ai) === 'false') {
+    this.scene.start('Gameover');
+  }
   }
 
-  buttons() {
-    var button2 = this.add.sprite(400,300,'button');
-
+  button_goToLevel2() {
+    var buttonToLevel2 = this.add.sprite(400,300,'button');
     var text2 = this.add.text(400, 300, "To level 2", style).setOrigin(0,0);
-    button2.setInteractive({useHandCursor:true});
-    button2.on('pointerdown', function(pointer) {this.scene.start('Level2');}, this);
+
+    buttonToLevel2.setInteractive({useHandCursor:true});
+    buttonToLevel2.on('pointerdown', function(pointer) {this.scene.start('Level2');}, this);
   }
 
   // adds buildings to the current player's kingdom
@@ -147,7 +140,4 @@ class Level1 extends Phaser.Scene {
       }
     },this);
   }
-
-
-
 }

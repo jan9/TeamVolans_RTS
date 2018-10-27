@@ -7,7 +7,7 @@ var gameMode = {name:''}; // default mode is easy;
 var opponentKingdom = '';
 var kingdomPool = ["Dueling Dominion","Equal Empire", "Fortune Federation", "Security Syndicate", "Remote Realm"];
 var value = -1;
-var warningMessage, text2;
+var warningMessage, aiMessage;
 
 class Selection extends Phaser.Scene {
 
@@ -51,23 +51,26 @@ class Selection extends Phaser.Scene {
     var hardMode = this.modeSetup(_width*0.8, _height*0.57, "hard");
 
     //3. Random assignment of the AI kingdom
-    value = Phaser.Math.Between(0, 5);  // Phaser's random number generator
+    value = Phaser.Math.Between(0, 4);  // Phaser's random number generator
     opponentKingdom = kingdomPool[value];
 
     // 4. Start the Game
     warningMessage = this.add.text(_width*0.11, _height*0.75, "Please select a kingdom and game mode!",{font: "32px Georgia", color: "red"}).setPadding(1,1);
+    aiMessage = aiMessage = this.add.text(_width*0.11, _height*0.75, '' ,{font: "32px Georgia", color: "black"}).setPadding(1,1);
 
     // optional: player provides a kingdom name (to be used when saving/loading a game)?
     console.log('[Selection] create() complete');
     }
 
   update() {
-    //hide until all the selection has been made
 
       if (kingdomSelection.name != '' && gameMode.name != '') {
         warningMessage = warningMessage.setText('');
-        text2 = this.add.text(_width*0.11, _height*0.75, "Your AI opponent will be: " + opponentKingdom ,{font: "32px Georgia", color: "black"}).setPadding(1,1);
+        aiMessage = aiMessage.setText("Your AI opponent will be: " + opponentKingdom);
         this.level1Button();
+      } else if (kingdomSelection.name != '' || gameMode.name != '') {
+        aiMessage = aiMessage.setText('');
+        warningMessage = warningMessage.setText('Please select a kingdom and game mode!');
       }
 
   }
@@ -77,7 +80,7 @@ class Selection extends Phaser.Scene {
     // button for going back to the main menu
     var button1 = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
     button1.setInteractive({useHandCursor:true});
-    button1.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
+    button1.once('pointerdown', function(pointer) {this.scene.start('Title');}, this);
   }
 
   level1Button() {
@@ -87,7 +90,7 @@ class Selection extends Phaser.Scene {
     shadow.alpha = 0.6;
     var button2 = this.add.sprite(_width*0.775,_height*0.78,'startButton');
     button2.setInteractive({useHandCursor:true});
-    button2.on('pointerdown', function(pointer) {this.scene.start('Level1');}, this);
+    button2.once('pointerdown', function(pointer) {this.scene.start('Level1');}, this);
   }
 
   emblemsetup(x, y, name) {

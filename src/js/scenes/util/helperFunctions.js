@@ -37,14 +37,14 @@ function calculateWinner(playerKingdom, aiKingdom){
 
   //goes through the player's buildings and adds up the castles
   for(var i = 0; i < playerKingdom.buildings.length; i++){
-    if(buildings[i].type === "Castle"){
+    if(playerKingdom.buildings[i].type === "Castle"){
       playerCastles++;
     }
   }
 
 //goes through the ai's buildings and adds up the castles
   for(var i = 0; i < aiKingdom.buildings.length; i++){
-    if(buildings[i].type === "Castle"){
+    if(aiKingdom.buildings[i].type === "Castle"){
       aiCastles++;
     }
   }
