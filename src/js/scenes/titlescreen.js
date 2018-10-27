@@ -25,7 +25,7 @@ class Title extends Phaser.Scene {
 
   update() {
     // when redirected to the titlescreen, restart the page
-
+    
   }
 
   /* Helper functions  */

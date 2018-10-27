@@ -56,7 +56,7 @@ function calculateWinner(playerKingdom, aiKingdom){
 
   //if the two have the same amount of castles, but the aiKingdom has more gold, then the ai wins
   else if(aiCastles == playerCastles){
-    if(aiKingdom.gold > playerKingdom.gold){
+    if(aiKingdom.gold >= playerKingdom.gold){
       playerWinner = false;
     }
   }

@@ -69,31 +69,22 @@ class Level1 extends Phaser.Scene {
       ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
     };
     */
+    currentLevel = 1;
+    goto = 'Level2';
     gameStartTime = Date.now();
     console.log('[Level1] create() complete');
   }
 
   update() {
-    if (backToMainMenu === 1) {
+    if (backToMainMenu === 1 && currentLevel === 1) {
       this.scene.start('Title');
       backToMainMenu = 0;
     }
     this.addBuildings();
 
-  if (calculateWinner(player,ai) === 'true') {
-    this.bringToTop('button_goToLevel2');
-  } else if (calculateWinner(player,ai) === 'false') {
-    this.scene.start('Gameover');
-  }
   }
 
-  button_goToLevel2() {
-    var buttonToLevel2 = this.add.sprite(400,300,'button');
-    var text2 = this.add.text(400, 300, "To level 2", style).setOrigin(0,0);
 
-    buttonToLevel2.setInteractive({useHandCursor:true});
-    buttonToLevel2.on('pointerdown', function(pointer) {this.scene.start('Level2');}, this);
-  }
 
   // adds buildings to the current player's kingdom
   // TODO: building images need to be corrected,
