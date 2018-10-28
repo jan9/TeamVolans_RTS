@@ -23,11 +23,7 @@ class Title extends Phaser.Scene {
     console.log("[Title] create() complete");
   }
 
-  update() {
-    // when redirected to the titlescreen, restart the page
-    
-  }
-
+  
   /* Helper functions  */
   buttons() {
     // button for starting a new game

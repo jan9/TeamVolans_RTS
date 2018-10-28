@@ -10,9 +10,10 @@ class Load extends Phaser.Scene {
   }
 
   create() {
+    this.scene.sendToBack('Level1');
     this.scene.setVisible(false,'gameHUD');
     this.add.image(_width/2,_height/2,'title_l').setDisplaySize(_width-200, _height-200);
-    this.buttons();
+    this.homeButton();
     console.log('[Load] create() complete');
   }
 
@@ -20,10 +21,10 @@ class Load extends Phaser.Scene {
 
   }
 
-  buttons() {
+  homeButton() {
     // button for going back to the main menu
-    var button1 = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
-    button1.setInteractive({useHandCursor:true});
-    button1.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
+    var homeButton = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
+    homeButton.setInteractive({useHandCursor:true});
+    homeButton.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
   }
 }

@@ -79,6 +79,9 @@ class Level1 extends Phaser.Scene {
     if (backToMainMenu === 1 && currentLevel === 1) {
       this.scene.start('Title');
       backToMainMenu = 0;
+    } else if (check_gameover === 1) {
+      this.scene.start('Gameover');
+      check_gameover = 0;
     }
     this.addBuildings();
 

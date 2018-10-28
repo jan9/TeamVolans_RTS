@@ -4,6 +4,7 @@ var gameStartTime;
 var playerWon;
 var textLevelX;
 var goto;
+var check_gameover = 0; // if game is over, then 1
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
 
@@ -61,6 +62,8 @@ class gameHUD extends Phaser.Scene {
     playerWon = calculateWinner(player, ai);
     if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
       this.button_goToLevelX(goto);
+    } else if (playerWon === false) {
+      check_gameover = 1;
     }
   }
 }
@@ -68,9 +71,9 @@ class gameHUD extends Phaser.Scene {
 
   button_Title() {
   // button for going back to the main menu
-  var button1 = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
-  button1.setInteractive({useHandCursor:true});
-  button1.on('pointerdown', function(pointer) {backToMainMenu = 1;},this);
+  var titlebuttonHUD = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
+  titlebuttonHUD.setInteractive({useHandCursor:true});
+  titlebuttonHUD.on('pointerdown', function(pointer) {backToMainMenu = 1;},this);
   }
 
   button_goToLevelX(goto) {
