@@ -23,7 +23,11 @@ class Title extends Phaser.Scene {
     console.log("[Title] create() complete");
   }
 
-  
+  update() {
+    currentLevel = 0;
+    check_gameover = 0;
+  }
+
   /* Helper functions  */
   buttons() {
     // button for starting a new game

@@ -9,22 +9,21 @@ class Gameover extends Phaser.Scene {
   }
 
   create() {
-    //backToMainMenu = 0;
     this.scene.setVisible(false,'gameHUD');
     // add background image
     this.add.image(0,0,'bg_Title').setOrigin(0,0).setDisplaySize(_width,_height);
-
+    this.add.image(_width*0.5, _height*0.78,'box').setDisplaySize(_width/2,_height/2.5);
+    var gameover_txt = this.add.text(_width*0.293, _height*0.67, "Game Over", {fontSize: '90px', color: 'black'});
     this.homeButton();
     console.log("[Gameover] create() complete");
   }
 
   update() {
+    currentLevel = 0;
   }
-
   homeButton() {
-    // button for going back to the main menu
-    var homeButton = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
+    var homeButton = this.add.sprite(_width*0.4, _height*0.82,'mainmenuButton').setOrigin(0,0).setDisplaySize(240,80);
     homeButton.setInteractive({useHandCursor:true});
-    homeButton.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
+    homeButton.on('pointerdown', function(pointer) { this.scene.start('Title');}, this);
   }
 }

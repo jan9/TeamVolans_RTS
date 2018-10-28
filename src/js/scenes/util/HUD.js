@@ -38,7 +38,7 @@ class gameHUD extends Phaser.Scene {
   }
 
   update() {
-    this.button_Title();
+    //this.button_Title();
     // 10 minute timer
     var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
     //console.log(timeElapsed);

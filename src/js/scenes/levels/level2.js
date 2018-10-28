@@ -14,7 +14,6 @@ class Level2 extends Phaser.Scene {
   }
 
   create() {
-    this.scene.sendToBack('Level1');
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
@@ -41,8 +40,11 @@ class Level2 extends Phaser.Scene {
 
     // randomly assign different AI?
     if (backToMainMenu === 1 && currentLevel === 2) {
-      this.scene.start('Title');
       backToMainMenu = 0;
+      this.scene.start('Title');
+    } else if (check_gameover === 1) {
+      check_gameover = 0;
+      this.scene.start('Gameover');
     }
     this.addBuildings();
 

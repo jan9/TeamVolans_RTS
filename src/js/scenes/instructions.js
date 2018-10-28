@@ -16,6 +16,10 @@ class Instructions extends Phaser.Scene {
     console.log('[Instructions] create() complete');
   }
 
+  update() {
+      currentLevel = 0;
+      check_gameover = 0;
+  }
   buttons() {
     var button1 = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
     button1.setInteractive({useHandCursor:true});

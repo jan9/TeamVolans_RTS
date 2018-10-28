@@ -10,7 +10,6 @@ class Load extends Phaser.Scene {
   }
 
   create() {
-    this.scene.sendToBack('Level1');
     this.scene.setVisible(false,'gameHUD');
     this.add.image(_width/2,_height/2,'title_l').setDisplaySize(_width-200, _height-200);
     this.homeButton();
@@ -18,7 +17,8 @@ class Load extends Phaser.Scene {
   }
 
   update() {
-
+    currentLevel = 0;
+    check_gameover = 0;
   }
 
   homeButton() {

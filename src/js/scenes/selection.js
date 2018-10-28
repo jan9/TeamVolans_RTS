@@ -77,6 +77,8 @@ class Selection extends Phaser.Scene {
     }
 
   update() {
+    currentLevel = 0;
+    check_gameover = 0;
     if (kingdomSelection.name != '' && gameMode.name != '') {
       warningMessage = warningMessage.setText('');
       aiMessage = aiMessage.setText("Your AI opponent will be: " + opponentKingdom);

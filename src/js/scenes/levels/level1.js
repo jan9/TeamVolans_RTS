@@ -38,7 +38,6 @@ class Level1 extends Phaser.Scene {
   }
 
   create() {
-
     this.map = this.add.tilemap('map');
     var tileset =[this.map.addTilesetImage('Background1', 'tiles1'),
     this.map.addTilesetImage('Background2', 'tiles2'),
@@ -77,11 +76,11 @@ class Level1 extends Phaser.Scene {
 
   update() {
     if (backToMainMenu === 1 && currentLevel === 1) {
-      this.scene.start('Title');
       backToMainMenu = 0;
+      this.scene.start('Title');
     } else if (check_gameover === 1) {
-      this.scene.start('Gameover');
       check_gameover = 0;
+      this.scene.start('Gameover');
     }
     this.addBuildings();
 
