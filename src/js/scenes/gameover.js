@@ -5,15 +5,16 @@ class Gameover extends Phaser.Scene {
 
   preload() {
     this.load.image('bg_Gameover','Graphics/screens/start_screen/StartScreen_NoBox.png');
+    this.load.image('gameover','assets/UI/Game-Over (1).png');
     this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
   }
 
   create() {
     this.scene.setVisible(false,'gameHUD');
     // add background image
-    this.add.image(0,0,'bg_Title').setOrigin(0,0).setDisplaySize(_width,_height);
+    this.add.image(0,0,'bg_Gameover').setOrigin(0,0).setDisplaySize(_width,_height);
     this.add.image(_width*0.5, _height*0.78,'box').setDisplaySize(_width/2,_height/2.5);
-    var gameover_txt = this.add.text(_width*0.293, _height*0.67, "Game Over", {fontSize: '90px', color: 'black'});
+    this.add.image(_width*0.5, _height*0.73, 'gameover');
     this.homeButton();
     console.log("[Gameover] create() complete");
   }

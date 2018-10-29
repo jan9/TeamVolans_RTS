@@ -10,34 +10,51 @@ class Level3 extends Phaser.Scene {
 
   preload() {
     this.load.image('map3','assets/UI/sampleMap.png');
-    this.load.image('button', 'assets/UI/button/button.png');
   }
 
   create() {
     this.scene.sendToBack('Level2');
+    this.add.image(_width/4, _height/4, 'map3');  //temp map
+
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
-    this.add.image(screen.width/3, screen.height/5, 'map3');
+    var cursors = this.input.keyboard.createCursorKeys();
 
-    // checking to have received correct data
+    var controlConfig = {
+        camera: this.cameras.main,
+        left: cursors.left,
+        right: cursors.right,
+        up: cursors.up,
+        down: cursors.down,
+        acceleration: 0.01,
+        drag: 0.0005,
+        maxSpeed: 0.4
+    };
+
+    controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+
     console.log(gameMode.name);
     // set up the player kingdom
     console.log(kingdomSelection.name);
     player = new Kingdom(fortuneFederationInfo, 100, -150, this);
 
     // set up the ai kingdom
+    // TODO: change the opponentKingdom?
     console.log(opponentKingdom);
 
     ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
 
     currentLevel = 3;
+    //goto = 'Level3';
     gameStartTime = Date.now();
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
     console.log('[Level3] create() complete');
   }
-  update() {
+
+  update(delta) {
+      controls.update(delta);
     // randomly assign different AI?
     if (backToMainMenu === 1 && currentLevel === 3) {
       backToMainMenu = 0;
@@ -63,43 +80,43 @@ class Level3 extends Phaser.Scene {
       if (build_signal === 1) {
         player.buildings.push(new Structure(archeryRangeInfo, x, y, this));
         player.buildingsAmount++;
-        player.gold -= archeryRangeInfo.cost;
+        currentGold -= archeryRangeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 2) {
         player.buildings.push(new Structure(barracksInfo, x, y, this));
         player.buildingsAmount++;
-        player.gold -= barracksInfo.cost;
+        currentGold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 3) {
         player.buildings.push(new Structure(castleInfo, x, y, this));
         player.buildingsAmount++;
-        player.gold -= barracksInfo.cost;
+        currentGold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 4) {
         player.buildings.push(new Structure(machineryInfo, x, y, this));
         player.buildingsAmount++;
-        player.gold -= machineryInfo.cost;
+        currentGold -= machineryInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 5) {
         player.buildings.push(new Structure(mineInfo, x, y, this));
         player.buildingsAmount++;
-        player.gold -= mineInfo.cost;
+        currentGold -= mineInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 6) {
         player.buildings.push(new Structure(templeInfo, x, y, this));
         player.buildingsAmount++;
-        player.gold -= templeInfo.cost;
+        currentGold -= templeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 7) {
         player.buildings.push(new Structure(townCenterInfo, x, y, this));
         player.buildingsAmount++;
-        player.gold -= townCenterInfo.cost;
+        currentGold -= townCenterInfo.cost;
         build_signal = 0;
       }
     },this);
