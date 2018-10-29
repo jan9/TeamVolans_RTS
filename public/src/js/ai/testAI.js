@@ -28,12 +28,13 @@ class TestAI extends Phaser.Scene {
 
     this.physics.start();
 
-    player = this.physics.add.sprite(100, 450, 'archer');
-    player.anims.play('archerWalkN');
+    player = this.physics.add.sprite(100, 450, 'swordsman_rev');
+    player.anims.play('swordsman_revWalkW');
+    var player2 = this.physics.add.sprite(300, 550, 'archer');
+    player2.anims.play('archerWalkE');
 
-
-    ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
-    ai2 = new AIKingdom(equalEmpireInfo, 400, 400, this);
+    ai = new AIKingdom(fortuneFederationInfo, 100, 50, this);
+    ai2 = new AIKingdom(equalEmpireInfo, 500, 500, this);
 
     console.log('[TestAI]:');
     console.log(ai);

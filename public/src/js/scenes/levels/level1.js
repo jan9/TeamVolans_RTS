@@ -18,6 +18,7 @@ var y;
 var pointer;
 var playerKingdom, aiKingdom;
 var controls;
+var selectedUnit;
 class Level1 extends Phaser.Scene {
 
   constructor() {
@@ -25,8 +26,10 @@ class Level1 extends Phaser.Scene {
   }
 
   preload() {
+
     createUnitSprites(this);    // found in scenes/util/createSpriteImages.js
     createStructureSprites(this); // found in scenes/util/createSpriteImages.js
+    createUnitAnims(this);
     this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
     this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
     this.load.image('tiles5', 'Graphics/TileSets/Background5.png');

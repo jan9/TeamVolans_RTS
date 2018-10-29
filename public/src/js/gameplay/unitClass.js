@@ -54,20 +54,52 @@ class Unit extends Phaser.GameObjects.Sprite{
   //moves the unit to the desired location
    move(xLocation, yLocation, game){
 
+     //sets what the unit's destination is and gives it the Move state
+     this.destinationX = xLocation;
+     this.destinationY = yLocation;
+
     //if unit is already moving, then we need to stop the movement
     if(this.getState() === "Move"){
       this.stopMovement();
     }
+    else{
+        this.walkAnimation();
+    }
 
-      //sets what the unit's destination is and gives it the Move state
-      this.destinationX = xLocation;
-      this.destinationY = yLocation;
       this.setState("Move");
+
 
       //uses built in phaser moveTo function to move the unit
       //this function does not stop the unit's movement so had to create a function which checks to see if unit reached destination yet
       game.physics.moveTo(this, xLocation, yLocation, 2);
 
+  }
+  walkAnimation(){
+    var direction = "";
+
+    if(this.destinationY != this.y){
+      if(this.destinationY > this.y){
+         direction = "S";
+      }
+      else{
+        direction = "N";
+      }
+    }
+    if(this.destinationX > this.x){
+      direction+="E"
+    }
+    else if(this.destinationX < this.x){
+      direction+="W";
+    }
+
+    if(direction === "SW" || direction ==="W" || direction == "NW"){
+      this.setTexture(this.type.toLowerCase()+"_rev");
+      this.anims.play(this.type.toLowerCase()+"_revWalk"+direction);
+    }
+    else{
+      this.setTexture(this.type.toLowerCase());
+      this.anims.play(this.type.toLowerCase()+"Walk"+direction);
+    }
   }
 
   //checks if the moving unit is at it's destination (right now have it set up to be in a radius of the actual destination)

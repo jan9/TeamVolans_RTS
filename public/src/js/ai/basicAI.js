@@ -12,7 +12,7 @@ function structureAI(structure, kingdom){
 
       //only increase currentBuild if we have enough gold to make the unit
       if(unitInfo.cost < kingdom.getGold()){
-        structure.startBuildUnit(kingdom.getCurrentBuild(), kingdom, kingdom.game);
+        structure.startBuildUnit(kingdom.getCurrentBuild(), kingdom, kingdom.game, false);
         kingdom.incrementBuildOrder();
       }
     }

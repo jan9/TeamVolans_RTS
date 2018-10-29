@@ -1,4 +1,4 @@
-class Kingdom {
+class Kingdom{
 
   constructor(kingdomInformation, xCoord, yCoord, game) {
     this.type = kingdomInformation.type;
@@ -101,7 +101,8 @@ getStructureInfo(buildingType){
      //creates the correct amount of buildings for the current type
      for(var j = 0; j < amount; j++){
        this.buildingsAmount++;
-         this.buildings.push(new Structure(buildingInfo, this.startingX+(i*2), this.startingY+(j*2), this.game));
+       var structure = new Structure(buildingInfo, this.startingX+((i+40)*2), this.startingY, this.game);
+        this.buildings.push(structure);
      }
  }
 }
@@ -123,7 +124,8 @@ getStructureInfo(buildingType){
       //goes through and creates the starting units
       for(var j = 0; j < amount; j++){
           this.unitAmount++;
-          this.units.push(new Unit(unitInfo, this.startingX-(i*2), this.startingY-(j*2), this.game));
+          var unit = new Unit(unitInfo, this.startingX-((j+10)*2), this.startingY, this.game);
+          this.units.push(unit);
       }
     }
   }
