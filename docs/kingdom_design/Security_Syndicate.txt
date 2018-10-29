@@ -1,5 +1,5 @@
 Kingdom_Name: Security Syndicate
 Start_Gold_Amount: 300
 Starting_Units: 3 Swordsman, 2 Archer, 1 Priests, 1 Miner, 1 Villager, 2 Royal
-Starting_Buildings: 1 Castle, 2 Wall
+Starting_Buildings: 1 Castle, 1 Temple
 Gameplay_Bonus: Castles and Walls are 10% cheaper to create and 10% faster to create and a Royal can be created in 7 seconds

@@ -33,7 +33,7 @@ class TestAI extends Phaser.Scene {
 
 
     ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
-    ai2 = new AIKingdom(fortuneFederationInfo, 400, 400, this);
+    ai2 = new AIKingdom(equalEmpireInfo, 400, 400, this);
 
     console.log('[TestAI]:');
     console.log(ai);
@@ -55,16 +55,16 @@ class TestAI extends Phaser.Scene {
   }
 
 //updates the target list of the ai (done every 10 seconds)
-aiUpdate(aiKingdom, playerKingdome){
-  aiKingdom.updateCurrentTargetList(playerKingdome);
+aiUpdate(aiKingdom, playerKingdom){
+  aiKingdom.updateCurrentTargetList(playerKingdom);
 }
   outputTestingInfo(){
     console.log(ai);
   }
   update(){
 
-      ai.updateAIKingdom();
-      ai2.updateAIKingdom();
+      ai.updateAIKingdom(ai2);
+      ai2.updateAIKingdom(ai);
   }
   buttons() {
     var style = {

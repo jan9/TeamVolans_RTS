@@ -11,14 +11,13 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.state = unitInformation.state;
     this.destinationX=0;
     this.destinationY=0;
+    this.baseType = unitInformation.baseType;
     scene.physics.world.enable(this);
-
 
     //add the unit to the game scene (so it will actually show up on the screen)
     this.scene = scene;
     this.scene.add.existing(this);
-  }
-
+}
 
   getState(){
     return this.state;
@@ -34,13 +33,8 @@ class Unit extends Phaser.GameObjects.Sprite{
   }
 
   //updates the health of the unit based on whether it's being healed or attacked
-  updateHealth(points, type){
-    if(type === "attack"){
-      this.health -= points;
-    }
-    else if (type === "heal"){
-      this.health += points;
-    }
+  updateHealth(points){
+    this.health += points;
   }
 
   //checks to see whether or not the unit is dead
@@ -80,15 +74,14 @@ class Unit extends Phaser.GameObjects.Sprite{
   //and if so stops the unit from moving
   //returns true if the unit has finished moving
   checkMovement(){
-
     var finishedMoving = false;
     var radius = 2.5;
 
     //checks to see if the unit is alive and still moving, then stop their movement if they're close enough
     if(!this.isDead() && this.getState() === "Move"){
 
-      if((this.destinationX < this.x + radius &&
-        this.destinationX > this.x - radius)
+      if((this.destinationX < this.x + radius
+        && this.destinationX > this.x - radius)
         && (this.destinationY < this.y + radius
         && this.destinationY > this.y - radius)){
           this.stopMovement();
@@ -109,46 +102,19 @@ class Unit extends Phaser.GameObjects.Sprite{
   //starts building the structure
   startBuildStructure(buildingType, kingdom, game){
 
-    var buildingInfo;
-
-    //depending on which type of structure is being built we need different details
-    switch(buildingType) {
-      case "Temple":
-        buildingInfo= templeInfo;
-        break;
-      case "Castle":
-        buildingInfo= castleInfo;
-        break;
-      case "Archery Range":
-        buildingInfo=archeryRangeInfo;
-        break;
-      case "Machinery":
-        buildingInfo= machineryInfo;
-        break;
-      case "Barracks":
-        buildingInfo=barracksInfo;
-        break;
-      case "Town Center":
-        buildingInfo= townCenterInfo;
-        break;
-      case "Mine":
-        buildingInfo= mineInfo;
-        break;
-      default:
-        buildingInfo=townCenterInfo;
-    }
+    var buildingInfo = kingdom.getStructureInfo(buildingType);
 
     //a villager can make all buildings except Castle
     //other units can only make their building type
     if(this.type === "Villager" || this.buildingProduced === buildingType){
     //can only build if the money is there for it
-      if(buildingInfo.cost < kingdom.gold){
+      if(buildingInfo.cost < kingdom.getGold()){
 
         //set the state to build
         this.setState("Build");
 
         //takes the gold right away from the kingdom
-        kingdom.gold -= buildingInfo.cost;
+        kingdom.removeGold(buildingInfo.cost);
 
         //builds the structure in 30 seconds
       var buildingEvent = game.time.addEvent({ delay: 30000, callback: this.finishBuildStructure,
@@ -173,7 +139,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     //not sure if this is the best way to do it. I don't think units/buildings should have
     //invincibility while building but should they get back the money at all from a failed build? Should it come right away?
     else{
-      kingdom.gold += buildingInfo.cost;
+      kingdom.addGold(buildingInfo.cost);
     }
   }
 
@@ -199,17 +165,56 @@ class Unit extends Phaser.GameObjects.Sprite{
 
         //if the unit is a villager, they mine 3 gold every 30 seconds
         if(this.type === "Villager"){
-          kingdom.gold += 3;
+          kingdom.addGold(3);
         }
 
         //if the unit is a miner they mine 6 gold every 30 seconds
         else if (this.type === "Miner"){
-          kingdom.gold += 6;
+          kingdom.addGold(6);
         }
 
         this.setState("Idle");
       }
     }
+  }
+
+  attackEnemy(attackedUnit){
+    this.setState("Attack");
+    //attack if unit isn't dead attack(dead units get removed at end of each update but
+    // there's a chance it might have been killed in between)
+    if(!this.isDead() && !attackedUnit.isDead()){
+
+      //unit has 50% chance of attack landing a hit
+      var chance = Math.floor(Math.random() * 2) + 1;
+
+      if(chance % 2 == 0 ){
+        attackedUnit.updateHealth(this.getAttack());
+        if(attackedUnit.isDead()){
+          this.setState("Idle");
+        }
+      }
+    }
+  }
+
+  //returns the closest unit in the given unitArray near the currentUnit
+  //expensive to run a lot so...need to figure out a way to "cache" the results
+  findClosestUnit(unitArray){
+    //set the base unit and distance to the first unit in the array
+    var closestUnit = unitArray[0];
+    var closestDistance = distance(this.x, this.y, unitArray[0].x, unitArray[0].y);
+
+  //goes through each of the units and checks to see if they are closest to our unit to check against
+    for(let unit of unitArray){
+      var currentDistance = distance(this.x, this.y, unit.x, unit.y);
+
+      //if the current distance is closer than the closest distance then set the closest distance to the current distance
+      if(currentDistance < closestDistance){
+        closestUnit = unit;
+        closestDistance = currentDistance;
+      }
+    }
+
+    return closestUnit;
   }
 
 }

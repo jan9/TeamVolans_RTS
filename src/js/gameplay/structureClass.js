@@ -3,6 +3,7 @@ class Structure extends Phaser.GameObjects.Sprite{
   constructor(structureInformation, xCoord, yCoord, scene) {
     super(scene, xCoord, yCoord, structureInformation.texture);
     this.type = structureInformation.type;
+    this.baseType = structureInformation.baseType;
     this.health = structureInformation.health;
     this.cost = structureInformation.cost;
     this.unitProduced = structureInformation.unitProduced;
@@ -18,6 +19,9 @@ class Structure extends Phaser.GameObjects.Sprite{
   }
   getHealth(){
     return this.health;
+  }
+  isDead(){
+    return this.health <= 0;
   }
 
   getCost(){
@@ -42,50 +46,22 @@ class Structure extends Phaser.GameObjects.Sprite{
 
   //updates the health of the structure based on how many points it's been hurt by
   updateHealth(points){
-      this.health -= points;
+      this.health += points;
   }
 
   //starts building the structure
   startBuildUnit(unitType, kingdom, game){
 
-    var unitInfo;
-
-    //gets the unit information depending on what type of unit is being built
-    switch(unitType) {
-      case "Priest":
-        unitInfo = priestInfo;
-        break;
-      case "Royalty":
-        unitInfo= royalInfo;
-        break;
-      case "Archer":
-        unitInfo=archerInfo;
-        break;
-      case "Catapult":
-        unitInfo= catapultInfo;
-        break;
-      case "Swordsman":
-        unitInfo=swordsmanInfo;
-        break;
-      case "Villager":
-        unitInfo= villagerInfo;
-        break;
-      case "Miner":
-        unitInfo= minerInfo;
-        break;
-      default:
-        unitInfo=villagerInfo;
-    }
-
+    var unitInfo = kingdom.getUnitInfo(unitType);
 
     //if the building can create the unit, and has the gold to create it, then creates the unit
     if(this.getUnitProduced() === unitType){
-      if(unitInfo.cost < kingdom.gold){
+      if(unitInfo.cost < kingdom.getGold()){
 
         //set the state to build
         this.setState("Build");
 
-        kingdom.gold -= unitInfo.cost;
+        kingdom.removeGold(unitInfo.cost);
 
         //creates the unit after 10 seconds
       var buildingEvent = game.time.addEvent({ delay: 10000, callback: this.finishBuildUnit,
@@ -110,7 +86,7 @@ class Structure extends Phaser.GameObjects.Sprite{
     else{
 
       //if the building was destroyed before the unit was built, give the money back to the kingdom
-      kingdom.gold += unitInfo.cost;
+      kingdom.addGold(unitInfo.cost);
 
     }
   }

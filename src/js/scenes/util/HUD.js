@@ -80,7 +80,7 @@ class gameHUD extends Phaser.Scene {
 */
     // stop the 10 minute timer
     //if(gameOver(timeElapsed)){
-    if(timeElapsed === 10){ //600 = 10 minute
+    if(timeElapsed === 60){ //600 = 10 minute
       currentTime = 0;
       readableTime = 0;
       timeElapsed = 0;

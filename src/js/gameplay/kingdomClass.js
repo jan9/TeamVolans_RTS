@@ -16,49 +16,96 @@ class Kingdom {
     this.createStartingUnits(kingdomInformation.units);
   }
 
-  createStartingBuildings(buildings){
 
-    var keys = Object.keys(buildings);
 
-    //goes through and creates the starting buildings based on the given kingdom's information
-    for(var i = 0; i < keys.length; i++){
 
-      var buildingInfo;
-      var amount = buildings[keys[i]];
+getStructureInfo(buildingType){
 
-      switch(keys[i]) {
-        case "temple":
-          buildingInfo=templeInfo;
-          break;
-        case "castle":
-          buildingInfo= castleInfo;
-          break;
-        case "archery_range":
-          buildingInfo=archeryRangeInfo;
-          break;
-        case "machinery":
-          buildingInfo= machineryInfo;
-          break;
-        case "barracks":
-          buildingInfo=barracksInfo;
-          break;
-        case "town_center":
-          buildingInfo= townCenterInfo;
-          break;
-        case "mine":
-          buildingInfo= mineInfo;
-          break;
-        default:
-          buildingInfo=townCenterInfo;
-      }
+  var buildingTypeLower =buildingType.toLowerCase();
+  var buildingInfo;
 
-      //creates the correct amount of buildings for the current type
-      for(var j = 0; j < amount; j++){
-        this.buildingsAmount++;
-          this.buildings.push(new Structure(buildingInfo, this.startingX+(i*2), this.startingY+(j*2), this.game));
-      }
+  switch(buildingTypeLower) {
+    case "temple":
+      buildingInfo=templeInfo;
+      break;
+    case "castle":
+      buildingInfo= castleInfo;
+      break;
+    case "archery_range":
+      buildingInfo=archeryRangeInfo;
+      break;
+    case "machinery":
+      buildingInfo= machineryInfo;
+      break;
+    case "barracks":
+      buildingInfo=barracksInfo;
+      break;
+    case "town_center":
+      buildingInfo= townCenterInfo;
+      break;
+    case "mine":
+      buildingInfo= mineInfo;
+      break;
+    default:
+      buildingInfo=townCenterInfo;
   }
+  return buildingInfo;
 }
+
+
+ getUnitInfo(unitType){
+
+   var unitTypeLower = unitType.toLowerCase();
+   var unitInfo;
+
+   switch(unitTypeLower) {
+     case "priest":
+       unitInfo=priestInfo;
+       break;
+     case "royalty":
+       unitInfo=royaltyInfo;
+       break;
+     case "archer":
+       unitInfo=archerInfo;
+       break;
+     case "catapult":
+       unitInfo= catapultInfo;
+       break;
+     case "swordsman":
+       unitInfo=swordsmanInfo;
+       break;
+     case "villager":
+       unitInfo=villagerInfo;
+       break;
+     case "miner":
+       unitInfo= minerInfo;
+       break;
+     default:
+       unitInfo=villagerInfo;
+   }
+   return unitInfo
+ }
+
+ createStartingBuildings(buildings){
+
+   var keys = Object.keys(buildings);
+
+   //goes through and creates the starting buildings based on the given kingdom's information
+   for(var i = 0; i < keys.length; i++){
+
+     var buildingInfo = this.getStructureInfo(keys[i]);
+     var amount = buildings[keys[i]];
+
+
+
+     //creates the correct amount of buildings for the current type
+     for(var j = 0; j < amount; j++){
+       this.buildingsAmount++;
+         this.buildings.push(new Structure(buildingInfo, this.startingX+(i*2), this.startingY+(j*2), this.game));
+     }
+ }
+}
+
 
 //creates all the starting units
   createStartingUnits(units){
@@ -68,34 +115,10 @@ class Kingdom {
 
     //goes through the different types of units the kingdom starts with and creates the given kingdom's base starting units
     for(var i = 0; i < keys.length; i++){
-      var unitInfo;
+      var unitInfo = this.getUnitInfo(keys[i]);
       var amount = units[keys[i]];
 
-      switch(keys[i]) {
-        case "priest":
-          unitInfo=priestInfo;
-          break;
-        case "royalty":
-          unitInfo=royaltyInfo;
-          break;
-        case "archer":
-          unitInfo=archerInfo;
-          break;
-        case "catapult":
-          unitInfo= catapultInfo;
-          break;
-        case "swordsman":
-          unitInfo=swordsmanInfo;
-          break;
-        case "villager":
-          unitInfo=villagerInfo;
-          break;
-        case "miner":
-          unitInfo= minerInfo;
-          break;
-        default:
-          unitInfo=villagerInfo;
-      }
+
 
       //goes through and creates the starting units
       for(var j = 0; j < amount; j++){
@@ -106,12 +129,41 @@ class Kingdom {
   }
 
   //removes the dead units (occurs at the end of the update function)
-  removeDeadUnits(){
+  removeDead(){
     for(var i = 0; i < this.units.length; i++){
       if(this.units[i].isDead()){
+        this.units[i].destroy();
         this.units.splice(i, 1);
         this.unitsAmount--;
       }
     }
+    for(var i = 0; i < this.buildings.length; i++){
+      if(this.buildings[i].isDead()){
+        this.buildings[i].destroy();
+        this.buildings.splice(i,1);
+        this.buildingsAmount--;
+      }
+    }
   }
+
+  getGold(){
+    return this.gold;
+  }
+  removeGold(cost){
+    this.gold -=cost;
+  }
+  addGold(benefit){
+    this.gold += benefit;
+  }
+
+
+//used to make the player's buildings and units interactive
+  makeInteractive(){
+    for(var i = 0; i < this.buildings.length; i++){
+      this.buildings[i].setInteractive();
+  }
+  for(var i = 0; i< this.units.length; i++){
+    this.units[i].setInteractive();
+  }
+}
 }

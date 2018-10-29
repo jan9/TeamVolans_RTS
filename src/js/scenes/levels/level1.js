@@ -54,6 +54,8 @@ class Level1 extends Phaser.Scene {
 
     var cursors = this.input.keyboard.createCursorKeys();
 
+    this.input.on('gameobjectdown', onObjectClicked);
+
     var controlConfig = {
         camera: this.cameras.main,
         left: cursors.left,
@@ -116,43 +118,43 @@ class Level1 extends Phaser.Scene {
       x = pointer.x;
       y = pointer.y;
       if (build_signal === 1) {
-        player.buildings.push(new Structure(archeryRangeInfo, x, y, this));
+        player.buildings.push(new Structure(archeryRangeInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= archeryRangeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 2) {
-        player.buildings.push(new Structure(barracksInfo, x, y, this));
+        player.buildings.push(new Structure(barracksInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 3) {
-        player.buildings.push(new Structure(castleInfo, x, y, this));
+        player.buildings.push(new Structure(castleInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 4) {
-        player.buildings.push(new Structure(machineryInfo, x, y, this));
+        player.buildings.push(new Structure(machineryInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= machineryInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 5) {
-        player.buildings.push(new Structure(mineInfo, x, y, this));
+        player.buildings.push(new Structure(mineInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= mineInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 6) {
-        player.buildings.push(new Structure(templeInfo, x, y, this));
+        player.buildings.push(new Structure(templeInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= templeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 7) {
-        player.buildings.push(new Structure(townCenterInfo, x, y, this));
+        player.buildings.push(new Structure(townCenterInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= townCenterInfo.cost;
         build_signal = 0;

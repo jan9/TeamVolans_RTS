@@ -24,28 +24,39 @@ class AIKingdom extends Kingdom{
     //clears out the previous targets
     this.currentTargets.splice(0,this.currentTargets.length)
 
-    //find the nearest enemy structure location and add it to the list
-    this.currentTargets.push(this.findClosest(playersKingdom.buildings));
+    //get the closest structure, if it exists, add it to the array
+    var closestStructure = this.findClosest(playersKingdom.buildings)
+    if(closestStructure){
+      this.currentTargets.push(closestStructure);
+    }
 
-    //find the closest enemy units locations and add them to the list
-    this.currentTargets.push(this.findClosest(playersKingdom.units));
+    //get the closest unit, if it exists add it to the array
+    var closestUnit = this.findClosest(playersKingdom.units);
+    if(closestUnit){
+      this.currentTargets.push(closestUnit);
+    }
 };
 
+ incrementBuildOrder(){
+   this.currentBuild++;
+ }
+ getCurrentBuild(){
+   return this.buildOrder[this.currentBuild];
+ }
   //finds the closest enemy in the given array
   findClosest(enemyArr){
 
     if(enemyArr.length > 0){
-    var closestEnemey= {'x': enemyArr[0].x, 'y': enemyArr[0].y};
+    var closestEnemy= enemyArr[0];
 
     //goes through the array and finds the location of the closest enemy
     for(var i = 0; i < enemyArr.length; i++){
-      if(distance(closestEnemey.x, closestEnemey.y, this.startingX, this.startingY) >
+      if(distance(closestEnemy.x, closestEnemy.y, this.startingX, this.startingY) >
       distance(enemyArr[i].x, enemyArr[i].y, this.startingX, this.startingY)){
-        closestEnemey.x = enemyArr[i].x;
-        closestEnemey.y = enemyArr[i].y;
+        closestEnemy = enemyArr[i];
       }
     }
-      return closestEnemey;
+      return closestEnemy;
     }
   }
 
@@ -59,58 +70,33 @@ class AIKingdom extends Kingdom{
 
       //have the miners mine
       for(var i = 0; i < this.units.length; i++){
-        if(this.units[i].getType() === "Miner"){
-            if(this.units[i].isIdle() ){
-              this.units[i].mine(this, this.game);
-            }
+        var currentUnit = this.units[i];
+        if(currentUnit.getType() === "Miner"){
+          minerAI(currentUnit, this);
         }
 
         //have the swordsman move to the nearest enemy
-        if(this.units[i].getType()==="Swordsman"){
-            if(this.currentTargets.length > 0){
-              this.units[i].move(this.currentTargets[1].x, this.currentTargets[1].y, this.game);
-            }
+        if(currentUnit.getType()==="Swordsman"
+        ||currentUnit.getType()==="Archer"
+        ||currentUnit.getType()==="Catapult"){
+            attackUnitAI(currentUnit, this);
         }
 
         //have the Villager build structures
-        if(this.units[i].getType() === "Villager"){
-            if(this.units[i].isIdle()){
-
-              if(this.buildOrder[this.currentBuild] === "Mine"
-              || this.buildOrder[this.currentBuild] === "Barracks"
-              || this.buildOrder[this.currentBuild] === "Town Center" ){
-
-              this.units[i].startBuildStructure(this.buildOrder[this.currentBuild], this, this.game);
-                this.currentBuild++;
-
-            }
+        if(currentUnit.getType() === "Villager"){
+            villagerAI(currentUnit, this);
           }
         }
 
-        //if the unit is moving, the check to see if it has found its destination
-        if(this.units[i].getState() === "Move"){
-
-          //if the unit has stopped moving, have them find the closest enemy and attack
-          if(this.units[i].checkMovement()){
-            //attack enemy here
-          };
-        }
-      }
 
       //goes through the list of buildings and if the building is able to make
       //the current item in the build order and is currently idle,
       //then build the unit
-      for(var i = 0; i < this.buildings.length; i++){
-        if(this.buildings[i].isIdle()){
-          if(this.buildOrder[this.currentBuild] === this.buildings[i].unitProduced){
-
-            //need a "check gold" function to make sure we can actually build it and to increment the currentBuild...OR
-            //make startBuild return true/false
-            this.buildings[i].startBuildUnit(this.buildOrder[this.currentBuild], this, this.game);
-            this.currentBuild++;
-          }
-        }
+      for( var i = 0; i < this.buildings.length; i++){
+        var currentBuilding = this.buildings[i];
+          structureAI(currentBuilding, this);
       }
-    }
 
+      this.removeDead();
+    }
 }

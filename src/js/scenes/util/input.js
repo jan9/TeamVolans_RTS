@@ -9,3 +9,10 @@ function getPopulation(currentPopulation, playerKingdom){
   newPop = currentPopulation;
   return newPop;
 }
+
+function onObjectClicked(pointer,gameObject)
+{
+    if(gameObject.baseType === "Structure"){
+      gameObject.startBuildUnit(gameObject.unitProduced, player, player.game);
+    }
+}
