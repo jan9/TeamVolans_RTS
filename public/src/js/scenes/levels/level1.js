@@ -29,7 +29,6 @@ class Level1 extends Phaser.Scene {
 
     createUnitSprites(this);    // found in scenes/util/createSpriteImages.js
     createStructureSprites(this); // found in scenes/util/createSpriteImages.js
-    createUnitAnims(this);
     this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
     this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
     this.load.image('tiles5', 'Graphics/TileSets/Background5.png');
@@ -40,6 +39,8 @@ class Level1 extends Phaser.Scene {
   }
 
   create() {
+    createUnitAnims(this);
+
     this.scene.sendToBack('Selection');
     this.map = this.add.tilemap('map');
     var tileset =[this.map.addTilesetImage('Background1', 'tiles1'),
@@ -87,13 +88,18 @@ class Level1 extends Phaser.Scene {
 
     // set up the ai kingdom
     console.log(opponentKingdom);
-
-    ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
     /* For testing purpose, all AI kingdom are Fortune Federation
     if (opponentKingdom === "Fortune Federation") {
       ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
     };
     */
+    ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
+
+
+    //runs every 10 seconds to get the ai priority attack locations
+    var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,
+    callbackScope: this, loop: true, args: [] });
+
     playerWon = false;
     currentLevel = 1;
     goto = 'Level2';
@@ -101,6 +107,11 @@ class Level1 extends Phaser.Scene {
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
     console.log('[Level1] create() complete');
+  }
+
+  //updates the target list of the ai (done every 10 seconds)
+  aiUpdate(){
+    ai.updateCurrentTargetList(player);
   }
 
   update(delta) {
@@ -113,6 +124,7 @@ class Level1 extends Phaser.Scene {
       this.scene.start('Gameover');
     }
     this.addBuildings();
+    ai.updateAIKingdom(player);
 
   }
 

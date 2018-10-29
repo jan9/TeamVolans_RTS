@@ -14,7 +14,7 @@ function onObjectClicked(pointer,gameObject)
 {
   console.log("Selected: " +gameObject.type);
     if(gameObject.baseType === "Structure"){
-      gameObject.startBuildUnit(gameObject.unitProduced, player, player.game);
+      gameObject.startBuildUnit(gameObject.unitProduced, player, player.game, true);
       console.log(gameObject.type + ' is creating ' + gameObject.unitProduced);
     }
 
