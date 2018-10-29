@@ -1,0 +1,15 @@
+{
+  "name": "TeamVolans_RTS",
+  "version": "1.0.0",
+  "description": "An RTS game built with Phaser 3",
+  "main": "medievalMayhem.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Team Volans",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "forever": "^0.15.3"
+  }
+}
