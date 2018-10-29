@@ -14,6 +14,7 @@ class Level3 extends Phaser.Scene {
   }
 
   create() {
+    this.scene.sendToBack('Level2');
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
@@ -32,6 +33,8 @@ class Level3 extends Phaser.Scene {
 
     currentLevel = 3;
     gameStartTime = Date.now();
+    currentGold = player.gold;
+    currentPopulation = player.unitAmount;
     console.log('[Level3] create() complete');
   }
   update() {
@@ -60,36 +63,43 @@ class Level3 extends Phaser.Scene {
       if (build_signal === 1) {
         player.buildings.push(new Structure(archeryRangeInfo, x, y, this));
         player.buildingsAmount++;
+        player.gold -= archeryRangeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 2) {
         player.buildings.push(new Structure(barracksInfo, x, y, this));
         player.buildingsAmount++;
+        player.gold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 3) {
         player.buildings.push(new Structure(castleInfo, x, y, this));
         player.buildingsAmount++;
+        player.gold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 4) {
         player.buildings.push(new Structure(machineryInfo, x, y, this));
         player.buildingsAmount++;
+        player.gold -= machineryInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 5) {
         player.buildings.push(new Structure(mineInfo, x, y, this));
         player.buildingsAmount++;
+        player.gold -= mineInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 6) {
         player.buildings.push(new Structure(templeInfo, x, y, this));
         player.buildingsAmount++;
+        player.gold -= templeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 7) {
         player.buildings.push(new Structure(townCenterInfo, x, y, this));
         player.buildingsAmount++;
+        player.gold -= townCenterInfo.cost;
         build_signal = 0;
       }
     },this);

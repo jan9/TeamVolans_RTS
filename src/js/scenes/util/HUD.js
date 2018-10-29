@@ -5,6 +5,9 @@ var playerWon;
 var textLevelX;
 var goto;
 var check_gameover = 0; // if game is over, then 1
+var currentGold;
+var currentPopulation;
+var displayGold,displayPop;
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
 
@@ -35,31 +38,35 @@ class gameHUD extends Phaser.Scene {
 
     currentTime = this.add.text(350, 17, 'CURRENT TIME: ');
 
+   displayGold = this.add.text(600,17,'CURRENT GOLD: ');
+
+   displayPop = this.add.text(850,17,'POPULATION: ');
+
   }
 
   update() {
-    //this.button_Title();
-    // 10 minute timer
     var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
-    //console.log(timeElapsed);
     var readableTime = calculateTime(timeElapsed);
 
-    //currentTime variable is in HUD so...need to check if it exists first
-    if(currentTime){
-      currentTime.setText('CURRENT TIME: ' + readableTime);
+    // initial seed money for testing purpose
+    if (timeElapsed%10 === 0){
+      currentGold += 1;
     }
 
+    // display info
+    currentTime.setText('CURRENT TIME: ' + readableTime);
+    displayGold.setText('CURRENT GOLD: ' + getGold(currentGold, player));
+    displayPop.setText('POPULATION: ' + getPopulation(currentPopulation, player));
+
+    // stop the 10 minute timer
     //if(gameOver(timeElapsed)){
-    if(timeElapsed === 7){
-      // stop timer at 10 minute
+    if(timeElapsed === 600){ //600 = 10 minute
       currentTime = 0;
       readableTime = 0;
       timeElapsed = 0;
-      // change the scene to either "You win!" or "Game over!"
-          // if player won, then bring out the level 2 button
-          // if player lost, then bring out the game over scene
-    // TODO: calculateWinner not working
+
     playerWon = calculateWinner(player, ai);
+    //TODO:   // change the scene to either "You win!"
     if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
       this.button_goToLevelX(goto);
     } else if (playerWon === false) {
@@ -87,13 +94,14 @@ class gameHUD extends Phaser.Scene {
   }
 
   // build structures: create buttons using hud and if button is clicked, then trigger it to build a buildings
+  // TODO: if not enough money -> http://labs.phaser.io/edit.html?src=src/tweens\total%20duration.js
   buildButtons() {
     // archeryRange
     var buildButton_archeryRange = this.add.sprite(_width-460, _height-25,"button_archeryRange").setOrigin(0.5,0.5);
     buildButton_archeryRange.setInteractive({useHandCursor:true});
     buildButton_archeryRange.on('pointerdown', function(pointer) {
       console.log("archery range button");
-      build_signal = 1;
+      if (currentGold > archeryRangeInfo.cost) {build_signal = 1;}
     }, this);
 
     // barracks
@@ -101,7 +109,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_barracks.setInteractive({useHandCursor:true});
     buildButton_barracks.on('pointerdown', function(pointer) {
       console.log("barracks button");
-      build_signal = 2;
+      if (currentGold > barracksInfo.cost) {build_signal = 2;}
     }, this);
 
     // castle
@@ -109,7 +117,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_castle.setInteractive({useHandCursor:true});
     buildButton_castle.on('pointerdown', function(pointer) {
       console.log("castle button");
-      build_signal = 3;
+      if (currentGold > castleInfo.cost) {build_signal = 3;}
     }, this);
 
     // machinery
@@ -117,7 +125,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_machinery.setInteractive({useHandCursor:true});
     buildButton_machinery.on('pointerdown', function(pointer) {
       console.log("machinery button");
-      build_signal = 4;
+      if (currentGold > machineryInfo.cost) {build_signal = 4;}
     }, this);
 
     // mine
@@ -125,7 +133,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_mine.setInteractive({useHandCursor:true});
     buildButton_mine.on('pointerdown', function(pointer) {
       console.log("mine button");
-      build_signal = 5;
+      if (currentGold > mineInfo.cost) {build_signal = 5;}
     }, this);
 
     // temple
@@ -133,7 +141,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_temple.setInteractive({useHandCursor:true});
     buildButton_temple.on('pointerdown', function(pointer) {
       console.log("temple button");
-      build_signal = 6;
+      if (currentGold > templeInfo.cost) {build_signal = 6;}
     }, this);
 
     // towncenter
@@ -141,8 +149,7 @@ class gameHUD extends Phaser.Scene {
     buildButton_townCenter.setInteractive({useHandCursor:true});
     buildButton_townCenter.on('pointerdown', function(pointer) {
       console.log("town center button");
-      build_signal = 7;
+      if (currentGold > townCenterInfo.cost) {build_signal = 7;}
     }, this);
   }
-
 }
