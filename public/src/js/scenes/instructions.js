@@ -30,12 +30,14 @@ class Instructions extends Phaser.Scene {
     // TODO add what keys and mouse controls needed to play the game
     var content = [
       'Welcome! Here is how you play the game:\n',
-      '1. Choose a game mode\n',
-      '2. Destroy all the enemy castles to win',
-      '',
-      'To control your units, drag with ? to select and ? to move units'
+      '  1. Select a kingdom and difficulty setting of your AI opponent\n',
+      '  2. Destroy all the enemy castles to win\n',
+      '  3. If the amount of castles are the same,\n',
+      '     then the kingdom with most number of gold wins'
     ];
-    this.add.text(_width*0.27, _height*0.5, content, { font: '25px Georgia', align: 'left', linespacing: 20});
+    this.add.text(_width*0.25, _height*0.5, content, { font: '20px Georgia', align: 'left', linespacing: 10});
+    this.add.text(_width*0.10, _height*0.9, 'Use the left mouse button to create your buildings and units, and the WASD keys to move aroud the map.', { font: '20px Georgia', align: 'center', linespacing: 10});
+
   }
 
 }

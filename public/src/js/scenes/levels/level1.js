@@ -48,6 +48,7 @@ class Level1 extends Phaser.Scene {
     this.map.createDynamicLayer("Tile Layer 2", tileset);
     this.map.createDynamicLayer("Tile Layer 3", tileset);
 
+    this.physics.world.setBounds(0,0,50,50);
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
@@ -56,17 +57,22 @@ class Level1 extends Phaser.Scene {
 
     this.input.on('gameobjectdown', onObjectClicked);
 
+    var cursors = this.input.keyboard.createCursorKeys();
+    var W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    var S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    var A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    var D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
     var controlConfig = {
         camera: this.cameras.main,
-        left: cursors.left,
-        right: cursors.right,
-        up: cursors.up,
-        down: cursors.down,
-        acceleration: 0.01,
+        left: A,
+        right: D,
+        up: W,
+        down: S,
+        acceleration: 0.001,
         drag: 0.0005,
         maxSpeed: 0.4
     };
-
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
     // checking to have received correct data

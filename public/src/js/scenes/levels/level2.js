@@ -29,18 +29,21 @@ class Level2 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     var cursors = this.input.keyboard.createCursorKeys();
+    var W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    var S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    var A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    var D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
     var controlConfig = {
         camera: this.cameras.main,
-        left: cursors.left,
-        right: cursors.right,
-        up: cursors.up,
-        down: cursors.down,
-        acceleration: 0.01,
+        left: A,
+        right: D,
+        up: W,
+        down: S,
+        acceleration: 0.001,
         drag: 0.0005,
         maxSpeed: 0.4
     };
-
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
     console.log(gameMode.name);
