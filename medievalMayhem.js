@@ -19,5 +19,5 @@ app.get('/', function (req, res) {
 
 //Need to see if this is needed or can be removed
 app.listen(app.get('port'), function(){
-  console.log('Medieval Mayhem started on http://flipX.engr.oregonstate.edu:4865/);
+  console.log('Medieval Mayhem started on http://flipX.engr.oregonstate.edu:4865/');
 });

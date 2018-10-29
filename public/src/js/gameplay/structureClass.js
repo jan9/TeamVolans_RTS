@@ -81,6 +81,7 @@ class Structure extends Phaser.GameObjects.Sprite{
         //once the unit has been built, add it to the kingdom and increase the unitamount
         kingdom.units.push(new Unit(unitInfo, this.x+5, this.y+5, game));
         kingdom.unitAmount++;
+        currentPopulation++;
         this.setState("Idle");
     }
     else{

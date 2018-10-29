@@ -29,6 +29,9 @@ class Level2 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     var cursors = this.input.keyboard.createCursorKeys();
+    
+    this.input.on('gameobjectdown', onObjectClicked);
+    
     var W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     var S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     var A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
