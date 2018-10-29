@@ -12,9 +12,11 @@ function getPopulation(currentPopulation, playerKingdom){
 
 function onObjectClicked(pointer,gameObject)
 {
-  if(gameObject.baseType === "Structure"){
-    gameObject.startBuildUnit(gameObject.unitProduced, player, player.game, true);
-  }
-
   console.log("Selected: " +gameObject.type);
+    if(gameObject.baseType === "Structure"){
+      gameObject.startBuildUnit(gameObject.unitProduced, player, player.game);
+      console.log(gameObject.type + ' is creating ' + gameObject.unitProduced);
+    }
+
+
 }
