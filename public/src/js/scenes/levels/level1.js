@@ -1,16 +1,6 @@
 /*
-  Level 1: a grass map
-
-Pause a game: http://labs.phaser.io/edit.html?src=src\scenes\pause%20and%20resume.js
-/*  this.input.once('pointerup', function () {
-
-  this.scene.pause();
-}, this);
-
-adding a building or unit: http://labs.phaser.io/edit.html?src=src\input\pointer\down%20event.js
-
+    Level 1
 */
-// https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 // global variables
 
 var x;
@@ -61,7 +51,6 @@ class Level1 extends Phaser.Scene {
 
     this.input.on('gameobjectdown', onObjectClicked);
 
-    var cursors = this.input.keyboard.createCursorKeys();
     var W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     var S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     var A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -75,7 +64,7 @@ class Level1 extends Phaser.Scene {
         down: S,
         acceleration: 0.001,
         drag: 0.0005,
-        maxSpeed: 0.4
+        maxSpeed: 0.3
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 

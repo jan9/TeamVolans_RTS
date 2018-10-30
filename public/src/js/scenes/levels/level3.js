@@ -1,5 +1,5 @@
 /*
-  Level 3: a water and grass map
+  Level 3:
     Requires successful completion of level 2
 */
 class Level3 extends Phaser.Scene {
@@ -34,7 +34,7 @@ class Level3 extends Phaser.Scene {
         down: S,
         acceleration: 0.001,
         drag: 0.0005,
-        maxSpeed: 0.4
+        maxSpeed: 0.3
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 

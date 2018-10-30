@@ -1,5 +1,5 @@
 /*
-  Level 2: a snow map
+  Level 2: 
     Requires successful completion of level 1
 */
 class Level2 extends Phaser.Scene {
@@ -29,9 +29,9 @@ class Level2 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     var cursors = this.input.keyboard.createCursorKeys();
-    
+
     this.input.on('gameobjectdown', onObjectClicked);
-    
+
     var W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     var S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     var A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -45,7 +45,7 @@ class Level2 extends Phaser.Scene {
         down: S,
         acceleration: 0.001,
         drag: 0.0005,
-        maxSpeed: 0.4
+        maxSpeed: 0.3
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
