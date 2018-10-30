@@ -49,16 +49,36 @@ class Level2 extends Phaser.Scene {
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+    // checking to have received correct data
     console.log(gameMode.name);
+
     // set up the player kingdom
     console.log(kingdomSelection.name);
-    player = new Kingdom(fortuneFederationInfo, 100, -150, this);
+    if (kingdomSelection.name === "Dueling Dominion") {
+      player = new Kingdom(duelingDominionInfo, 100, -150, this);
+    } else if (kingdomSelection.name === "Equal Empire") {
+      player = new Kingdom(equalEmpireInfo, 100, -150, this);
+    } else if (kingdomSelection.name === "Fortune Federation") {
+      player = new Kingdom(fortuneFederationInfo, 100, -150, this);
+    } else if (kingdomSelection.name === "Security Syndicate") {
+      player = new Kingdom(securitySyndicateInfo, 100, -150, this);
+    } else if (kingdomSelection.name === "Remote Realm") {
+      player = new Kingdom(remoteRealmInfo, 100, -150, this);
+    };
 
     // set up the ai kingdom
-    // TODO: change the opponentKingdom?
     console.log(opponentKingdom);
-
-    ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
+    if (opponentKingdom === "Dueling Dominion") {
+      ai = new AIKingdom(duelingDominionInfo, 50, 50, this);
+    } else if (opponentKingdom === "Equal Empire") {
+      ai = new AIKingdom(equalEmpireInfo, 50, 50, this);
+    } else if (opponentKingdom === "Fortune Federation") {
+      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
+    } else if (opponentKingdom === "Security Syndicate") {
+      ai = new AIKingdom(securitySyndicateInfo, 50, 50, this);
+    } else if (opponentKingdom === "Remote Realm") {
+      ai = new AIKingdom(remoteRealmInfo, 50, 50, this);
+    };
 
     playerWon = false;
     currentLevel = 2;
