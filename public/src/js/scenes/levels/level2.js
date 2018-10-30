@@ -55,15 +55,15 @@ class Level2 extends Phaser.Scene {
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
-      player = new Kingdom(duelingDominionInfo, 100, -150, this);
+      player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, this);
     } else if (kingdomSelection.name === "Equal Empire") {
-      player = new Kingdom(equalEmpireInfo, 100, -150, this);
+      player = new Kingdom(equalEmpireInfo, _width*0.9, _height*0.9, this);
     } else if (kingdomSelection.name === "Fortune Federation") {
-      player = new Kingdom(fortuneFederationInfo, 100, -150, this);
+      player = new Kingdom(fortuneFederationInfo, _width*0.9, _height*0.9, this);
     } else if (kingdomSelection.name === "Security Syndicate") {
-      player = new Kingdom(securitySyndicateInfo, 100, -150, this);
+      player = new Kingdom(securitySyndicateInfo, _width*0.9, _height*0.9, this);
     } else if (kingdomSelection.name === "Remote Realm") {
-      player = new Kingdom(remoteRealmInfo, 100, -150, this);
+      player = new Kingdom(remoteRealmInfo, _width*0.9, _height*0.9, this);
     };
 
     // set up the ai kingdom

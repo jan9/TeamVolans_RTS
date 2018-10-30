@@ -85,7 +85,7 @@ class Structure extends Phaser.GameObjects.Sprite{
 
         kingdom.units.push(unit);
         kingdom.unitAmount++;
-        if (kingdom === 'player' && kingdom != 'ai') {
+        if(kingdom === player){
           currentPopulation++;
         }
         this.setState("Idle");
