@@ -56,6 +56,7 @@ class gameHUD extends Phaser.Scene {
     //  money for testing purpose
     if (timeElapsed%10 === 0){
       currentGold += 1;
+      player.gold += 1;
     }
 
     //currentTime variable is in HUD so...need to check if it exists first

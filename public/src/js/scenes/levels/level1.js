@@ -147,42 +147,49 @@ class Level1 extends Phaser.Scene {
         player.buildings.push(new Structure(archeryRangeInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= archeryRangeInfo.cost;
+        player.gold -= archeryRangeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 2) {
         player.buildings.push(new Structure(barracksInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= barracksInfo.cost;
+        player.gold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 3) {
         player.buildings.push(new Structure(castleInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= barracksInfo.cost;
+        player.gold -= barracksInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 4) {
         player.buildings.push(new Structure(machineryInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= machineryInfo.cost;
+        player.gold -= machineryInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 5) {
         player.buildings.push(new Structure(mineInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= mineInfo.cost;
+        player.gold -= mineInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 6) {
         player.buildings.push(new Structure(templeInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= templeInfo.cost;
+        player.gold -= templeInfo.cost;
         build_signal = 0;
       }
       else if (build_signal === 7) {
         player.buildings.push(new Structure(townCenterInfo, x, y, this).setInteractive());
         player.buildingsAmount++;
         currentGold -= townCenterInfo.cost;
+        player.gold -= townCenterInfo.cost;
         build_signal = 0;
       }
     },this);

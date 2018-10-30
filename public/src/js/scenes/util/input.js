@@ -1,6 +1,7 @@
 function getGold(currentGold, playerKingdom) {
   var newGold;
   newGold = currentGold;
+  player.gold = currentGold;
   return newGold;
 }
 
