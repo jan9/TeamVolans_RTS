@@ -135,7 +135,6 @@ function createGeneralUnitAnims(scene, type){
             createAnim(type+actionsList[j]+revDirections[i],
                type, actionsList[j].toLowerCase()+revDirections[i]+"Frames", scene);
           }
-
     }
     else{
       for(var i = 0; i < directionsList.length; i++){
