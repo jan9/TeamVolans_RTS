@@ -130,6 +130,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
     this.setState("Idle");
+    this.anims.stopOnRepeat();
   }
 
   //starts building the structure

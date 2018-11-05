@@ -49,7 +49,7 @@ var swordsmanDieEFrames = swordsmanDieSEFrames = swordsman_revDieWFrames = sword
 
 
 //ADD CATAPULT BACK IN ONCE WE GET THE FRAMES LISTINGS
-var unitSprites = ['archer', 'archer_rev', 'priest', 'priest_rev',
+var unitSprites = ['archer', 'archer_rev', 'catapult', 'catapult_rev', 'priest', 'priest_rev',
 'villager', 'villager_rev', 'royalty', 'royalty_rev',
 'swordsman', 'swordsman_rev', 'miner', 'miner_rev'];
 const directionsList = ["N", "NE", "E", "SE"];
