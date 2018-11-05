@@ -1,7 +1,7 @@
 class AIKingdom extends Kingdom{
 
-  constructor(kingdomInformation, xCoord, yCoord, game){
-      super(kingdomInformation, xCoord, yCoord, game);
+  constructor(kingdomInformation, xCoord, yCoord, game, startingObjects){
+      super(kingdomInformation, xCoord, yCoord, false, game, startingObjects);
       this.buildOrder = kingdomInformation.buildOrder;
       this.currentBuild = 0;
 
@@ -47,7 +47,7 @@ class AIKingdom extends Kingdom{
   findClosest(enemyArr){
 
     if(enemyArr.length > 0){
-    var closestEnemy= enemyArr[0];
+    var closestEnemy = enemyArr[0];
 
     //goes through the array and finds the location of the closest enemy
     for(var i = 0; i < enemyArr.length; i++){
@@ -56,6 +56,7 @@ class AIKingdom extends Kingdom{
         closestEnemy = enemyArr[i];
       }
     }
+    console.log(closestEnemy);
       return closestEnemy;
     }
   }

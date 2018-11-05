@@ -53,19 +53,13 @@ class gameHUD extends Phaser.Scene {
     var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
     var readableTime = calculateTime(timeElapsed);
 
-    //  money for testing purpose
-    if (timeElapsed%10 === 0){
-      currentGold += 1;
-      player.gold += 1;
-    }
-
     //currentTime variable is in HUD so...need to check if it exists first
     if(currentTime){
       currentTime.setText('CURRENT TIME: ' + readableTime);
     }
 
     // current gold and population
-    displayGold.setText('CURRENT GOLD: ' + getGold(currentGold, player));
+    displayGold.setText('CURRENT GOLD: ' + player.gold);
     displayPop.setText('POPULATION: ' + getPopulation(currentPopulation, player));
 
 

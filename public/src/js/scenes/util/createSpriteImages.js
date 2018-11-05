@@ -1,20 +1,66 @@
+//walk is the same frames across units
 var walkNFrames = [0, 5, 10, 15, 20];
-var walkNEFrames, walkSWFrames =	[1, 6, 11, 16, 21];
-var walkEFrames, walkWFrames = [2, 7, 12, 17, 22];
-var walkSEFrames, walkNWFrames = [3, 8, 13, 18, 23];
+var walkNEFrames = walkSWFrames =	[1, 6, 11, 16, 21];
+var walkEFrames = walkWFrames = [2, 7, 12, 17, 22];
+var walkSEFrames = walkNWFrames = [3, 8, 13, 18, 23];
 var walkSFrames = [4, 9, 14, 19, 24];
-var actionNFrames = [25, 30, 35, 40];
-var actionNEFrames, actionSWFrames = [26, 31, 36, 41];
-var actionEFrames, actionWFrames =	[27, 32, 37, 42];
-var actionSEFrames, actionNWFrames = [28, 33, 38, 43];
-var actionSFrames = [29, 34, 39, 44];
-var dieNNEFrames, dieSSWFrames = [45, 50, 55];
-var dieESEFrames, dieWNWFrames = [48, 53, 58];
 
 
+//action frames for everyone but archer and swordsman
+var actionNFrames = [25, 30, 35, 40, 45];
+var actionNEFrames = actionSWFrames = [26, 31, 36, 41, 46];
+var actionEFrames = actionWFrames =	[27, 32, 37, 42, 47];
+var actionSEFrames = actionNWFrames = [28, 33, 38, 43, 48];
+var actionSFrames = [29, 34, 39, 44, 49];
+
+//dying frames for everyone but archer and swordsman
+var dieNEFrames = dieNFrames = dieSFrames = dieSWFrames = [50, 55, 60];
+var dieEFrames = dieSEFrames = dieWFrames = dieNWFrames = [53, 58, 63];
+
+//archer has different frames for actions/dying/melee
+//archer shoot frames
+var archerShootNFrames = [25, 30, 35, 40, 45, 50];
+var archerShootNEFrames = archer_revShootSWFrames = [26, 31, 36, 41, 46, 51];
+var archerShootEFrames = archer_revShootWFrames = [27, 32, 37, 42, 47, 52];
+var archerShootSEFrames = archer_revShootNWFrames = [28, 33, 38, 43, 49, 54];
+var archer_revShootSFrames = [29, 34, 39, 44, 49, 54];
+
+//archer melee frames
+var archerMeleeNFrames = [70, 75, 80, 85, 90, 95];
+var archerMeleeNEFrames = archer_revMeleeSWFrames = [71, 76, 81, 86, 91, 96];
+var archerMeleeEFrames = archer_revMeleeWFrames = [72, 77, 82, 87, 92, 97];
+var archerMeleeSEFrames = archer_revMeleeNWFrames = [73, 78, 83, 88, 93, 98];
+var archer_revMeleeSFrames = [74, 79, 84, 89, 94, 99];
+
+//archer die frames
+var archerDieNFrames = archerDieNEFrames = archer_revDieSWFrames = archer_revDieSFrames = [55, 60, 65];
+var archerDieEFrames = archerDieSEFrames = archerDie_revNWFrames = archer_revDieWFrames = [57, 62, 67];
+
+
+//swordsman has different frames for actions/dying melee
+var swordsmanAttackNFrames = [25, 30, 35, 40];
+var swordsmanAttackNEFrames = swordsman_revAttackSWFrames = [26, 31, 36, 41];
+var swordsmanAttackEFrames = swordsman_revAttackWFrames = [27, 32, 37, 42];
+var swordsmanAttackSEFrames = swordsman_revAttackNWFrames = [28, 33, 38, 43];
+var swordsmanAttackSFrames = [29, 34, 39, 44];
+
+var swordsmanDieNEFrames = swordsmanDieNFrames = swordsman_revDieSFrames = swordsman_revDieSWFrames = [45, 50, 55];
+var swordsmanDieEFrames = swordsmanDieSEFrames = swordsman_revDieWFrames = swordsman_revDieNWFrames = [48, 53, 58];
+
+
+//ADD CATAPULT BACK IN ONCE WE GET THE FRAMES LISTINGS
 var unitSprites = ['archer', 'archer_rev', 'priest', 'priest_rev',
-'catapult', 'catapult_rev', 'villager', 'villager_rev', 'royalty', 'royalty_rev',
+'villager', 'villager_rev', 'royalty', 'royalty_rev',
 'swordsman', 'swordsman_rev', 'miner', 'miner_rev'];
+const directionsList = ["N", "NE", "E", "SE"];
+const revDirections = ["SW", "W", "NW", "S"];
+
+const walkDirectionList = ["N", "NE", "E", "SE", "S"];
+const revWalkDirectionList = ["W", "NW", "SW"];
+
+const actionsList = [ "Action", "Die"];
+const archerActions = ["Shoot", "Melee", "Die"];
+const swordsmanActions = ["Attack", "Die"];
 
 
 //load in the unit sprites
@@ -61,7 +107,7 @@ function createStructureSprites(scene){
     { frameWidth: 128, frameHeight: 128}
   );
   scene.load.spritesheet('townCenter',
-    'Graphics/buildings/gold_mine.png',
+    'Graphics/buildings/TownCenter.png',
     { frameWidth: 128, frameHeight: 128}
   );
 }
@@ -72,42 +118,86 @@ function createAnim(newKeyName, originalKey, framesArr, scene){
     {
              key: newKeyName,
              frames: scene.anims.generateFrameNumbers(originalKey, {
-                 frames: framesArr
+                 frames: window[framesArr]
              }),
              repeat: -1,
-             frameRate: 2
+             frameRate: 1
   });
 }
 
-function createAnims(scene, type){
+function createGeneralUnitAnims(scene, type){
+
+    //create all the other unit animations
+    for(var j = 0; j < actionsList.length; j++){
+
+      if(type.includes("rev")){
+        for(var i = 0; i < revDirections.length; i++){
+            createAnim(type+actionsList[j]+revDirections[i],
+               type, actionsList[j].toLowerCase()+revDirections[i]+"Frames", scene);
+          }
+
+    }
+    else{
+      for(var i = 0; i < directionsList.length; i++){
+        createAnim(type+actionsList[j]+directionsList[i],
+          type, actionsList[j].toLowerCase()+directionsList[i]+"Frames", scene);
+      }
+    }
+  }
+}
+
+function createSpecialUnitAnims(scene, type, specialActionArray){
+
+    for(var j = 0; j < specialActionArray.length; j++){
+
+      if(type.includes("rev")){
+        for(var i = 0; i < revDirections.length; i++){
+          createAnim(type+specialActionArray[j]+revDirections[i],
+           type, type+specialActionArray[j]+revDirections[i]+"Frames", scene);
+        }
+
+    }
+    else{
+
+      for(var i = 0; i < directionsList.length; i++){
+        createAnim(type+specialActionArray[j]+directionsList[i],
+          type, type+specialActionArray[j]+directionsList[i]+"Frames", scene);
+      }
+    }
+  }
+}
+
+function createWalkAnims(scene, type){
   if(type.includes("rev")){
-    createAnim(type+'WalkSW', type, walkSWFrames, scene);
-    createAnim(type+'WalkW', type, walkWFrames, scene);
-    createAnim(type+'WalkNW', type, walkNWFrames, scene);
-    createAnim(type+'ActionSW', type, actionSWFrames, scene);
-    createAnim(type+'ActionW', type, actionWFrames, scene);
-    createAnim(type+'ActionNW', type, actionNWFrames, scene);
-    createAnim(type+'DieSW', type, dieSSWFrames, scene);
-    createAnim(type+'DieS', type, dieSSWFrames, scene);
-    createAnim(type+'DieW', type, dieWNWFrames, scene);
-    createAnim(type+'DieNW', type, dieWNWFrames, scene);
+    for(var i = 0; i < revWalkDirectionList.length; i++){
+      createAnim(type+"Walk"+revWalkDirectionList[i],
+         type, "walk"+revWalkDirectionList[i]+"Frames", scene);
+      }
+    }
+    else{
+    for(var i = 0; i < walkDirectionList.length; i++){
+      createAnim(type+"Walk"+walkDirectionList[i],
+         type, "walk"+walkDirectionList[i]+"Frames", scene);
+    }
   }
-  else{
-  createAnim(type+'WalkN', type, walkNFrames, scene);
-  createAnim(type+'WalkNE', type, walkNEFrames, scene);
-  createAnim(type+'WalkE', type, walkEFrames, scene);
-  createAnim(type+'WalkSE', type, walkSEFrames, scene);
-  createAnim(type+'WalkS', type, walkSFrames, scene);
-  createAnim(type+'ActionN', type, actionNFrames, scene);
-  createAnim(type+'ActionNE', type, actionNEFrames, scene);
-  createAnim(type+'ActionE', type, actionEFrames, scene);
-  createAnim(type+'ActionSE', type, actionSEFrames, scene);
-  createAnim(type+'ActionS', type, actionSFrames, scene);
-  createAnim(type+'DieNE', type, dieNNEFrames, scene);
-  createAnim(type+'DieN', type, dieNNEFrames, scene);
-  createAnim(type+'DieSE', type, dieESEFrames, scene);
-  createAnim(type+'DieE', type, dieESEFrames, scene);
-  }
+}
+
+function createAnims(scene, type){
+
+  //all units have same walk animation frames so make those first
+    createWalkAnims(scene, type);
+
+    //create the archer animations
+    if(type.includes("archer")){
+      createSpecialUnitAnims(scene, type, archerActions);
+    }
+    //create the swordsman animations
+    else if (type.includes("swordsman")){
+      createSpecialUnitAnims(scene, type, swordsmanActions);
+    }
+    else{
+      createGeneralUnitAnims(scene, type);
+    }
 }
 
 //goes through the list of unitSprites and creates the different animations

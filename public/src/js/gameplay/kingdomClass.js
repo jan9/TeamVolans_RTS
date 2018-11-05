@@ -1,6 +1,6 @@
 class Kingdom{
 
-  constructor(kingdomInformation, xCoord, yCoord, game) {
+  constructor(kingdomInformation, xCoord, yCoord, isPlayer, game, startingObjects) {
     this.type = kingdomInformation.type;
     this.gold = kingdomInformation.gold;
     this.buildings = [];
@@ -10,10 +10,15 @@ class Kingdom{
     this.game = game;
     this.startingX = xCoord;
     this.startingY = yCoord;
+    this.playerKingdom = isPlayer;
 
     //create the starting buildings and units
-    this.createStartingBuildings(kingdomInformation.buildings);
-    this.createStartingUnits(kingdomInformation.units);
+    this.createStartingBuildings(kingdomInformation.buildings, startingObjects);
+    this.createStartingUnits(kingdomInformation.units, startingObjects);
+
+    //get 6 gold every 15 seconds. Continuously loops
+    var getGold = game.time.addEvent({ delay: 15000, callback: this.receiveCastleGold,
+      callbackScope: this, loop: true, args: [] });
   }
 
 
@@ -86,7 +91,37 @@ getStructureInfo(buildingType){
    return unitInfo
  }
 
- createStartingBuildings(buildings){
+  findStartingPosition(itemInformation, itemNum, startingObjectsList){
+
+    var positionName = "Player";
+    if(!this.isPlayer()){
+      positionName = "Enemy";
+    }
+
+    var coordinates = {"x": 0, "y": 0};
+
+    if(itemInformation.type === "Castle"){
+        positionName+="_Castle";
+    }
+    else if (itemInformation.baseType === "Structure"){
+        positionName+="_Building";
+    }
+    else{
+        positionName+="_Unit"+itemNum.toString();
+    }
+
+    for(var i = 0; i < startingObjectsList.length; i++){
+      if(startingObjectsList[i].name === positionName){
+        coordinates.x = startingObjectsList[i].x;
+        coordinates.y = startingObjectsList[i].y;
+      }
+    }
+
+    return coordinates;
+  }
+
+
+ createStartingBuildings(buildings, startingObjectsList){
 
    var keys = Object.keys(buildings);
 
@@ -101,15 +136,28 @@ getStructureInfo(buildingType){
      //creates the correct amount of buildings for the current type
      for(var j = 0; j < amount; j++){
        this.buildingsAmount++;
-       var structure = new Structure(buildingInfo, this.startingX+((i+40)*2), this.startingY, this.game);
+      var structureCoords = this.findStartingPosition(buildingInfo, this.buildingsAmount, startingObjectsList);
+       var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game);
+
+       //set the statting x and y to the castle's position
+       if(structure.type === "Castle"){
+         this.startingX = structure.x;
+         this.startingY= structure.y;
+       }
+
+       //if this is the player's kingdom, set it to interactive
+      if(this.isPlayer()){
+         structure.setInteractive();
+       }
         this.buildings.push(structure);
      }
  }
 }
 
 
+
 //creates all the starting units
-  createStartingUnits(units){
+  createStartingUnits(units, startingObjectsList){
 
     //gets all the types of the starting units
     var keys = Object.keys(units);
@@ -124,19 +172,35 @@ getStructureInfo(buildingType){
       //goes through and creates the starting units
       for(var j = 0; j < amount; j++){
           this.unitAmount++;
-          var unit = new Unit(unitInfo, this.startingX-((j+10)*2), this.startingY, this.game);
+          var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
+          var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game);
+          if(this.isPlayer()){
+            unit.setInteractive();
+          }
           this.units.push(unit);
       }
     }
+  }
+
+  
+
+  //destorys the sprite (takes it off screen)
+  destroyUnit(unit){
+    unit.destroy();
   }
 
   //removes the dead units (occurs at the end of the update function)
   removeDead(){
     for(var i = 0; i < this.units.length; i++){
       if(this.units[i].isDead()){
-        this.units[i].destroy();
-        this.units.splice(i, 1);
-        this.unitsAmount--;
+
+        this.units[i].unitAnimations("Die");
+        //used to play the death animation for 4 seconds
+        var deathEvent = this.game.time.addEvent({ delay: 4000, callback: this.destroyUnit,
+          callbackScope: this, loop: false, args: [this.units[i]]});
+
+          this.units.splice(i, 1);
+          this.unitsAmount--;
       }
     }
     for(var i = 0; i < this.buildings.length; i++){
@@ -146,6 +210,10 @@ getStructureInfo(buildingType){
         this.buildingsAmount--;
       }
     }
+  }
+
+  receiveCastleGold(){
+    this.gold+=6;
   }
 
   getGold(){
@@ -159,13 +227,19 @@ getStructureInfo(buildingType){
   }
 
 
-//used to make the player's buildings and units interactive
-  makeInteractive(){
-    for(var i = 0; i < this.buildings.length; i++){
-      this.buildings[i].setInteractive();
-  }
-  for(var i = 0; i< this.units.length; i++){
-    this.units[i].setInteractive();
-  }
+
+isPlayer(){
+  return this.playerKingdom;
 }
+
+  updatePlayerKingdom(){
+    for(let unit of this.units){
+      if(unit.getState() === "Move"){
+        if(unit.checkMovement()){
+          //dosomething
+        }
+      }
+    }
+  }
+
 }

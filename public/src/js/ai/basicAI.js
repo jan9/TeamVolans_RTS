@@ -12,7 +12,7 @@ function structureAI(structure, kingdom){
 
       //only increase currentBuild if we have enough gold to make the unit
       if(unitInfo.cost < kingdom.getGold()){
-        structure.startBuildUnit(kingdom.getCurrentBuild(), kingdom, kingdom.game, false);
+        structure.startBuildUnit(kingdom.getCurrentBuild(), kingdom, kingdom.game);
         kingdom.incrementBuildOrder();
       }
     }
@@ -27,10 +27,10 @@ function attackUnitAI(attackUnit, kingdom){
     //if the unit has stopped moving, have them find the closest enemy and attack
     if(attackUnit.checkMovement()){
       if(kingdom.currentTargets[1]){
-        attackUnit.attackEnemy(kingdom.currentTargets[1]);
+        attackUnit.attackEnemy(kingdom.currentTargets[1], kingdom.game);
       }
       else if(kingdom.currentTargets[0]){
-        attackUnit.attackEnemy(kingdom.currentTargets[0]);
+        attackUnit.attackEnemy(kingdom.currentTargets[0], kingdom.game);
       }
     }
   }

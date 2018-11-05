@@ -50,16 +50,14 @@ class Structure extends Phaser.GameObjects.Sprite{
   }
 
   //starts building the structure
-  startBuildUnit(unitType, kingdom, game, setInteractive){
+  startBuildUnit(unitType, kingdom, game){
 
     var unitInfo = kingdom.getUnitInfo(unitType);
 
     //if the building can create the unit, and has the gold to create it, then creates the unit
     if(this.getUnitProduced() === unitType){
       if(unitInfo.cost < kingdom.getGold()){
-        if(kingdom === player){
-          currentGold -= unitInfo.cost;
-        }
+        
         //set the state to build
         this.setState("Build");
 
@@ -67,7 +65,7 @@ class Structure extends Phaser.GameObjects.Sprite{
 
         //creates the unit after 10 seconds
       var buildingEvent = game.time.addEvent({ delay: 10000, callback: this.finishBuildUnit,
-        callbackScope: this, loop: false, args: [unitInfo, kingdom, game, setInteractive] });
+        callbackScope: this, loop: false, args: [unitInfo, kingdom, game] });
     }
   }
 
@@ -75,13 +73,13 @@ class Structure extends Phaser.GameObjects.Sprite{
 
 
   //finished building the unit. occurs 10 seconds after start
-  finishBuildUnit(unitInfo, kingdom, game, setInteractive){
+  finishBuildUnit(unitInfo, kingdom, game){
 
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && this.health > 0){
       var unit = new Unit(unitInfo, this.x+75, this.y, game);
         //once the unit has been built, add it to the kingdom and increase the unitamount
-        if(setInteractive){
+        if(kingdom.isPlayer()){
           unit.setInteractive();
         }
 
@@ -96,9 +94,7 @@ class Structure extends Phaser.GameObjects.Sprite{
 
       //if the building was destroyed before the unit was built, give the money back to the kingdom
       kingdom.addGold(unitInfo.cost);
-      if(kingdom === player){
-        currentGold += unitInfo.cost;
-      }
+
 
     }
   }

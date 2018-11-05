@@ -18,6 +18,9 @@ function onObjectClicked(pointer,gameObject)
       gameObject.startBuildUnit(gameObject.unitProduced, player, player.game, true);
       console.log(gameObject.type + ' is creating ' + gameObject.unitProduced);
     }
+    else{
+      selectedUnit = gameObject;
+    }
 
 
 }

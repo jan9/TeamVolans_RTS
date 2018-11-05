@@ -9,8 +9,8 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.attack = unitInformation.attack;
     this.range = unitInformation.range;
     this.state = unitInformation.state;
-    this.destinationX=0;
-    this.destinationY=0;
+    this.destinationX=xCoord+1;
+    this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
     scene.physics.world.enable(this);
 
@@ -63,7 +63,7 @@ class Unit extends Phaser.GameObjects.Sprite{
       this.stopMovement();
     }
     else{
-        this.walkAnimation();
+        this.unitAnimations("Walk");
     }
 
       this.setState("Move");
@@ -71,10 +71,11 @@ class Unit extends Phaser.GameObjects.Sprite{
 
       //uses built in phaser moveTo function to move the unit
       //this function does not stop the unit's movement so had to create a function which checks to see if unit reached destination yet
-      game.physics.moveTo(this, xLocation, yLocation, 2);
+      game.physics.moveTo(this, xLocation, yLocation, 5);
 
   }
-  walkAnimation(){
+  unitAnimations(typeOfAnim){
+
     var direction = "";
 
     if(this.destinationY != this.y){
@@ -91,16 +92,16 @@ class Unit extends Phaser.GameObjects.Sprite{
     else if(this.destinationX < this.x){
       direction+="W";
     }
-
     if(direction === "SW" || direction ==="W" || direction == "NW"){
       this.setTexture(this.type.toLowerCase()+"_rev");
-      this.anims.play(this.type.toLowerCase()+"_revWalk"+direction);
+      this.anims.play(this.type.toLowerCase()+"_rev"+typeOfAnim+direction);
     }
     else{
       this.setTexture(this.type.toLowerCase());
-      this.anims.play(this.type.toLowerCase()+"Walk"+direction);
+      this.anims.play(this.type.toLowerCase()+typeOfAnim+direction);
     }
   }
+
 
   //checks if the moving unit is at it's destination (right now have it set up to be in a radius of the actual destination)
   //and if so stops the unit from moving
@@ -128,12 +129,14 @@ class Unit extends Phaser.GameObjects.Sprite{
   stopMovement(){
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
+    this.anims.stop();
     this.setState("Idle");
   }
 
   //starts building the structure
   startBuildStructure(buildingType, kingdom, game){
 
+    console.log("HERE");
     var buildingInfo = kingdom.getStructureInfo(buildingType);
 
     //a villager can make all buildings except Castle
@@ -144,6 +147,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
         //set the state to build
         this.setState("Build");
+        this.unitAnimations("Action");
 
         //takes the gold right away from the kingdom
         kingdom.removeGold(buildingInfo.cost);
@@ -159,12 +163,16 @@ class Unit extends Phaser.GameObjects.Sprite{
   //finished building the structure. occurs 30 seconds after start
   finishBuildStructure(buildingInfo, kingdom, game){
 
-
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && !this.isDead()){
-        kingdom.buildings.push(new Structure(buildingInfo, this.x+5, this.y+5, game));
-        kingdom.buildingsAmount++;
-        this.setState("Idle");
+      var structure = new Structure(buildingInfo, this.x+5, this.y+5, game);
+
+      if(kingdom.isPlayer()){
+        structure.setInteractive();
+      }
+      kingdom.buildings.push(structure);
+      kingdom.buildingsAmount++;
+      this.setState("Idle");
     }
 
     //if the unit has been killed or isn't making the building anymore, give the kingdom back the gold from the buildings
@@ -179,6 +187,7 @@ class Unit extends Phaser.GameObjects.Sprite{
   mine(kingdom, game){
 
     this.setState("Mine");
+    this.unitAnimations("Action");
 
     //TIMER INFO
     //https://phaser.io/phaser3/devlog/87
@@ -210,10 +219,8 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
   }
 
-  attackEnemy(attackedUnit){
-    this.setState("Attack");
-    //attack if unit isn't dead attack(dead units get removed at end of each update but
-    // there's a chance it might have been killed in between)
+  attackEnemyEnd(attackedUnit){
+
     if(!this.isDead() && !attackedUnit.isDead()){
 
       //unit has 50% chance of attack landing a hit
@@ -221,10 +228,38 @@ class Unit extends Phaser.GameObjects.Sprite{
 
       if(chance % 2 == 0 ){
         attackedUnit.updateHealth(this.getAttack());
-        if(attackedUnit.isDead()){
-          this.setState("Idle");
-        }
       }
+    }
+
+    //set state to idle and stop the attack animation
+    this.setState("Idle");
+    this.anims.stop();
+  }
+
+  attackEnemy(attackedUnit, game){
+
+    this.setState("Attack");
+
+    //attack if unit isn't dead attack(dead units get removed at end of each update but
+    // there's a chance it might have been killed in between)
+    if(!this.isDead() && !attackedUnit.isDead()){
+      this.setState("Attack");
+
+      //waits 2.5 seconds to actually attack/land the hit
+      //starts the attack animations
+      if(this.getType() === "Archer"){
+        this.unitAnimations("Shoot");
+      }
+      else if (this.getType() === "Swordsman"){
+        this.unitAnimations("Attack");
+      }
+      //catapult needs special frames
+      else if (this.getType() === "Catapult"){}
+      else{
+        this.unitAnimations("Action");
+      }
+      var attackEvent = game.time.addEvent({ delay: 2500, callback: this.attackEnemyEnd,
+        callbackScope: this, loop: false, args: [attackedUnit] });
     }
   }
 

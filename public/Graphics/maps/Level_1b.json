@@ -437,6 +437,50 @@
                  "width":32,
                  "x":481,
                  "y":32
+                }, 
+                {
+                 "height":32,
+                 "id":39,
+                 "name":"Player_Unit13",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":801,
+                 "y":1473
+                }, 
+                {
+                 "height":32,
+                 "id":40,
+                 "name":"Player_Unit14",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":800,
+                 "y":1535
+                }, 
+                {
+                 "height":32,
+                 "id":41,
+                 "name":"Enemy_Unit13",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":286,
+                 "y":97
+                }, 
+                {
+                 "height":32,
+                 "id":42,
+                 "name":"Enemy_Unit14",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":382,
+                 "y":96
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -445,7 +489,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":39,
+ "nextobjectid":43,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.0",
@@ -454,7 +498,7 @@
         {
          "columns":12,
          "firstgid":1,
-         "image":"..\/..\/..\/Graphics\/TileSets\/water.png",
+         "image":"..\/TileSets\/water.png",
          "imageheight":331,
          "imagewidth":410,
          "margin":0,
@@ -2140,7 +2184,7 @@
         {
          "columns":30,
          "firstgid":121,
-         "image":"..\/..\/..\/Graphics\/TileSets\/Background5.png",
+         "image":"..\/TileSets\/Background5.png",
          "imageheight":960,
          "imagewidth":960,
          "margin":0,
@@ -3386,7 +3430,7 @@
         {
          "columns":30,
          "firstgid":1021,
-         "image":"..\/..\/..\/Graphics\/TileSets\/Background2.png",
+         "image":"..\/TileSets\/Background2.png",
          "imageheight":960,
          "imagewidth":960,
          "margin":0,
@@ -4612,7 +4656,7 @@
         {
          "columns":30,
          "firstgid":1921,
-         "image":"..\/..\/..\/Graphics\/TileSets\/Background1.png",
+         "image":"..\/TileSets\/Background1.png",
          "imageheight":960,
          "imagewidth":960,
          "margin":0,
