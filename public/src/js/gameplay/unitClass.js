@@ -129,7 +129,6 @@ class Unit extends Phaser.GameObjects.Sprite{
   stopMovement(){
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    this.anims.stop();
     this.setState("Idle");
   }
 
