@@ -12,6 +12,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.destinationX=xCoord+1;
     this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
+    this.maxHealth = unitInformation.health;
     scene.physics.world.enable(this);
 
     //add the unit to the game scene (so it will actually show up on the screen)
@@ -136,7 +137,6 @@ class Unit extends Phaser.GameObjects.Sprite{
   //starts building the structure
   startBuildStructure(buildingType, kingdom, game){
 
-    console.log("HERE");
     var buildingInfo = kingdom.getStructureInfo(buildingType);
 
     //a villager can make all buildings except Castle
@@ -219,23 +219,9 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
   }
 
-  attackEnemyEnd(attackedUnit){
 
-    if(!this.isDead() && !attackedUnit.isDead()){
-
-      //unit has 50% chance of attack landing a hit
-      var chance = Math.floor(Math.random() * 2) + 1;
-
-      if(chance % 2 == 0 ){
-        attackedUnit.updateHealth(this.getAttack());
-      }
-    }
-
-    //set state to idle and stop the attack animation
-    this.setState("Idle");
-    this.anims.stop();
-  }
-
+  //attacks an enemy
+  //also used for the priest to heal allies
   attackEnemy(attackedUnit, game){
 
     this.setState("Attack");
@@ -258,10 +244,32 @@ class Unit extends Phaser.GameObjects.Sprite{
       else{
         this.unitAnimations("Action");
       }
-      var attackEvent = game.time.addEvent({ delay: 2500, callback: this.attackEnemyEnd,
+
+      //the actual attack takes 3 seconds to account for the animation playing
+      var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
         callbackScope: this, loop: false, args: [attackedUnit] });
     }
   }
+
+  //attack the enemy
+  //heal the ally
+  attackEnemyEnd(attackedUnit){
+
+    if(!this.isDead() && !attackedUnit.isDead()){
+
+      //unit has 50% chance of attack landing a hit
+      var chance = Math.floor(Math.random() * 2) + 1;
+
+      if(chance % 2 == 0 ){
+        attackedUnit.updateHealth(this.getAttack());
+      }
+    }
+
+    //set state to idle and stop the attack animation
+    this.setState("Idle");
+    this.anims.stopOnRepeat();
+  }
+
 
   //returns the closest unit in the given unitArray near the currentUnit
   //expensive to run a lot so...need to figure out a way to "cache" the results
@@ -282,6 +290,27 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
 
     return closestUnit;
+  }
+
+  //finds the closest injured unit
+  closestInjured(unitsList){
+    var closestInjuredUnit;
+
+    //goes through the list of units to find the  closest injured
+    for(let unit of unitsList){
+      //if closestInjuredUnit is undefined, define it with the first injured unit
+      if(unit.health < unit.maxHealth && !closestInjuredUnit){
+        closestInjuredUnit = unit;
+      }
+
+      else if(unit.health < unit.maxHealth
+        && distance(this.x, this.y, closestInjured.x, closestInjured.y)
+        > distance(this.x, this.y, unit.x, unit.y)){
+        closestInjuredUnit = unit;
+      }
+    }
+
+    return closestInjuredUnit;
   }
 
 }

@@ -48,7 +48,6 @@ var swordsmanDieNEFrames = swordsmanDieNFrames = swordsman_revDieSFrames = sword
 var swordsmanDieEFrames = swordsmanDieSEFrames = swordsman_revDieWFrames = swordsman_revDieNWFrames = [48, 53, 58];
 
 
-//ADD CATAPULT BACK IN ONCE WE GET THE FRAMES LISTINGS
 var unitSprites = ['archer', 'archer_rev', 'catapult', 'catapult_rev', 'priest', 'priest_rev',
 'villager', 'villager_rev', 'royalty', 'royalty_rev',
 'swordsman', 'swordsman_rev', 'miner', 'miner_rev'];

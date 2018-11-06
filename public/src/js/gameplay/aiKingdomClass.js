@@ -5,8 +5,8 @@ class AIKingdom extends Kingdom{
       this.buildOrder = kingdomInformation.buildOrder;
       this.currentBuild = 0;
 
-      this.availableAttackUnits = [];
-      this.guardUnits = [];
+      this.attackGroup = [];
+
 
       //keeps track of the AI's current targets of attack
       this.currentTargets = [];
@@ -56,7 +56,6 @@ class AIKingdom extends Kingdom{
         closestEnemy = enemyArr[i];
       }
     }
-    console.log(closestEnemy);
       return closestEnemy;
     }
   }
@@ -72,22 +71,29 @@ class AIKingdom extends Kingdom{
       //have the miners mine
       for(var i = 0; i < this.units.length; i++){
         var currentUnit = this.units[i];
+
+        //have the miner mine
         if(currentUnit.getType() === "Miner"){
           minerAI(currentUnit, this);
         }
 
-        //have the swordsman move to the nearest enemy
-        if(currentUnit.getType()==="Swordsman"
+        //have the attack units attack
+        else if(currentUnit.getType()==="Swordsman"
         ||currentUnit.getType()==="Archer"
         ||currentUnit.getType()==="Catapult"){
             attackUnitAI(currentUnit, this);
         }
 
         //have the Villager build structures
-        if(currentUnit.getType() === "Villager"){
+        else if(currentUnit.getType() === "Villager"){
             villagerAI(currentUnit, this);
           }
+
+        //have the priests heal
+        else if(currentUnit.getType() === "Priest"){
+          priestAI(currentUnit, this);
         }
+      }
 
 
       //goes through the list of buildings and if the building is able to make
