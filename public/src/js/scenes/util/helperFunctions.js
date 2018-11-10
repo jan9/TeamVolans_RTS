@@ -67,7 +67,12 @@ function calculateWinner(playerKingdom, aiKingdom){
 //updates the colliders
 function updateColliders(game, aiKingdom, playerKingdom){
 
-  game.physics.add.collider(aiKingdom);
-  game.physics.add.collider(playerKingdom);
+  game.physics.add.collider(aiKingdom, aiKingdom);
+  game.physics.add.collider(playerKingdom, playerKingdom);
   game.physics.add.collider(aiKingdom, playerKingdom);
+}
+
+function testingCollision(obj1, obj2){
+  console.log(obj1);
+  console.log(obj2);
 }

@@ -14,6 +14,9 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.baseType = unitInformation.baseType;
     this.maxHealth = unitInformation.health;
 
+    //set size for physics
+    this.setSize(32, 32);
+
     scene.physics.world.enable(this);
 
 
