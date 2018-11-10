@@ -18,14 +18,14 @@ class Selection extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('title_g','assets/UI/sampleSelection.jpg');
+    this.load.image('title_g','Graphics/UI/sampleSelection.jpg');
     // this.load.image('box','Graphics/screens/start_screen/StartScreen_Box.png');
     this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
-    this.load.image('Dueling Dominion', 'assets/UI/emblem/Dueling Dominion.svg');
-    this.load.image('Equal Empire', 'assets/UI/emblem/Equal Empire.svg');
-    this.load.image('Fortune Federation', 'assets/UI/emblem/Fortune Federation.svg');
-    this.load.image('Remote Realm', 'assets/UI/emblem/Remote Realm.svg');
-    this.load.image('Security Syndicate', 'assets/UI/emblem/Security Syndicate.svg');
+    this.load.image('Dueling Dominion', 'Graphics/UI/emblem/Dueling Dominion.svg');
+    this.load.image('Equal Empire', 'Graphics/UI/emblem/Equal Empire.svg');
+    this.load.image('Fortune Federation', 'Graphics/UI/emblem/Fortune Federation.svg');
+    this.load.image('Remote Realm', 'Graphics/UI/emblem/Remote Realm.svg');
+    this.load.image('Security Syndicate', 'Graphics/UI/emblem/Security Syndicate.svg');
     //this.load.image('Legendary League', 'assets/UI/emblem/Legendary League.svg');
   }
 

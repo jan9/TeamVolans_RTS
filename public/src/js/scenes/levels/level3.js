@@ -9,7 +9,7 @@ class Level3 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('map3','assets/UI/sampleMap.png');
+    this.load.image('map3','Graphics/UI/sampleMap.png');
   }
 
   create() {

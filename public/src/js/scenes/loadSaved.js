@@ -5,7 +5,7 @@ class Load extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('title_l','assets/UI/sampleSaved.jpg');
+    this.load.image('title_l','Graphics/UI/sampleSaved.jpg');
     this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
   }
 

@@ -246,12 +246,27 @@ isPlayer(){
 
   updatePlayerKingdom(){
     for(let unit of this.units){
+      /*
       if(unit.getState() === "Move"){
         if(unit.checkMovement()){
           //dosomething
         }
       }
+      */
+      for(let unit of this.units){
+      // if the unit selected, move it to a new position
+      if(unit.player_selected  === true && unit.alpha === 0.5){
+        // mouse x and y stored in global variables x and y in level 1
+        var new_x = x-unit.x;
+        var new_y = y-unit.y;
+        unit.move(new_x, new_y, this.game);
+      }
+      // if the unit deselected, stop the movement and set its state to idle
+      // TODO: add this as an event
+      else if(unit.player_selected  === false && unit.alpha === 1){
+        unit.stopMovement();
+        }
+      }
     }
   }
-
 }

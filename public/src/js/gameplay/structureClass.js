@@ -9,9 +9,23 @@ class Structure extends Phaser.GameObjects.Sprite{
     this.unitProduced = structureInformation.unitProduced;
     this.state = "Idle";
 
-    //add the structure to the game scene (so it will actually show up on the screen)
+      // set up a health bar
+    this.maxHealth = structureInformation.health; // store max health of a unit
+    this.bar = new Phaser.GameObjects.Graphics(scene);
+    this.barX = xCoord-50;
+    this.barY = yCoord-90;
+    this.percent = this.health/this.maxHealth;
+    this.drawHealthBar();
+
     this.scene = scene;
-    this.scene.add.existing(this);
+    //a game container containing a unit and its health bar
+    this.unitContainer = new Phaser.GameObjects.Container(scene, xCoord, yCoord, [this,this.bar]);
+    this.unitContainer.x = 0;
+    this.unitContainer.y = 0;
+    //scene.physics.world.enable(this);
+    //scene.physics.world.enable(this.bar);
+    scene.physics.world.enable(this.unitContainer);
+    this.scene.add.existing(this.unitContainer);
   }
 
   getState(){
@@ -46,7 +60,11 @@ class Structure extends Phaser.GameObjects.Sprite{
 
   //updates the health of the structure based on how many points it's been hurt by
   updateHealth(points){
-      this.health += points;
+    this.health += points;
+    if (this.health < 0) {
+      this.health = 0;
+    }
+    this.drawHealthBar();
   }
 
   //starts building the structure
@@ -102,5 +120,28 @@ class Structure extends Phaser.GameObjects.Sprite{
 
     }
   }
+  drawHealthBar() {
+    this.bar.clear();
+    this.percent = this.health/this.maxHealth;
+    //  BG
+    this.bar.fillStyle(0x000000);
+    this.bar.fillRect(this.barX, this.barY, 50, 10);
 
+    //  Health
+    this.bar.fillStyle(0xffffff);
+    this.bar.fillRect(this.barX + 2, this.barY + 2, 46, 6);
+
+    if (this.percent < 0.3)
+    {
+        this.bar.fillStyle(0xff0000);
+    }
+    else
+    {
+        this.bar.fillStyle(0x00ff00);
+    }
+
+  var d = Math.floor( this.percent * 46);
+
+    this.bar.fillRect(this.barX + 2, this.barY + 2, d, 6);
+  }
 }

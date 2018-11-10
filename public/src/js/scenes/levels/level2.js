@@ -9,8 +9,8 @@ class Level2 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('map2','assets/UI/sampleMap.png');
-    this.load.image('button', 'assets/UI/button/button.png');
+    this.load.image('map2','Graphics/UI/sampleMap.png');
+    this.load.image('button', 'Graphics/UI/button/button.png');
     this.load.image('tiles', 'Graphics/TileSets/BackgroundComplete.png');
     this.load.tilemapTiledJSON('map2', 'Graphics/maps/Level_2.json');
   }

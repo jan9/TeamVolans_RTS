@@ -9,7 +9,7 @@ class Title extends Phaser.Scene {
     this.load.image('startButton','Graphics/screens/start_screen/StartScreen_Start.png');
     this.load.image('howtoplayButton','Graphics/screens/start_screen/misc_buttons/Button_HowtoPlay.png');
     this.load.image('loadButton', 'Graphics/screens/start_screen/StartScreen_Load copy.png');
-    this.load.image('button', 'assets/UI/button/button1.png');  // for AI testing
+    this.load.image('button', 'Graphics/UI/button/button1.png');  // for AI testing
   }
 
   create() {

@@ -18,16 +18,16 @@ class gameHUD extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('win','assets/UI/WIN.png');
-    this.load.image('lackOfGold','assets/UI/Not-Enough-Gold.png');
+    this.load.image('win','Graphics/UI/WIN.png');
+    this.load.image('lackOfGold','Graphics/UI/Not-Enough-Gold.png');
     this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
-    this.load.image('button_mine','assets/UI/buildButtons/1.png');
-    this.load.image('button_archeryRange','assets/UI/buildButtons/2.png');
-    this.load.image('button_townCenter','assets/UI/buildButtons/3.png');
-    this.load.image('button_barracks','assets/UI/buildButtons/4.png');
-    this.load.image('button_castle','assets/UI/buildButtons/5.png');
-    this.load.image('button_temple','assets/UI/buildButtons/6.png');
-    this.load.image('button_machinery','assets/UI/buildButtons/7.png');
+    this.load.image('button_mine','Graphics/UI/buildButtons/1.png');
+    this.load.image('button_archeryRange','Graphics/UI/buildButtons/2.png');
+    this.load.image('button_townCenter','Graphics/UI/buildButtons/3.png');
+    this.load.image('button_barracks','Graphics/UI/buildButtons/4.png');
+    this.load.image('button_castle','Graphics/UI/buildButtons/5.png');
+    this.load.image('button_temple','Graphics/UI/buildButtons/6.png');
+    this.load.image('button_machinery','Graphics/UI/buildButtons/7.png');
   }
 
   create() {

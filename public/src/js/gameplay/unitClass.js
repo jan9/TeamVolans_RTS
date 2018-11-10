@@ -12,17 +12,36 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.destinationX=xCoord+1;
     this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
-    this.maxHealth = unitInformation.health;
+    this.player_selected = false;  // for player kingdom
+    // set up a health bar
+    this.maxHealth = unitInformation.health; // store max health of a unit
+    this.bar = new Phaser.GameObjects.Graphics(scene);
+    this.barX = xCoord-25;
+    this.barY = yCoord-35;
+    this.percent = this.health/this.maxHealth;
+    this.drawHealthBar();
+
+    this.scene = scene;
 
     //set size for physics
     this.setSize(32, 32);
 
+    //a game container containing a unit and its health bar
+    this.unitContainer = new Phaser.GameObjects.Container(scene, xCoord, yCoord, [this,this.bar]);
+    this.unitContainer.x = 0;
+    this.unitContainer.y = 0;
+    //scene.physics.world.enable(this);
+    //scene.physics.world.enable(this.bar);
+    scene.physics.world.enable(this.unitContainer);
+    this.scene.add.existing(this.unitContainer);
+
+
+    /*
     scene.physics.world.enable(this);
-
-
     //add the unit to the game scene (so it will actually show up on the screen)
     this.scene = scene;
     this.scene.add.existing(this);
+    */
 }
 
   getState(){
@@ -41,6 +60,10 @@ class Unit extends Phaser.GameObjects.Sprite{
   //updates the health of the unit based on whether it's being healed or attacked
   updateHealth(points){
     this.health += points;
+    if (this.health < 0) {
+      this.health = 0;
+    }
+    this.drawHealthBar();
   }
 
   //checks to see whether or not the unit is dead
@@ -77,7 +100,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
       //uses built in phaser moveTo function to move the unit
       //this function does not stop the unit's movement so had to create a function which checks to see if unit reached destination yet
-      game.physics.moveTo(this, xLocation, yLocation, 5);
+      game.physics.moveTo(this.unitContainer, xLocation, yLocation, 5);
 
   }
   unitAnimations(typeOfAnim){
@@ -139,8 +162,8 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   //stops the unit's movement and sets the state to idle
   stopMovement(){
-    this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
+    this.unitContainer.body.velocity.x = 0;
+    this.unitContainer.body.velocity.y = 0;
     this.setState("Idle");
     //this.anims.stop();
   }
@@ -331,4 +354,28 @@ class Unit extends Phaser.GameObjects.Sprite{
     return closestInjuredUnit;
   }
 
+  drawHealthBar() {
+    this.bar.clear();
+    this.percent = this.health/this.maxHealth;
+    //  BG
+    this.bar.fillStyle(0x000000);
+    this.bar.fillRect(this.barX, this.barY, 50, 10);
+
+    //  Health
+    this.bar.fillStyle(0xffffff);
+    this.bar.fillRect(this.barX + 2, this.barY + 2, 46, 6);
+
+    if (this.percent < 0.3)
+    {
+        this.bar.fillStyle(0xff0000);
+    }
+    else
+    {
+        this.bar.fillStyle(0x00ff00);
+    }
+
+  var d = Math.floor( this.percent * 46);
+
+    this.bar.fillRect(this.barX + 2, this.barY + 2, d, 6);
+  }
 }

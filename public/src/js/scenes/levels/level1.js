@@ -9,6 +9,7 @@ var pointer;
 var playerKingdom, aiKingdom;
 var controls;
 var selectedUnit;
+var dragSelect_Rect;
 class Level1 extends Phaser.Scene {
 
   constructor() {
@@ -24,7 +25,7 @@ class Level1 extends Phaser.Scene {
     this.load.image('tiles5', 'Graphics/TileSets/Background5.png');
     this.load.image('tilesW', 'Graphics/TileSets/water.png');
     this.load.tilemapTiledJSON('map', 'Graphics/maps/Level_1b.json');
-    this.load.image('button', 'assets/UI/button/button.png');
+    this.load.image('button', 'Graphics/UI/button/button.png');
 
   }
 
@@ -44,14 +45,26 @@ class Level1 extends Phaser.Scene {
 
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
-    this.physics.world.setBounds(0,0,50,50);
+    // sets a boundary for main camera
+    this.cameras.main.setBounds(0, -100, _width*1.28, _height*2.6);
+    this.cameras.main.centerOn(_width*0.5, _height*2.5);
+    this.physics.world.setBounds(0, 0, _width*1.28, _height*2.5);
+
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
 
+    //TODO: minimap
+    /*
+    //  The miniCam is 400px wide, so can display the whole world at a zoom of 0.2
+   this.minimap = this.cameras.add(0, -100, _width*1.28, _height*2.6).setZoom(0.2).setName('mini');
+   //this.minimap.setBackgroundColor(0x002244);
+   this.minimap.scrollX = 3600;
+   this.minimap.scrollY = 300;
+   */
     var cursors = this.input.keyboard.createCursorKeys();
 
-    this.input.on('gameobjectdown', onObjectClicked);
+    this.input.on('gameobjectdown', onObjectClicked, this.scene);
 
     var W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     var S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -101,6 +114,7 @@ class Level1 extends Phaser.Scene {
       ai = new AIKingdom(remoteRealmInfo, 50, 50, this, startingObjects);
     };
 
+    updateColliders(this, ai, player);
 
     //runs every 10 seconds to get the ai priority attack locations
     var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,
@@ -112,6 +126,7 @@ class Level1 extends Phaser.Scene {
     gameStartTime = Date.now();
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
+
     console.log('[Level1] create() complete');
   }
 
@@ -123,6 +138,9 @@ class Level1 extends Phaser.Scene {
 
   update(delta) {
     controls.update(delta);
+
+    this.dragSelect(this);
+
     if (backToMainMenu === 1 && currentLevel === 1) {
       backToMainMenu = 0;
       this.scene.start('Title');
@@ -130,70 +148,101 @@ class Level1 extends Phaser.Scene {
       check_gameover = 0;
       this.scene.start('Gameover');
     }
-    this.addBuildings();
+
+    this.pointerInput();
+
     ai.updateAIKingdom(player);
+    player.updatePlayerKingdom(player);
 
   }
 
 
 
-  // adds buildings to the current player's kingdom
-  // TODO: building images need to be corrected,
-  // TODO: building time needs to be reflected,
-  // TODO: building cost needs to be reflected
-  addBuildings() {
+  pointerInput() {
     this.input.on('pointerdown', function(pointer) {
-      x = pointer.x;
-      y = pointer.y;
-      if (build_signal === 1) {
-        player.buildings.push(new Structure(archeryRangeInfo, x, y, this).setInteractive());
-        player.buildingsAmount++;
-        currentGold -= archeryRangeInfo.cost;
-        player.gold -= archeryRangeInfo.cost;
-        build_signal = 0;
+      var structureInfo;
+      x = Phaser.Math.RoundAwayFromZero(pointer.worldX);
+      y = Phaser.Math.RoundAwayFromZero(pointer.worldY);
+
+      //check if we were selecting a game object, not doing pointer Input
+      //basically setting the input for gameObjectDown also calls this input function...even if we don't want it Called
+      //so this is a check to ignore this function if gameObject is really what we were calling
+      if(gameObjectClicked){
+        gameObjectClicked = false;
       }
-      else if (build_signal === 2) {
-        player.buildings.push(new Structure(barracksInfo, x, y, this).setInteractive());
-        player.buildingsAmount++;
-        currentGold -= barracksInfo.cost;
-        player.gold -= barracksInfo.cost;
-        build_signal = 0;
+
+      else{
+      if(selectedUnit){
+        //if there is a build signa; and a unit selected is villager, build the structure
+        if(build_signal > 0 && selectedUnit.type === "Villager"){
+
+          if (build_signal === 1) {
+            structureInfo = "Archery Range";
+            build_signal = 0;
+          }
+          else if (build_signal === 2) {
+            structureInfo = "Barracks";
+            build_signal = 0;
+          }
+          else if (build_signal === 3) {
+            structureInfo = "Castle";
+            build_signal = 0;
+          }
+          else if (build_signal === 4) {
+            structureInfo = "Machinery";
+            build_signal = 0;
+          }
+          else if (build_signal === 5) {
+            structureInfo = "Mine";
+            build_signal = 0;
+          }
+          else if (build_signal === 6) {
+            structureInfo = "Temple";
+            build_signal = 0;
+          }
+          else if (build_signal === 7) {
+            structureInfo = "Town Center";
+            build_signal = 0;
+          }
+          selectedUnit.startBuildStructure(structureInfo, player, this);
+        }
+        /*//move the unit to the location
+        else if (build_signal <= 0){
+            selectedUnit.move(x, y, this);
+        }*/
       }
-      else if (build_signal === 3) {
-        player.buildings.push(new Structure(castleInfo, x, y, this).setInteractive());
-        player.buildingsAmount++;
-        currentGold -= barracksInfo.cost;
-        player.gold -= barracksInfo.cost;
-        build_signal = 0;
+    }
+  },this);
+  }
+
+  dragSelect(scene) {
+    var graphics = this.add.graphics();
+
+    var color = 0xffff00;
+    var thickness = 1;
+    var alpha = 1;
+
+    var draw = false;
+    var downX, downY;
+
+    scene.input.on('pointerdown', function(pointer) {
+      if (pointer.leftButtonDown()){
+      downX = Phaser.Math.RoundAwayFromZero(pointer.worldX);
+      downY = Phaser.Math.RoundAwayFromZero(pointer.worldY);
+      draw = true;
       }
-      else if (build_signal === 4) {
-        player.buildings.push(new Structure(machineryInfo, x, y, this).setInteractive());
-        player.buildingsAmount++;
-        currentGold -= machineryInfo.cost;
-        player.gold -= machineryInfo.cost;
-        build_signal = 0;
+    });
+    scene.input.on('pointerup', function(){
+      draw = false;
+    });
+    scene.input.on('pointermove', function(pointer){
+      if (pointer.leftButtonDown()){
+        if (draw) {
+          graphics.clear();
+          graphics.lineStyle(thickness, color, alpha);
+          graphics.strokeRect(downX, downY, pointer.worldX - downX, pointer.worldY - downY);
+        }
       }
-      else if (build_signal === 5) {
-        player.buildings.push(new Structure(mineInfo, x, y, this).setInteractive());
-        player.buildingsAmount++;
-        currentGold -= mineInfo.cost;
-        player.gold -= mineInfo.cost;
-        build_signal = 0;
-      }
-      else if (build_signal === 6) {
-        player.buildings.push(new Structure(templeInfo, x, y, this).setInteractive());
-        player.buildingsAmount++;
-        currentGold -= templeInfo.cost;
-        player.gold -= templeInfo.cost;
-        build_signal = 0;
-      }
-      else if (build_signal === 7) {
-        player.buildings.push(new Structure(townCenterInfo, x, y, this).setInteractive());
-        player.buildingsAmount++;
-        currentGold -= townCenterInfo.cost;
-        player.gold -= townCenterInfo.cost;
-        build_signal = 0;
-      }
-    },this);
+    });
   }
 }

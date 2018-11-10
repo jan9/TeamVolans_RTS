@@ -142,7 +142,7 @@ class TestAI extends Phaser.Scene {
       if(gameObjectClicked){
         gameObjectClicked = false;
       }
-      
+
       else{
       if(selectedUnit){
         //if there is a build signa; and a unit selected is villager, build the structure
