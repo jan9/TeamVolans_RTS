@@ -1,6 +1,7 @@
-class Kingdom{
+class Kingdom extends Phaser.Physics.Arcade.Group{
 
   constructor(kingdomInformation, xCoord, yCoord, isPlayer, game, startingObjects) {
+    super(game.physics.world, game);
     this.type = kingdomInformation.type;
     this.gold = kingdomInformation.gold;
     this.buildings = [];
@@ -17,8 +18,9 @@ class Kingdom{
     this.createStartingUnits(kingdomInformation.units, startingObjects);
 
     //get 6 gold every 15 seconds. Continuously loops
-    var getGold = game.time.addEvent({ delay: 15000, callback: this.receiveCastleGold,
+    var getGold = game.time.addEvent({ delay: 10000, callback: this.receiveCastleGold,
       callbackScope: this, loop: true, args: [] });
+
   }
 
 
@@ -139,6 +141,12 @@ getStructureInfo(buildingType){
       var structureCoords = this.findStartingPosition(buildingInfo, this.buildingsAmount, startingObjectsList);
        var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game);
 
+       //add the structure to the group
+       this.add(structure);
+
+       //make it so structures can't be moved by collisions
+       structure.body.setImmovable();
+
        //set the statting x and y to the castle's position
        if(structure.type === "Castle"){
          this.startingX = structure.x;
@@ -174,6 +182,10 @@ getStructureInfo(buildingType){
           this.unitAmount++;
           var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
           var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game);
+
+          //add the unit to the group
+          this.add(unit);
+
           if(this.isPlayer()){
             unit.setInteractive();
           }
@@ -182,7 +194,7 @@ getStructureInfo(buildingType){
     }
   }
 
-  
+
 
   //destorys the sprite (takes it off screen)
   destroyUnit(unit){

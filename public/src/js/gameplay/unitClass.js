@@ -13,7 +13,9 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
     this.maxHealth = unitInformation.health;
+
     scene.physics.world.enable(this);
+
 
     //add the unit to the game scene (so it will actually show up on the screen)
     this.scene = scene;
@@ -93,7 +95,13 @@ class Unit extends Phaser.GameObjects.Sprite{
     else if(this.destinationX < this.x){
       direction+="W";
     }
-    if(direction === "SW" || direction ==="W" || direction == "NW"){
+
+    if(direction === "S" && actionType === "Walk"){
+      this.setTexture(this.type.toLowerCase());
+      this.anims.play(this.type.toLowerCase()+typeOfAnim+direction);
+    }
+    else if(direction === "SW" || direction === "W" || direction === "NW"
+    || direction === "S"){
       this.setTexture(this.type.toLowerCase()+"_rev");
       this.anims.play(this.type.toLowerCase()+"_rev"+typeOfAnim+direction);
     }
@@ -131,7 +139,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
     this.setState("Idle");
-    this.anims.stopOnRepeat();
+    //this.anims.stop();
   }
 
   //starts building the structure
@@ -166,6 +174,13 @@ class Unit extends Phaser.GameObjects.Sprite{
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && !this.isDead()){
       var structure = new Structure(buildingInfo, this.x+5, this.y+5, game);
+
+      //add the structure to the Group
+      kingdom.add(structure);
+
+      //make it so structures can't be moved by collisions
+       structure.body.setImmovable(true);
+
 
       if(kingdom.isPlayer()){
         structure.setInteractive();
@@ -267,7 +282,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //set state to idle and stop the attack animation
     this.setState("Idle");
-    this.anims.stopOnRepeat();
+    //this.anims.stop();
   }
 
 

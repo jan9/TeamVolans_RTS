@@ -9,6 +9,8 @@ var pointer;
 var playerKingdom, aiKingdom;
 var controls;
 var selectedUnit;
+var gameObjectClicked = false;
+
 class TestAI extends Phaser.Scene {
 
   constructor() {
@@ -74,7 +76,9 @@ class TestAI extends Phaser.Scene {
     player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, true, this, startingObjects);
 
 
-      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects);
+      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, false);
+
+      updateColliders(this, ai, player);
 
       //outputs to the console the kingdom info for testing purposes
      var outputInfo = this.time.addEvent({ delay: 20000, callback: this.outputTestingInfo,
@@ -100,9 +104,11 @@ class TestAI extends Phaser.Scene {
   //updates the target list of the ai (done every 10 seconds)
   aiUpdate(){
     ai.updateCurrentTargetList(player);
+    console.log(this.physics);
   }
 
   update(delta) {
+
     controls.update(delta);
     if (backToMainMenu === 1 && currentLevel === 1) {
       backToMainMenu = 0;
@@ -130,43 +136,54 @@ class TestAI extends Phaser.Scene {
       x = pointer.worldX;
       y = pointer.worldY;
 
-      if(build_signal > 0 && selectedUnit.type === "Villager"){
-
-        if (build_signal === 1) {
-          structureInfo = "Archery Range";
-          build_signal = 0;
-        }
-        else if (build_signal === 2) {
-          structureInfo = "Barracks";
-          build_signal = 0;
-        }
-        else if (build_signal === 3) {
-          structureInfo = "Castle";
-          build_signal = 0;
-        }
-        else if (build_signal === 4) {
-          structureInfo = "Machinery";
-          build_signal = 0;
-        }
-        else if (build_signal === 5) {
-          structureInfo = "Mine";
-          build_signal = 0;
-        }
-        else if (build_signal === 6) {
-          structureInfo = "Temple";
-          build_signal = 0;
-        }
-        else if (build_signal === 7) {
-          structureInfo = "Town Center";
-          build_signal = 0;
-        }
-        selectedUnit.startBuildStructure(structureInfo, player, this);
+      //check if we were selecting a game object, not doing pointer Input
+      //basically setting the input for gameObjectDown also calls this input function...even if we don't want it Called
+      //so this is a check to ignore this function if gameObject is really what we were calling
+      if(gameObjectClicked){
+        gameObjectClicked = false;
       }
+      
       else{
-        if(selectedUnit){
-          selectedUnit.move(x, y, this);
+      if(selectedUnit){
+        //if there is a build signa; and a unit selected is villager, build the structure
+        if(build_signal > 0 && selectedUnit.type === "Villager"){
+
+          if (build_signal === 1) {
+            structureInfo = "Archery Range";
+            build_signal = 0;
+          }
+          else if (build_signal === 2) {
+            structureInfo = "Barracks";
+            build_signal = 0;
+          }
+          else if (build_signal === 3) {
+            structureInfo = "Castle";
+            build_signal = 0;
+          }
+          else if (build_signal === 4) {
+            structureInfo = "Machinery";
+            build_signal = 0;
+          }
+          else if (build_signal === 5) {
+            structureInfo = "Mine";
+            build_signal = 0;
+          }
+          else if (build_signal === 6) {
+            structureInfo = "Temple";
+            build_signal = 0;
+          }
+          else if (build_signal === 7) {
+            structureInfo = "Town Center";
+            build_signal = 0;
+          }
+          selectedUnit.startBuildStructure(structureInfo, player, this);
+        }
+        //move the unit to the location
+        else if (build_signal <= 0){
+            selectedUnit.move(x, y, this);
         }
       }
+    }
   },this);
   }
 }

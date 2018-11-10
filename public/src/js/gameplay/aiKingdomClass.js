@@ -1,10 +1,10 @@
 class AIKingdom extends Kingdom{
 
-  constructor(kingdomInformation, xCoord, yCoord, game, startingObjects){
+  constructor(kingdomInformation, xCoord, yCoord, game, startingObjects, isHardMode){
       super(kingdomInformation, xCoord, yCoord, false, game, startingObjects);
       this.buildOrder = kingdomInformation.buildOrder;
       this.currentBuild = 0;
-
+      this.isHardMode = isHardMode;
       this.attackGroup = [];
 
 

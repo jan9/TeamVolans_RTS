@@ -57,7 +57,7 @@ class Structure extends Phaser.GameObjects.Sprite{
     //if the building can create the unit, and has the gold to create it, then creates the unit
     if(this.getUnitProduced() === unitType){
       if(unitInfo.cost < kingdom.getGold()){
-        
+
         //set the state to build
         this.setState("Build");
 
@@ -83,8 +83,12 @@ class Structure extends Phaser.GameObjects.Sprite{
           unit.setInteractive();
         }
 
+        //add the unit to the group
+        kingdom.add(unit);
+
         kingdom.units.push(unit);
         kingdom.unitAmount++;
+
         if(kingdom === player){
           currentPopulation++;
         }

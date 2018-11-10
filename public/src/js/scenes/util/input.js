@@ -22,5 +22,9 @@ function onObjectClicked(pointer,gameObject)
       selectedUnit = gameObject;
     }
 
-
+    //gameobjectdown input also calls normal down input. This is a check used in
+    //the normal down input to see if we were choosing a game object to then move or choosing a location
+    if(!(selectedUnit.type === "Villager" && build_signal > 0) ){
+      gameObjectClicked = true;
+    }
 }

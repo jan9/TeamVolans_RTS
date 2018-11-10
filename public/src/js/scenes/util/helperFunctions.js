@@ -63,3 +63,11 @@ function calculateWinner(playerKingdom, aiKingdom){
 
   return playerWinner;
 }
+
+//updates the colliders
+function updateColliders(game, aiKingdom, playerKingdom){
+
+  game.physics.add.collider(aiKingdom);
+  game.physics.add.collider(playerKingdom);
+  game.physics.add.collider(aiKingdom, playerKingdom);
+}
