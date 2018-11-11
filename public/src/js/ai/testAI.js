@@ -72,11 +72,10 @@ class TestAI extends Phaser.Scene {
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
-
     player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, true, this, startingObjects);
 
 
-      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, false);
+    ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, false);
 
       updateColliders(this, ai, player);
 
@@ -104,7 +103,6 @@ class TestAI extends Phaser.Scene {
   //updates the target list of the ai (done every 10 seconds)
   aiUpdate(){
     ai.updateCurrentTargetList(player);
-    console.log(this.physics);
   }
 
   update(delta) {
@@ -179,9 +177,10 @@ class TestAI extends Phaser.Scene {
           selectedUnit.startBuildStructure(structureInfo, player, this);
         }
         //move the unit to the location
-        else if (build_signal <= 0){
+    /*  else if (build_signal <= 0){
             selectedUnit.move(x, y, this);
-        }
+
+        }  */
       }
     }
   },this);

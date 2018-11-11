@@ -12,7 +12,9 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.destinationX=xCoord+1;
     this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
+
     this.player_selected = false;  // for player kingdom
+
     // set up a health bar
     this.maxHealth = unitInformation.health; // store max health of a unit
     this.bar = new Phaser.GameObjects.Graphics(scene);
@@ -25,23 +27,24 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //set size for physics
     this.setSize(32, 32);
-
+/*
     //a game container containing a unit and its health bar
     this.unitContainer = new Phaser.GameObjects.Container(scene, xCoord, yCoord, [this,this.bar]);
+    this.unitContainer.setExclusive(true);
     this.unitContainer.x = 0;
     this.unitContainer.y = 0;
     //scene.physics.world.enable(this);
     //scene.physics.world.enable(this.bar);
     scene.physics.world.enable(this.unitContainer);
     this.scene.add.existing(this.unitContainer);
+*/
 
 
-    /*
     scene.physics.world.enable(this);
     //add the unit to the game scene (so it will actually show up on the screen)
     this.scene = scene;
     this.scene.add.existing(this);
-    */
+
 }
 
   getState(){
@@ -80,29 +83,6 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.state = state;
   }
 
-  //moves the unit to the desired location
-   move(xLocation, yLocation, game){
-
-     //sets what the unit's destination is and gives it the Move state
-     this.destinationX = xLocation;
-     this.destinationY = yLocation;
-
-    //if unit is already moving, then we need to stop the movement
-    if(this.getState() === "Move"){
-      this.stopMovement();
-    }
-    else{
-        this.unitAnimations("Walk");
-    }
-
-      this.setState("Move");
-
-
-      //uses built in phaser moveTo function to move the unit
-      //this function does not stop the unit's movement so had to create a function which checks to see if unit reached destination yet
-      game.physics.moveTo(this.unitContainer, xLocation, yLocation, 5);
-
-  }
   unitAnimations(typeOfAnim){
 
     var direction = "";
@@ -122,6 +102,7 @@ class Unit extends Phaser.GameObjects.Sprite{
       direction+="W";
     }
 
+
     if(direction === "S" && actionType === "Walk"){
       this.setTexture(this.type.toLowerCase());
       this.anims.play(this.type.toLowerCase()+typeOfAnim+direction);
@@ -137,36 +118,6 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
   }
 
-
-  //checks if the moving unit is at it's destination (right now have it set up to be in a radius of the actual destination)
-  //and if so stops the unit from moving
-  //returns true if the unit has finished moving
-  checkMovement(){
-    var finishedMoving = false;
-    var radius = 2.5;
-
-    //checks to see if the unit is alive and still moving, then stop their movement if they're close enough
-    if(!this.isDead() && this.getState() === "Move"){
-
-      if((this.destinationX < this.x + radius
-        && this.destinationX > this.x - radius)
-        && (this.destinationY < this.y + radius
-        && this.destinationY > this.y - radius)){
-          this.stopMovement();
-          finishedMoving = true;
-      }
-    }
-
-    return finishedMoving;
-  }
-
-  //stops the unit's movement and sets the state to idle
-  stopMovement(){
-    this.unitContainer.body.velocity.x = 0;
-    this.unitContainer.body.velocity.y = 0;
-    this.setState("Idle");
-    //this.anims.stop();
-  }
 
   //starts building the structure
   startBuildStructure(buildingType, kingdom, game){

@@ -1,4 +1,5 @@
-function minerAI(miner, kingdom){
+function minerAI(unit, kingdom){
+  let miner = unit.first;
   if(miner.isIdle() ){
     miner.mine(kingdom, kingdom.game);
   }
@@ -23,8 +24,9 @@ function structureAI(structure, kingdom){
 
 //finds any injured units within 100px of the castle and heals them
 //otherwise, adds them to an attackgroup
-function priestAI(priest, kingdom){
+function priestAI(unit, kingdom){
 
+  let priest = unit.first;
   var radius = 100;
   var injuredUnit = priest.closestInjured(kingdom.units);
 
@@ -33,7 +35,7 @@ function priestAI(priest, kingdom){
   if(priest.isIdle()){
     if(distance(injuredUnit.x, injuredUnit.y, kingdom.startingX, kingdom.startingY) < radius
       && distance(injuredUnit.x, injuredUnited.y, priest.x, priest.y) < radius){
-      priest.move(injuredUnit.x, injuredUnit.y, kingdom.game);
+      unit.move(injuredUnit.x, injuredUnit.y, kingdom.game, false);
     }
     else if(distance(injuredUnit.x, injuredUnited.y, priest.x, priest.y) < 2){
       priest.attackEnemy(injuredUnit, kingdom.game);
@@ -43,7 +45,7 @@ function priestAI(priest, kingdom){
     //has 4 members and not already in the group
     else{
       if(kingdom.attackGroup.length > 4 && kingdom.attackGroup.indexOf(priest) < 0){
-        kingdom.attackGroup.push(priest);
+        kingdom.attackGroup.push(unit);
       }
     }
   }
@@ -70,38 +72,29 @@ function royaltyAI(priest, kingdom){
 
 
 
-function attackUnitAI(attackUnit, kingdom){
+function attackUnitAI(unit, kingdom){
 
-  //if the unit is moving, the check to see if it has found its destination
-  if(attackUnit.getState() === "Move"){
+  let attackUnit = unit.first;
 
-    //if the unit has stopped moving, have them find the closest enemy and attack
-    if(attackUnit.checkMovement()){
-      if(kingdom.currentTargets[1]){
-        attackUnit.attackEnemy(kingdom.currentTargets[1], kingdom.game);
-      }
-      else if(kingdom.currentTargets[0]){
-        attackUnit.attackEnemy(kingdom.currentTargets[0], kingdom.game);
-      }
-    }
-  }
 
   //if the currentTargets list isn't empty, attack the target
   if(kingdom.currentTargets.length > 0){
 
     //go after units first
     if(kingdom.currentTargets[1]){
-      attackUnit.move(kingdom.currentTargets[1].x, kingdom.currentTargets[1].y, kingdom.game);
+      unit.move(kingdom.currentTargets[1].x, kingdom.currentTargets[1].y, kingdom.game, false);
     }
     //then go after buildings
     else{
-      attackUnit.move(kingdom.currentTargets[0].x, kingdom.currentTargets[0].y, kingdom.game);
+      unit.move(kingdom.currentTargets[0].x, kingdom.currentTargets[0].y, kingdom.game, false);
     }
   }
 }
 
 
-function villagerAI(villager, kingdom){
+function villagerAI(unit, kingdom){
+
+  let villager = unit.first;
 
   //building takes precedence over mining
   if(villager.isIdle() || villager.getState()==="Mine"){
