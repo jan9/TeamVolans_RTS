@@ -35,7 +35,7 @@ function priestAI(unit, kingdom){
   if(priest.isIdle()){
     if(distance(injuredUnit.x, injuredUnit.y, kingdom.startingX, kingdom.startingY) < radius
       && distance(injuredUnit.x, injuredUnited.y, priest.x, priest.y) < radius){
-      unit.move(injuredUnit.x, injuredUnit.y, kingdom.game, false);
+      unit.move(injuredUnit.first.x, injuredUnit.first.y, kingdom.game, false);
     }
     else if(distance(injuredUnit.x, injuredUnited.y, priest.x, priest.y) < 2){
       priest.attackEnemy(injuredUnit, kingdom.game);
@@ -82,11 +82,11 @@ function attackUnitAI(unit, kingdom){
 
     //go after units first
     if(kingdom.currentTargets[1]){
-      unit.move(kingdom.currentTargets[1].x, kingdom.currentTargets[1].y, kingdom.game, false);
+      unit.move((kingdom.currentTargets[1].x-attackUnit.x), (kingdom.currentTargets[1].y-attackUnit.y), kingdom.game);
     }
     //then go after buildings
     else{
-      unit.move(kingdom.currentTargets[0].x, kingdom.currentTargets[0].y, kingdom.game, false);
+      unit.move((kingdom.currentTargets[0].x-attackUnit.x), (kingdom.currentTargets[0].y-attackUnit.y), kingdom.game);
     }
   }
 }

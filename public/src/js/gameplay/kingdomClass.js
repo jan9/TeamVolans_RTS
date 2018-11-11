@@ -254,7 +254,7 @@ isPlayer(){
         // mouse x and y stored in global variables x and y in level 1
         var new_x = x-unit.first.x;
         var new_y = y-unit.first.y;
-        unit.move(new_x, new_y, this.game, true);
+        unit.move(new_x, new_y, this.game);
       }
       // if the unit deselected, stop the movement and set its state to idle
       // TODO: add this as an event

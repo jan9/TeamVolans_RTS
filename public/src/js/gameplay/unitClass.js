@@ -40,7 +40,6 @@ class Unit extends Phaser.GameObjects.Sprite{
 */
 
 
-    scene.physics.world.enable(this);
     //add the unit to the game scene (so it will actually show up on the screen)
     this.scene = scene;
     this.scene.add.existing(this);
