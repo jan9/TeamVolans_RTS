@@ -46,19 +46,17 @@ class AIKingdom extends Kingdom{
 
  findClosestUnit(unitArr){
    if(unitArr.length > 0){
-     var closestEnemyUnit = unitArr[0];
    var closestEnemy = unitArr[0].first;
 
    //goes through the array and finds the location of the closest enemy
    for(let enemyUnit of unitArr){
      let enemy = enemyUnit.first;
-     if(distance((closestEnemy.currentX), (closestEnemy.currentY), this.startingX, this.startingY) >
-     distance((enemy.currentX), (enemy.currentY), this.startingX, this.startingY)){
-
+     if(distance(closestEnemy.currentX, closestEnemy.currentY, this.startingX, this.startingY) >
+     distance(enemy.currentX, enemy.currentY, this.startingX, this.startingY)){
        closestEnemy = enemy;
      }
    }
-   return closestEnemyUnit;
+   return closestEnemy;
    }
  }
   //finds the closest enemy in the given array

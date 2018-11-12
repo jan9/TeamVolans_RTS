@@ -257,8 +257,10 @@ isPlayer(){
         var new_y = y-unit.first.y;
         unit.move(new_x, new_y, this.game);
 
-        console.log(unit);
-
+        console.log("pointer x: " +x);
+        console.log("containter X: " +unit.x);
+        console.log("unit x: " +unit.first.x);
+        console.log("body X: " +unit.body.x);
       }
       // if the unit deselected, stop the movement and set its state to idle
       // TODO: add this as an event
