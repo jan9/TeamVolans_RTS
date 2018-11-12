@@ -12,16 +12,8 @@ class ExtendedUnit extends Phaser.GameObjects.Container{
 }
 
 
-  synchMovements(){
-    this.first.currentX = this.x;
-    this.first.currentY = this.y;
-  }
-
   //moves the unit to the desired location
    move(xLocation, yLocation, game){
-
-     //console.log("x Location: " +xLocation+" y Location: " +yLocation + " current destination X: " +this.first.destinationX + " current destination Y: " + this.first.destinationY);
-
      if(xLocation != this.first.destinationX || yLocation != this.first.destinationY){
 
       this.playerStopMovement();
@@ -47,7 +39,6 @@ class ExtendedUnit extends Phaser.GameObjects.Container{
   //stops the unit's movement and sets the state to idle
   stopMovement(originalDestinationX, originalDestinationY){
 
-    this.synchMovements();
     if(this.first.destinationX == originalDestinationX && this.first.destinationY == originalDestinationY){
       this.body.velocity.x = 0;
       this.body.velocity.y = 0;
@@ -60,7 +51,6 @@ class ExtendedUnit extends Phaser.GameObjects.Container{
   playerStopMovement(){
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    this.first.setState("Idle");
     this.first.anims.stop();
   }
 }

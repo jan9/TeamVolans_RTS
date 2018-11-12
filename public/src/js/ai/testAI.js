@@ -84,8 +84,8 @@ class TestAI extends Phaser.Scene {
          callbackScope: this, loop: true, args: [] });
 
 
-    //runs every  second to get the ai priority attack locations
-    var aiEvent = this.time.addEvent({ delay: 1000, callback: this.aiUpdate,
+    //runs every 10 seconds to get the ai priority attack locations
+    var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,
     callbackScope: this, loop: true, args: [] });
 
     playerWon = false;
@@ -133,7 +133,6 @@ class TestAI extends Phaser.Scene {
       var structureInfo;
       x = pointer.worldX;
       y = pointer.worldY;
-    
 
       //check if we were selecting a game object, not doing pointer Input
       //basically setting the input for gameObjectDown also calls this input function...even if we don't want it Called

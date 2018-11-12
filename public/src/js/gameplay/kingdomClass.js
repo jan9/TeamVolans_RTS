@@ -249,18 +249,12 @@ isPlayer(){
   updatePlayerKingdom(){
 
       for(let unit of this.units){
-
       // if the unit selected, move it to a new position
       if(unit.first.player_selected  === true && unit.first.alpha === 0.5){
         // mouse x and y stored in global variables x and y in level 1
         var new_x = x-unit.first.x;
         var new_y = y-unit.first.y;
         unit.move(new_x, new_y, this.game);
-
-        console.log("pointer x: " +x);
-        console.log("containter X: " +unit.x);
-        console.log("unit x: " +unit.first.x);
-        console.log("body X: " +unit.body.x);
       }
       // if the unit deselected, stop the movement and set its state to idle
       // TODO: add this as an event
