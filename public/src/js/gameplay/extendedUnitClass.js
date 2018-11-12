@@ -1,10 +1,10 @@
 class ExtendedUnit extends Phaser.GameObjects.Container{
 
   constructor(unit) {
-    super(unit.scene, 0, 0, [unit,unit.bar]);
+    super(unit.scene, unit.xCoord, unit.yCoord, [unit,unit.bar]);
 
-    this.setSize(32, 32);
-
+    this.x = 0;
+    this.y = 0;
     //scene.physics.world.enable(this);
     //scene.physics.world.enable(this.bar);
     unit.scene.physics.world.enable(this);
@@ -14,9 +14,10 @@ class ExtendedUnit extends Phaser.GameObjects.Container{
 
   //moves the unit to the desired location
    move(xLocation, yLocation, game){
-     if(xLocation != this.first.destinationX || yLocation != this.first.destinationY){
 
-      this.playerStopMovement();
+
+
+     if(xLocation != this.first.destinationX || yLocation != this.first.destinationY){
 
        //sets what the unit's destination is and gives it the Move state
        this.first.destinationX = xLocation;
@@ -25,13 +26,13 @@ class ExtendedUnit extends Phaser.GameObjects.Container{
        this.first.unitAnimations("Walk");
        this.first.setState("Move");
 
-       var distanceToMove = distance(xLocation, yLocation, this.x, this.y);
+       var distanceToMove = distance(xLocation, yLocation, this.first.x, this.first.y);
 
        //uses built in phaser moveTo function to move the unit
        //this function does not stop the unit's movement so had to create a function which checks to see if unit reached destination yet
-       game.physics.moveTo(this, xLocation, yLocation, 1, (distanceToMove*10));
-
-       var moveEvent = game.time.addEvent({ delay: (distanceToMove*10), callback: this.stopMovement,
+       //game.physics.moveTo(this.unitContainer, xLocation, yLocation, 5);
+       game.physics.moveTo(this, xLocation, yLocation, 0, (distanceToMove*100)/2);
+       var moveEvent = game.time.addEvent({ delay: ((distanceToMove*100)/2), callback: this.stopMovement,
          callbackScope: this, loop: false, args: [xLocation, yLocation] });
      }
   }
@@ -44,13 +45,12 @@ class ExtendedUnit extends Phaser.GameObjects.Container{
       this.body.velocity.y = 0;
 
       this.first.setState("Idle");
-      this.first.anims.stop();
+      //this.anims.stop();
     }
   }
 
   playerStopMovement(){
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    this.first.anims.stop();
   }
 }
