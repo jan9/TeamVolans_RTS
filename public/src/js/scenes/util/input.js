@@ -22,7 +22,7 @@ function onObjectClicked(pointer,gameObject)
     selectedUnit = gameObject;
     console.log(selectedUnit.type + ' is set to "Move" ');
     // selected units move
-    if (pointer.leftButtonDown()){
+    if (pointer.leftButtonDown() ){
       selectedUnit.setAlpha(0.5);
       selectedUnit.player_selected  = true;
       //this.physics.add.overlap(gameObject, graphics);

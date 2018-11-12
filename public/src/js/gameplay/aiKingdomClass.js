@@ -91,7 +91,7 @@ class AIKingdom extends Kingdom{
 
         //have the priests heal
         else if(currentUnit.getType() === "Priest"){
-          priestAI(currentUnit, this);
+          //priestAI(currentUnit, this);
         }
       }
 

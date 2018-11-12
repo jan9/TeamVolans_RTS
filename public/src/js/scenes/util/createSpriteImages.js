@@ -62,6 +62,15 @@ const archerActions = ["Shoot", "Melee", "Die"];
 const swordsmanActions = ["Attack", "Die"];
 
 
+function createHealthBarSprites(scene){
+  for(var i = 0; i <= 100; i+=10){
+  scene.load.spritesheet('healthBar'+i,
+       'Graphics/misc/health_bar_'+i+'.png',
+       { frameWidth: 34, frameHeight: 20}
+   );
+ }
+}
+
 //load in the unit sprites
 function createUnitSprite(scene, type){
   scene.load.spritesheet(type,

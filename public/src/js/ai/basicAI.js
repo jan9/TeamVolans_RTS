@@ -50,13 +50,7 @@ function priestAI(priest, kingdom){
 
   //if the priest has stopped moving find the injured unit and heal them
   else if (priest.getState() === "Move"){
-    //check to see if unit should stop moving
-    if(priest.checkMovement()){
-      //if stop moving, heal the injured unit
-      if(distance(injuredUnit.x, injuredUnited.y, priest.x, priest.y) < 2){
-        priest.attackEnemy(injuredUnit, kingdom.game);
-      }
-    }
+    
   }
 
 }
@@ -71,20 +65,6 @@ function royaltyAI(priest, kingdom){
 
 
 function attackUnitAI(attackUnit, kingdom){
-
-  //if the unit is moving, the check to see if it has found its destination
-  if(attackUnit.getState() === "Move"){
-
-    //if the unit has stopped moving, have them find the closest enemy and attack
-    if(attackUnit.checkMovement()){
-      if(kingdom.currentTargets[1]){
-        attackUnit.attackEnemy(kingdom.currentTargets[1], kingdom.game);
-      }
-      else if(kingdom.currentTargets[0]){
-        attackUnit.attackEnemy(kingdom.currentTargets[0], kingdom.game);
-      }
-    }
-  }
 
   //if the currentTargets list isn't empty, attack the target
   if(kingdom.currentTargets.length > 0){

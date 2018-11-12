@@ -66,13 +66,30 @@ function calculateWinner(playerKingdom, aiKingdom){
 
 //updates the colliders
 function updateColliders(game, aiKingdom, playerKingdom){
-
-  game.physics.add.collider(aiKingdom, aiKingdom);
-  game.physics.add.collider(playerKingdom, playerKingdom);
-  game.physics.add.collider(aiKingdom, playerKingdom);
+  //game.physics.add.overlap(aiKingdom, playerKingdom, overlapOccurred, null, this);
 }
 
-function testingCollision(obj1, obj2){
-  console.log(obj1);
-  console.log(obj2);
+
+function overlapOccurred(unit1, unit2){
+
+
+  if(unit1.baseType !== "Structure"){
+    unit1.body.velocity.x = 0;
+    unit1.body.velocity.y = 0;
+
+    let moveX = unit1.x;
+    let moveY = unit1.y;
+
+
+    unit1.move(unit1.x-100, unit2.y-100, unit1.scene);
+  }
+  if (unit2.baseType !== "Structure"){
+    unit2.body.velocity.x = 0;
+    unit2.body.velocity.y = 0;
+
+    unit2.move(unit2.x+100, unit2.y+100, unit2.scene);
+  }
+  else{
+
+  }
 }

@@ -21,6 +21,8 @@ class TestAI extends Phaser.Scene {
 
     createUnitSprites(this);    // found in scenes/util/createSpriteImages.js
     createStructureSprites(this); // found in scenes/util/createSpriteImages.js
+    createHealthBarSprites(this);
+
     this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
     this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
     this.load.image('tiles5', 'Graphics/TileSets/Background5.png');
@@ -85,8 +87,8 @@ class TestAI extends Phaser.Scene {
          callbackScope: this, loop: true, args: [] });
 
 
-    //runs every 10 seconds to get the ai priority attack locations
-    var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,
+    //runs every 1 seconds to get the ai priority attack locations
+    var aiEvent = this.time.addEvent({ delay: 1000, callback: this.aiUpdate,
     callbackScope: this, loop: true, args: [] });
 
     playerWon = false;
@@ -104,7 +106,6 @@ class TestAI extends Phaser.Scene {
   //updates the target list of the ai (done every 10 seconds)
   aiUpdate(){
     ai.updateCurrentTargetList(player);
-    console.log(this.physics);
   }
 
   update(delta) {
@@ -178,10 +179,13 @@ class TestAI extends Phaser.Scene {
           }
           selectedUnit.startBuildStructure(structureInfo, player, this);
         }
+
+        /*
         //move the unit to the location
         else if (build_signal <= 0){
             selectedUnit.move(x, y, this);
         }
+        */
       }
     }
   },this);
