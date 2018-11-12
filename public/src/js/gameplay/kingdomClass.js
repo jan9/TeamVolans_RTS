@@ -142,10 +142,10 @@ getStructureInfo(buildingType){
        var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game);
 
        //add the structure to the group
-       this.add(structure);
+      // this.add(structure);
 
        //make it so structures can't be moved by collisions
-       structure.body.setImmovable();
+      // structure.body.setImmovable();
 
        //set the statting x and y to the castle's position
        if(structure.type === "Castle"){
@@ -184,7 +184,8 @@ getStructureInfo(buildingType){
           var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game);
 
           //add the unit to the group
-          this.add(unit);
+        // this.add(unit);
+
 
           if(this.isPlayer()){
             unit.setInteractive();

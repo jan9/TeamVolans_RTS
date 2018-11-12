@@ -42,13 +42,11 @@ class TestAI extends Phaser.Scene {
     this.map.addTilesetImage('Background5', 'tiles5'),
     this.map.addTilesetImage('water_tile', 'tilesW')];
 
-    this.map.createDynamicLayer("Tile Layer 1", tileset);
-    this.map.createDynamicLayer("Tile Layer 2", tileset);
-    this.map.createDynamicLayer("Tile Layer 3", tileset);
-
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
-    this.physics.world.setBounds(0,0,50,50);
+    //had a lot of trouble figuring out what the x and y should be...currently its close but still not exact
+    this.physics.world.setBounds(-40,-40,this.map.widthInPixels+10,this.map.heightInPixels+10);
+
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
@@ -78,9 +76,7 @@ class TestAI extends Phaser.Scene {
     player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, true, this, startingObjects);
 
 
-      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, false);
-
-      updateColliders(this, ai, player);
+      ai = new AIKingdom(equalEmpireInfo, 75, 75, this, startingObjects, false);
 
       //outputs to the console the kingdom info for testing purposes
      var outputInfo = this.time.addEvent({ delay: 20000, callback: this.outputTestingInfo,

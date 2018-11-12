@@ -24,7 +24,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     scene.add.existing(this.bar);
 
 
-    this.bar.setSize(2,2);
+    this.bar.setSize(16,16);
     //set size for physics
     this.setSize(32, 32);
 
@@ -32,7 +32,8 @@ class Unit extends Phaser.GameObjects.Sprite{
     scene.physics.world.enable(this);
     scene.physics.world.enable(this.bar);
 
-
+    this.body.setCollideWorldBounds(true);
+    this.bar.body.setCollideWorldBounds(true);
 
 
     //add the unit to the game scene (so it will actually show up on the screen)

@@ -65,8 +65,14 @@ function calculateWinner(playerKingdom, aiKingdom){
 }
 
 //updates the colliders
-function updateColliders(game, aiKingdom, playerKingdom){
-  //game.physics.add.overlap(aiKingdom, playerKingdom, overlapOccurred, null, this);
+function updateColliders(game, aiKingdom, playerKingdom, layers){
+  game.physics.add.collider(aiKingdom.units, layers[0]);
+  game.physics.add.collider(aiKingdom.units, layers[1]);
+  game.physics.add.collider(aiKingdom.units, layers[2]);
+
+  game.physics.add.collider(playerKingdom.units, layers[0]);
+  game.physics.add.collider(playerKingdom.units, layers[1]);
+  game.physics.add.collider(playerKingdom.units, layers[2]);
 }
 
 
