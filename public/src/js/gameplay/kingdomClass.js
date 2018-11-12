@@ -182,7 +182,6 @@ getStructureInfo(buildingType){
           this.unitAmount++;
           var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
           var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game);
-          var extendedUnit = new ExtendedUnit(unit);
 
           //add the unit to the group
           this.add(unit);
@@ -190,7 +189,7 @@ getStructureInfo(buildingType){
           if(this.isPlayer()){
             unit.setInteractive();
           }
-          this.units.push(extendedUnit);
+          this.units.push(unit);
       }
     }
   }
@@ -205,13 +204,12 @@ getStructureInfo(buildingType){
   //removes the dead units (occurs at the end of the update function)
   removeDead(){
     for(var i = 0; i < this.units.length; i++){
-      var currentUnit = this.units[i].first;
-      if(currentUnit.isDead()){
+      if(this.units[i].isDead()){
 
-        currentUnit.unitAnimations("Die");
+        this.units[i].unitAnimations("Die");
         //used to play the death animation for 4 seconds
         var deathEvent = this.game.time.addEvent({ delay: 4000, callback: this.destroyUnit,
-          callbackScope: this, loop: false, args: [currentUnit]});
+          callbackScope: this, loop: false, args: [this.units[i]]});
 
           this.units.splice(i, 1);
           this.unitsAmount--;
@@ -247,20 +245,28 @@ isPlayer(){
 }
 
   updatePlayerKingdom(){
-
+    for(let unit of this.units){
+      /*
+      if(unit.getState() === "Move"){
+        if(unit.checkMovement()){
+          //dosomething
+        }
+      }
+      */
       for(let unit of this.units){
       // if the unit selected, move it to a new position
-      if(unit.first.player_selected  === true && unit.first.alpha === 0.5){
+      if(unit.player_selected  === true && unit.alpha === 0.5){
         // mouse x and y stored in global variables x and y in level 1
-        var new_x = x-unit.first.x;
-        var new_y = y-unit.first.y;
-        unit.move(new_x, new_y, this.game, true);
+        var new_x = x-unit.x;
+        var new_y = y-unit.y;
+        unit.move(new_x, new_y, this.game);
       }
       // if the unit deselected, stop the movement and set its state to idle
       // TODO: add this as an event
-      else if(unit.first.player_selected  === false && unit.first.alpha === 1){
-        unit.playerStopMovement();
+      else if(unit.player_selected  === false && unit.alpha === 1){
+        unit.stopMovement();
         }
       }
+    }
   }
 }

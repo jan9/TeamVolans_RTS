@@ -25,13 +25,13 @@ class AIKingdom extends Kingdom{
     this.currentTargets.splice(0,this.currentTargets.length)
 
     //get the closest structure, if it exists, add it to the array
-    var closestStructure = this.findClosestStructure(playersKingdom.buildings)
+    var closestStructure = this.findClosest(playersKingdom.buildings)
     if(closestStructure){
       this.currentTargets.push(closestStructure);
     }
 
     //get the closest unit, if it exists add it to the array
-    var closestUnit = this.findClosestUnit(playersKingdom.units);
+    var closestUnit = this.findClosest(playersKingdom.units);
     if(closestUnit){
       this.currentTargets.push(closestUnit);
     }
@@ -43,37 +43,21 @@ class AIKingdom extends Kingdom{
  getCurrentBuild(){
    return this.buildOrder[this.currentBuild];
  }
-
- findClosestUnit(unitArr){
-   if(unitArr.length > 0){
-   var closestEnemy = unitArr[0].first;
-
-   //goes through the array and finds the location of the closest enemy
-   for(let enemyUnit of unitArr){
-     let enemy = enemyUnit.first;
-     if(distance(closestEnemy.x, closestEnemy.y, this.startingX, this.startingY) >
-     distance(enemy.x, enemy.y, this.startingX, this.startingY)){
-       closestEnemy = enemy;
-     }
-   }
-   return closestEnemy;
-   }
- }
   //finds the closest enemy in the given array
-  findClosestStructure(structureArr){
+  findClosest(enemyArr){
 
-    if(structureArr.length > 0){
-    var closestEnemy = structureArr[0];
+    if(enemyArr.length > 0){
+    var closestEnemy = enemyArr[0];
 
     //goes through the array and finds the location of the closest enemy
-    for(let enemy of structureArr){
+    for(var i = 0; i < enemyArr.length; i++){
       if(distance(closestEnemy.x, closestEnemy.y, this.startingX, this.startingY) >
-      distance(enemy.x, enemy.y, this.startingX, this.startingY)){
-        closestEnemy = enemy;
+      distance(enemyArr[i].x, enemyArr[i].y, this.startingX, this.startingY)){
+        closestEnemy = enemyArr[i];
       }
     }
-    return closestEnemy;
-  }
+      return closestEnemy;
+    }
   }
 
   //updates the ai kingdom
@@ -87,27 +71,26 @@ class AIKingdom extends Kingdom{
       //have the miners mine
       for(var i = 0; i < this.units.length; i++){
         var currentUnit = this.units[i];
-        var unitType = currentUnit.first.getType();
 
         //have the miner mine
-        if(unitType === "Miner"){
+        if(currentUnit.getType() === "Miner"){
           minerAI(currentUnit, this);
         }
 
         //have the attack units attack
-        else if(unitType ==="Swordsman"
-        ||unitType ==="Archer"
-        ||unitType ==="Catapult"){
+        else if(currentUnit.getType()==="Swordsman"
+        ||currentUnit.getType()==="Archer"
+        ||currentUnit.getType()==="Catapult"){
             attackUnitAI(currentUnit, this);
         }
 
         //have the Villager build structures
-        else if(unitType === "Villager"){
+        else if(currentUnit.getType() === "Villager"){
             villagerAI(currentUnit, this);
           }
 
         //have the priests heal
-        else if(unitType === "Priest"){
+        else if(currentUnit.getType() === "Priest"){
           priestAI(currentUnit, this);
         }
       }
