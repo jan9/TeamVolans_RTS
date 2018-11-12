@@ -82,7 +82,8 @@ function attackUnitAI(unit, kingdom){
 
     //go after units first
     if(kingdom.currentTargets[1]){
-      unit.move((kingdom.currentTargets[1].x-attackUnit.x), (kingdom.currentTargets[1].y-attackUnit.y), kingdom.game);
+      console.log(kingdom.currentTargets[1].first.currentX - attackUnit.x);
+      unit.move((kingdom.currentTargets[1].first.currentX - attackUnit.x), (kingdom.currentTargets[1].first.currentY - attackUnit.y), kingdom.game);
     }
     //then go after buildings
     else{
