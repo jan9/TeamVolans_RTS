@@ -11,6 +11,9 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.state = unitInformation.state;
     this.destinationX=xCoord+1;
     this.destinationY=yCoord+1;
+    this.currentX=xCoord;
+    this.currentY=yCoord;
+
     this.baseType = unitInformation.baseType;
 
     this.player_selected = false;  // for player kingdom
@@ -86,18 +89,18 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     var direction = "";
 
-    if(this.destinationY != this.y){
-      if(this.destinationY > this.y){
+    if(this.destinationY != this.currentY){
+      if(this.destinationY > this.currentY){
          direction = "S";
       }
       else{
         direction = "N";
       }
     }
-    if(this.destinationX > this.x){
+    if(this.destinationX > this.currentX){
       direction+="E"
     }
-    else if(this.destinationX < this.x){
+    else if(this.destinationX < this.currentX){
       direction+="W";
     }
 

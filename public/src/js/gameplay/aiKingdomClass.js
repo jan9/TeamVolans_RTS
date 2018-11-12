@@ -51,8 +51,8 @@ class AIKingdom extends Kingdom{
    //goes through the array and finds the location of the closest enemy
    for(let enemyUnit of unitArr){
      let enemy = enemyUnit.first;
-     if(distance(closestEnemy.x, closestEnemy.y, this.startingX, this.startingY) >
-     distance(enemy.x, enemy.y, this.startingX, this.startingY)){
+     if(distance(closestEnemy.currentX, closestEnemy.currentY, this.startingX, this.startingY) >
+     distance(enemy.currentX, enemy.currentY, this.startingX, this.startingY)){
        closestEnemy = enemy;
      }
    }
@@ -86,10 +86,11 @@ class AIKingdom extends Kingdom{
 
       //have the miners mine
       for(var i = 0; i < this.units.length; i++){
+
         var currentUnit = this.units[i];
         var unitType = currentUnit.first.getType();
 
-        //have the miner mine
+          //have the miner mine
         if(unitType === "Miner"){
           minerAI(currentUnit, this);
         }
