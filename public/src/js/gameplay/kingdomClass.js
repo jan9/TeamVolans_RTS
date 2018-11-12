@@ -21,6 +21,10 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
     var getGold = game.time.addEvent({ delay: 10000, callback: this.receiveCastleGold,
       callbackScope: this, loop: true, args: [] });
 
+      //get .5 second remove the dead units...
+      var updateDead = game.time.addEvent({ delay: 500, callback: this.removeDead,
+        callbackScope: this, loop: true, args: [] });
+
   }
 
 

@@ -103,7 +103,5 @@ class AIKingdom extends Kingdom{
         var currentBuilding = this.buildings[i];
           structureAI(currentBuilding, this);
       }
-
-      this.removeDead();
     }
 }

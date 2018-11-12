@@ -50,7 +50,7 @@ function priestAI(priest, kingdom){
 
   //if the priest has stopped moving find the injured unit and heal them
   else if (priest.getState() === "Move"){
-    
+
   }
 
 }
@@ -62,20 +62,40 @@ function royaltyAI(priest, kingdom){
 
 }
 
+function attackArea(attackUnit){
+  let x = 0;
+  let y = 0;
+
+  if(attackUnit.type === "Archer"){
+    x = 32;
+    y = 32;
+  }
+  else if (attackUnit.type === "Swordsman"){
+    x=-32;
+    y=0;
+  }
+  else if (attackUnit.type === "Catapult"){
+    x=0;
+    y=-40
+  }
+
+  return {"x": x, "y": y};
+}
 
 
 function attackUnitAI(attackUnit, kingdom){
 
+  var coordinateChange = attackArea(attackUnit);
   //if the currentTargets list isn't empty, attack the target
   if(kingdom.currentTargets.length > 0){
 
     //go after units first
-    if(kingdom.currentTargets[1]){
-      attackUnit.move(kingdom.currentTargets[1].x, kingdom.currentTargets[1].y, kingdom.game);
+    if(kingdom.currentTargets[1] && attackUnit.getState() !== "Attack"){
+      attackUnit.move(kingdom.currentTargets[1].x+coordinateChange.x, kingdom.currentTargets[1].y+coordinateChange.y, kingdom.game, {"name": "Attack", "target": kingdom.currentTargets[1]});
     }
     //then go after buildings
-    else{
-      attackUnit.move(kingdom.currentTargets[0].x, kingdom.currentTargets[0].y, kingdom.game);
+    else if(attackUnit.getState() !== "Attack"){
+      attackUnit.move(kingdom.currentTargets[0].x+(coordinateChange.x*2), kingdom.currentTargets[0].y+(coordinateChange.y*2), kingdom.game);
     }
   }
 }

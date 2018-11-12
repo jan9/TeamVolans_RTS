@@ -65,7 +65,8 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   updateHealthBar(){
     let percent = Math.round((this.health/this.maxHealth)*10);
-
+    percent *=10;
+    console.log(percent);
     //if there is less than 5% of health but unit is not dead, still use health bar for 10%
     if(percent < 10 && this.health > 0){
       this.bar.setTexture('healthBar10');
@@ -92,7 +93,7 @@ class Unit extends Phaser.GameObjects.Sprite{
   }
 
   //moves the unit to the desired location
-   move(xLocation, yLocation, game){
+   move(xLocation, yLocation, game, action){
 
      if(this.destinationX != xLocation|| this.destinationY != yLocation){
 
@@ -113,7 +114,7 @@ class Unit extends Phaser.GameObjects.Sprite{
         game.physics.moveTo(this.bar, xLocation, yLocation-25, 1, (unitDistanceToMove*10));
 
         var moveEvent = game.time.addEvent({ delay: (unitDistanceToMove*10), callback: this.stopMovement,
-          callbackScope: this, loop: false, args: [xLocation, yLocation] });
+          callbackScope: this, loop: false, args: [xLocation, yLocation, action] });
       }
   }
   unitAnimations(typeOfAnim){
@@ -135,7 +136,7 @@ class Unit extends Phaser.GameObjects.Sprite{
       direction+="W";
     }
 
-    if(direction === "S" && actionType === "Walk"){
+    if(direction === "S" && typeOfAnim === "Walk"){
       this.setTexture(this.type.toLowerCase());
       this.anims.play(this.type.toLowerCase()+typeOfAnim+direction);
     }
@@ -161,7 +162,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.anims.stop();
   }
   //stops the unit's movement and sets the state to idle
-  stopMovement(destinationX, destinationY){
+  stopMovement(destinationX, destinationY, action){
 
     let radius = 16;
     if((this.x-radius < this.destinationX && this.x+radius > this.destinationX) && (this.y-radius < this.destinationY && this.y+radius > this.destinationY)){
@@ -172,6 +173,22 @@ class Unit extends Phaser.GameObjects.Sprite{
 
       this.setState("Idle");
       this.anims.stop();
+
+      if(action){
+        this.takeAction(action);
+      }
+    }
+  }
+
+  takeAction(action){
+    if(action.name === "Attack"){
+      this.attackEnemy(action.target, this.scene);
+    }
+    else if(action.name === "Mine"){
+      this.mine(action.kingdom, this.scene);
+    }
+    else if(action.name === "Build"){
+      this.startBuildStructure(action.buildingType, action.kingdom, this.scene);
     }
   }
 
@@ -268,34 +285,44 @@ class Unit extends Phaser.GameObjects.Sprite{
   }
 
 
+  basicAttack(enemyKingdom){
+    var enemy = findClosestUnit(enemyKingdom.units);
+    this.move(enemy.x-32, enemy.y-32, this.scene, {"name": "Attack", "target": enemy});
+  }
+
+
   //attacks an enemy
   //also used for the priest to heal allies
-  attackEnemy(attackedUnit, game){
+  attackEnemy(attackedUnit){
 
-    this.setState("Attack");
+    if(attackedUnit){
+      let game = this.scene;
+      this.destinationX = attackedUnit.x;
+      this.destinationY= attackedUnit.y;
 
-    //attack if unit isn't dead attack(dead units get removed at end of each update but
-    // there's a chance it might have been killed in between)
-    if(!this.isDead() && !attackedUnit.isDead()){
-      this.setState("Attack");
+      //attack if unit isn't dead attack(dead units get removed at end of each update but
+      // there's a chance it might have been killed in between)
+      if(!this.isDead() && !attackedUnit.isDead()){
+        this.setState("Attack");
 
-      //waits 2.5 seconds to actually attack/land the hit
-      //starts the attack animations
-      if(this.getType() === "Archer"){
-        this.unitAnimations("Shoot");
+        //waits 2.5 seconds to actually attack/land the hit
+        //starts the attack animations
+        if(this.getType() === "Archer"){
+          this.unitAnimations("Shoot");
+        }
+        else if (this.getType() === "Swordsman"){
+          this.unitAnimations("Attack");
+        }
+        //catapult needs special frames
+        else if (this.getType() === "Catapult"){}
+        else{
+          this.unitAnimations("Action");
+        }
+
+        //the actual attack takes 3 seconds to account for the animation playing
+        var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
+          callbackScope: this, loop: false, args: [attackedUnit] });
       }
-      else if (this.getType() === "Swordsman"){
-        this.unitAnimations("Attack");
-      }
-      //catapult needs special frames
-      else if (this.getType() === "Catapult"){}
-      else{
-        this.unitAnimations("Action");
-      }
-
-      //the actual attack takes 3 seconds to account for the animation playing
-      var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
-        callbackScope: this, loop: false, args: [attackedUnit] });
     }
   }
 
@@ -303,6 +330,11 @@ class Unit extends Phaser.GameObjects.Sprite{
   //heal the ally
   attackEnemyEnd(attackedUnit){
 
+    //set state to idle and stop the attack animation
+    this.setState("Idle");
+    this.anims.stop();
+
+    if(attackedUnit){
     if(!this.isDead() && !attackedUnit.isDead()){
 
       //unit has 50% chance of attack landing a hit
@@ -312,10 +344,8 @@ class Unit extends Phaser.GameObjects.Sprite{
         attackedUnit.updateHealth(this.getAttack());
       }
     }
+}
 
-    //set state to idle and stop the attack animation
-    this.setState("Idle");
-    //this.anims.stop();
   }
 
 
@@ -360,6 +390,4 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     return closestInjuredUnit;
   }
-
-
 }

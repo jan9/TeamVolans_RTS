@@ -42,6 +42,11 @@ class TestAI extends Phaser.Scene {
     this.map.addTilesetImage('Background5', 'tiles5'),
     this.map.addTilesetImage('water_tile', 'tilesW')];
 
+
+    this.map.createDynamicLayer("Tile Layer 1", tileset);
+    this.map.createDynamicLayer("Tile Layer 2", tileset);
+    this.map.createDynamicLayer("Tile Layer 3", tileset);
+
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
     //had a lot of trouble figuring out what the x and y should be...currently its close but still not exact
