@@ -131,6 +131,8 @@ class Level1 extends Phaser.Scene {
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
 
+    dragSelect(this, player);
+    this.pointerInput();
     console.log('[Level1] create() complete');
   }
 
@@ -143,7 +145,6 @@ class Level1 extends Phaser.Scene {
   update(delta) {
     controls.update(delta);
 
-    this.dragSelect(this);
 
     if (backToMainMenu === 1 && currentLevel === 1) {
       backToMainMenu = 0;
@@ -153,7 +154,7 @@ class Level1 extends Phaser.Scene {
       this.scene.start('Gameover');
     }
 
-    this.pointerInput();
+
 
     ai.updateAIKingdom(player);
     player.updatePlayerKingdom(player);
@@ -219,34 +220,4 @@ class Level1 extends Phaser.Scene {
   },this);
   }
 
-  dragSelect(scene) {
-    var graphics = this.add.graphics();
-
-    var color = 0xffff00;
-    var thickness = 1;
-    var alpha = 1;
-
-    var draw = false;
-    var downX, downY;
-
-    scene.input.on('pointerdown', function(pointer) {
-      if (pointer.leftButtonDown()){
-      downX = Phaser.Math.RoundAwayFromZero(pointer.worldX);
-      downY = Phaser.Math.RoundAwayFromZero(pointer.worldY);
-      draw = true;
-      }
-    });
-    scene.input.on('pointerup', function(){
-      draw = false;
-    });
-    scene.input.on('pointermove', function(pointer){
-      if (pointer.leftButtonDown()){
-        if (draw) {
-          graphics.clear();
-          graphics.lineStyle(thickness, color, alpha);
-          graphics.strokeRect(downX, downY, pointer.worldX - downX, pointer.worldY - downY);
-        }
-      }
-    });
-  }
 }

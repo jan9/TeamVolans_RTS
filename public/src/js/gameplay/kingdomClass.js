@@ -286,10 +286,10 @@ isPlayer(){
 }
 
   updatePlayerKingdom(){
-
-      for(let unit of this.units){
+      //TO DO
+      for(let unit of playerUnitSelected){
       // if the unit selected, move it to a new position
-      if(unit.player_selected  === true && unit.alpha === 0.5){
+      if(unit.player_selected  === true){
         // mouse x and y stored in global variables x and y in level 1
       //  var new_x = x-unit.x;
       //  var new_y = y-unit.y;
@@ -297,9 +297,15 @@ isPlayer(){
       }
       // if the unit deselected, stop the movement and set its state to idle
       // TODO: add this as an event
-      else if(unit.player_selected  === false && unit.alpha === 1){
+      else if(unit.player_selected  === false){
         unit.playerStopMovement();
-        }
+      }
+
+      // if unit type is attack
+
+        //updateHealth(points);
+
+
       }
   }
 }

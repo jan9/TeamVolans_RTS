@@ -98,7 +98,7 @@ class TestAI extends Phaser.Scene {
     currentPopulation = player.unitAmount;
 
     this.pointerInput();
-
+    dragSelect(this, player);
   }
 
   outputTestingInfo(){
