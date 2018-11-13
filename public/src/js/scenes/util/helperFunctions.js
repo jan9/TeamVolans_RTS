@@ -21,6 +21,20 @@ function calculateTime(seconds){
 }
 
 
+function getGold(currentGold, playerKingdom) {
+  var newGold;
+  newGold = currentGold;
+  player.gold = currentGold;
+  return newGold;
+}
+
+function getPopulation(currentPopulation, playerKingdom){
+  var newPop;
+  newPop = currentPopulation;
+  return newPop;
+}
+
+
 //checks to see if the game is over
 function gameOver(seconds){
   return seconds >= 600;
