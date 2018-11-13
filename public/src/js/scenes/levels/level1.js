@@ -87,6 +87,10 @@ class Level1 extends Phaser.Scene {
 
     // checking to have received correct data
     console.log(gameMode.name);
+    let hardMode = false;
+    if(gameMode.name === "hard"){
+      hardMode = true;
+    }
 
     // set up the player kingdom
     console.log(kingdomSelection.name);
@@ -105,15 +109,15 @@ class Level1 extends Phaser.Scene {
     // set up the ai kingdom
     console.log(opponentKingdom);
     if (opponentKingdom === "Dueling Dominion") {
-      ai = new AIKingdom(duelingDominionInfo, 50, 50, this, startingObjects);
+      ai = new AIKingdom(duelingDominionInfo, 50, 50, this, startingObjects, true);
     } else if (opponentKingdom === "Equal Empire") {
-      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects);
+      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, true);
     } else if (opponentKingdom === "Fortune Federation") {
-      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this, startingObjects);
+      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this, startingObjects, true);
     } else if (opponentKingdom === "Security Syndicate") {
-      ai = new AIKingdom(securitySyndicateInfo, 50, 50, this, startingObjects);
+      ai = new AIKingdom(securitySyndicateInfo, 50, 50, this, startingObjects, true);
     } else if (opponentKingdom === "Remote Realm") {
-      ai = new AIKingdom(remoteRealmInfo, 50, 50, this, startingObjects);
+      ai = new AIKingdom(remoteRealmInfo, 50, 50, this, startingObjects, true);
     };
 
     //runs every 10 seconds to get the ai priority attack locations

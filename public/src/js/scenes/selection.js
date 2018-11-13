@@ -65,8 +65,8 @@ class Selection extends Phaser.Scene {
 
     //3. Random assignment of the AI kingdom
     value = Phaser.Math.Between(0, 4);  // Phaser's random number generator
-    //opponentKingdom = kingdomPool[value];
-    opponentKingdom = kingdomPool[2]; // Fortune Federation
+    opponentKingdom = kingdomPool[value];
+    //opponentKingdom = kingdomPool[2]; // Fortune Federation
 
     // 4. Start the Game
     warningMessage = this.add.text(_width*0.11, _height*0.75, "Please select a kingdom and game mode!",{font: "32px Georgia", color: "red"}).setPadding(1,1);

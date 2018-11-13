@@ -20,15 +20,48 @@ class AIKingdom extends Kingdom{
 
   hardModeBonus(){
     if(this.isHardMode){
+
+      //ai has starting bonus if game is hardmode
       this.hardModeStartingBonus();
-      var middleBonus = game.time.addEvent({ delay: (60*1000*5), callback: this.hardModeMiddleBonus,
+
+      //after 5 minutes there is a middle-of-the-game bonus for the ai in hardMode
+      var middleBonus = this.game.time.addEvent({ delay: (60*1000*5), callback: this.hardModeMiddleBonus,
         callbackScope: this, loop: true, args: [] });
     }
   }
+
+  //hardmode starting bonus starts with an extra 100 gold and the first 3 build orders completed
   hardModeStartingBonus(){
     this.gold+=100;
+
+    //hard mode starts off with first 3 build orders completed
+    for(var i = 0; i < 3; i++){
+        let currentBuildOrder = this.buildOrder[i];
+      if(_unitList.includes(currentBuildOrder)){
+        let unit = new Unit(this.getUnitInfo(currentBuildOrder), this.startingX+10, this.startingY-10, this.game);
+        this.units.push(unit);
+        this.unitAmount++;
+      }
+      else{
+        let structCoords = this.findOpenArea();
+        let structure = new Structure(this.getStructureInfo(currentBuildOrder), structCoords.x, structCoords.y, this.game);
+        this.buildings.push(structure);
+        this.buildingsAmount++;
+      }
+      this.incrementBuildOrder();
+    }
   }
+
+
   hardModeMiddleBonus(){
+
+    //gets a bonus of one of each unit type
+    for(var i = 0; i < _unitList; i++){
+      let unit = new Unit(this.getUnitInfo(currentBuildOrder), this.startingX+10, this.startingY-10, this.game);
+      this.units.push(unit);
+      this.unitAmount++;
+    }
+
       this.gold+=100;
   }
 
