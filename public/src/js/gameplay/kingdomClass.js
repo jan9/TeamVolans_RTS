@@ -27,6 +27,7 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
 
   }
 
+  //finds an area with no other structures built in it
   findOpenArea(){
     let x = this.startingX;
     let y = this.startingY;
@@ -38,11 +39,20 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
       let randXVal = Math.random() * (20 - 1) + 1;
       let randYVal = Math.random() * (20 - 1) + 1;
 
-      x+=randXVal;
+      //randomly decide whether x is positive or negative
+      let xType = Math.random() * (2-1) + 1;
 
+      if(xType == 2){
+        xType = -1;
+      }
+
+      x+=randXVal * xType;
+
+      //if the player is building the structure the open area goes up so y needs to decrease
       if(this.isPlayer()){
         y+=(randYVal*-1);
       }
+      //if the ai is building the structure the building needs to be built below so y increases
       else{
         y+=randYVal;
       }
