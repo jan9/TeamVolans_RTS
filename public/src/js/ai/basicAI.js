@@ -55,11 +55,27 @@ function priestAI(priest, kingdom){
 
 }
 
-//Not sure what to have royalty do yet. They give health benefits to the castle...
-//Maybe more royalty = more gold/time? Or some other bonus...Maybe if a royalty is nearby other units do better?
-//heal better, attack better, mine better?
-function royaltyAI(priest, kingdom){
 
+function royaltyAI(royal, kingdom){
+
+  // the castle gain 5 extra health every 30 seconds for each royal inside it
+  var castle = royal.isInCastle(kingdom);
+  let currentBuildItem = kingdom.getCurrentBuild();
+
+  if(currentBuildItem === "Castle" && royal.isIdle()){
+    var structureInfo = kingdom.getStructureInfo(currentBuildItem);
+
+      //only increase currentBuild if we have enough gold to make the structure
+      if(structureInfo.cost < kingdom.getGold()){
+        let coordinates = kingdom.findOpenArea();
+        royal.move(coordinates.x+32, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
+        kingdom.incrementBuildOrder();
+      }
+  }
+  else if(!castle){
+    let foundCastle = royal.findCastle(kingdom);
+    royal.royalBonus(foundCastle, kingdom);
+  }
 }
 
 function attackArea(attackUnit){
@@ -106,18 +122,19 @@ function villagerAI(villager, kingdom){
   //building takes precedence over mining
   if(villager.isIdle() || villager.getState()==="Mine"){
 
-    if(kingdom.getCurrentBuild() === "Mine"
-      || kingdom.getCurrentBuild() === "Barracks"
-      || kingdom.getCurrentBuild() === "Town Center"
-      || kingdom.getCurrentBuild() === "Archery Range"
-      || kingdom.getCurrentBuild() === "Temple"
-      || kingdom.getCurrentBuild() === "Machinery"){
+    let currentBuildItem = kingdom.getCurrentBuild();
+    if(currentBuildItem === "Mine"
+      || currentBuildItem === "Barracks"
+      || currentBuildItem === "Town Center"
+      || currentBuildItem === "Archery Range"
+      || currentBuildItem === "Temple"
+      || currentBuildItem === "Machinery"){
 
-      var structureInfo = kingdom.getStructureInfo(kingdom.getCurrentBuild());
-
+      var structureInfo = kingdom.getStructureInfo(currentBuildItem);
       //only increase currentBuild if we have enough gold to make the structure
       if(structureInfo.cost < kingdom.getGold()){
-        villager.startBuildStructure(kingdom.getCurrentBuild(), kingdom, kingdom.game);
+        let coordinates = kingdom.findOpenArea();
+        villager.move(coordinates.x+32, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
         kingdom.incrementBuildOrder();
       }
 

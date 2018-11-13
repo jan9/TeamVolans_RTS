@@ -27,7 +27,42 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
 
   }
 
+  findOpenArea(){
+    let x = this.startingX;
+    let y = this.startingY;
 
+    while(!(this.checkArea(x, y))){
+
+      //Used the following site as a reference to javascript random numbers
+      //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+      let randXVal = Math.random() * (20 - 1) + 1;
+      let randYVal = Math.random() * (20 - 1) + 1;
+
+      x+=randXVal;
+
+      if(this.isPlayer()){
+        y+=(randYVal*-1);
+      }
+      else{
+        y+=randYVal;
+      }
+    }
+
+    return {"x": x, "y": y};
+  }
+
+  checkArea(xCoord, yCoord){
+      let areaOpen = true;
+    //from the starting point, look for an area that's open for a size 160px (structures only)
+    for(let building of this.buildings){
+      if (((xCoord - 80) < building.x && (xCoord+80) > building.x) &&
+      ((yCoord - 80) < building.y && (yCoord+80) > building.y)){
+        areaOpen = false;
+      }
+    }
+
+    return areaOpen;
+  }
 
 
 getStructureInfo(buildingType){

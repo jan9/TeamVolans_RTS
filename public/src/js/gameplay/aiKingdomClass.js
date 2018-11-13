@@ -8,15 +8,29 @@ class AIKingdom extends Kingdom{
       this.attackGroup = [];
 
 
+
       //keeps track of the AI's current targets of attack
       this.currentTargets = [];
 
-      //will probably also add in separate arrays for all the units (likely don't need one for
-      //structures as it's a 10 minute game and the ai will probably only have like 10 or so)
-      //probably don't even "need" one for all the unit types either as the max amount of units will be <100
-      //BUT I will probably do it...
+      this.hardModeBonus();
+
+
     }
 
+
+  hardModeBonus(){
+    if(this.isHardMode){
+      this.hardModeStartingBonus();
+      var middleBonus = game.time.addEvent({ delay: (60*1000*5), callback: this.hardModeMiddleBonus,
+        callbackScope: this, loop: true, args: [] });
+    }
+  }
+  hardModeStartingBonus(){
+    this.gold+=100;
+  }
+  hardModeMiddleBonus(){
+      this.gold+=100;
+  }
 
   //runs every 10 seconds to find the 3 closest enemy units to the castle and find the current structure closest to the castle
   updateCurrentTargetList(playersKingdom){
@@ -92,6 +106,10 @@ class AIKingdom extends Kingdom{
         //have the priests heal
         else if(currentUnit.getType() === "Priest"){
           //priestAI(currentUnit, this);
+        }
+        //have royalty go to castles and support them
+        else if(currentUnit.getType() === "Royalty"){
+          royaltyAI(currentUnit, this);
         }
       }
 

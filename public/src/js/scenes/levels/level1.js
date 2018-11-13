@@ -20,6 +20,8 @@ class Level1 extends Phaser.Scene {
 
     createUnitSprites(this);    // found in scenes/util/createSpriteImages.js
     createStructureSprites(this); // found in scenes/util/createSpriteImages.js
+    createHealthBarSprites(this);
+
     this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
     this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
     this.load.image('tiles5', 'Graphics/TileSets/Background5.png');
@@ -46,9 +48,9 @@ class Level1 extends Phaser.Scene {
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
     // sets a boundary for main camera
-    this.cameras.main.setBounds(0, -100, _width*1.28, _height*2.6);
+    this.cameras.main.setBounds(0, -100, _width*1.28, ((_height*2.6)+16));
     this.cameras.main.centerOn(_width*0.5, _height*2.5);
-    this.physics.world.setBounds(0, 0, _width*1.28, _height*2.5);
+    this.physics.world.setBounds(0, 0, _width*1.28, ((_height*2.5)+16));
 
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
@@ -113,8 +115,6 @@ class Level1 extends Phaser.Scene {
     } else if (opponentKingdom === "Remote Realm") {
       ai = new AIKingdom(remoteRealmInfo, 50, 50, this, startingObjects);
     };
-
-    updateColliders(this, ai, player);
 
     //runs every 10 seconds to get the ai priority attack locations
     var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,

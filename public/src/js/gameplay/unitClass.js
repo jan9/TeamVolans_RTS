@@ -12,7 +12,10 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.destinationX=xCoord+1;
     this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
-    this.scene = scene;
+    this.scene = scene
+
+    //used to have the unit be in front of buildings
+    this.depth = 1;
 
     this.player_selected = false;  // for player kingdom
     // set up a health bar
@@ -66,7 +69,6 @@ class Unit extends Phaser.GameObjects.Sprite{
   updateHealthBar(){
     let percent = Math.round((this.health/this.maxHealth)*10);
     percent *=10;
-    console.log(percent);
     //if there is less than 5% of health but unit is not dead, still use health bar for 10%
     if(percent < 10 && this.health > 0){
       this.bar.setTexture('healthBar10');
@@ -190,6 +192,9 @@ class Unit extends Phaser.GameObjects.Sprite{
     else if(action.name === "Build"){
       this.startBuildStructure(action.buildingType, action.kingdom, this.scene);
     }
+    else if (action.name === "Royal_Bonus"){
+      this.startRoyalBonus(action.castle, action.kingdom);
+    }
   }
 
   //starts building the structure
@@ -223,7 +228,9 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && !this.isDead()){
-      var structure = new Structure(buildingInfo, this.x+5, this.y+5, game);
+      var coordinates = kingdom.findOpenArea();
+
+      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game);
 
       //add the structure to the Group
       kingdom.add(structure);
@@ -235,6 +242,7 @@ class Unit extends Phaser.GameObjects.Sprite{
       if(kingdom.isPlayer()){
         structure.setInteractive();
       }
+      console.log(structure);
       kingdom.buildings.push(structure);
       kingdom.buildingsAmount++;
       this.setState("Idle");
@@ -389,5 +397,44 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
 
     return closestInjuredUnit;
+  }
+
+  //checks if the royalty is in a castles
+  //if so, returns the castle
+  isInCastle(kingdom){
+    let castle = undefined;
+    for(let building of kingdom.buildings){
+      if(building.type === "Castle"){
+        if(distance(this.x, this.y, building.x, building.y) < 10){
+          castle = building;
+        }
+      }
+    }
+    return castle;
+  }
+
+  findCastle(kingdom){
+    let castle = undefined;
+    for(let building of kingdom.buildings){
+      if(building.type === "Castle"){
+        castle = building;
+      }
+    }
+    return castle;
+  }
+  royalBonus(castle, kingdom){
+    this.move(castle.x, castle.y, kingdom.game, {"name": "Royal_Bonus", "kingdom": kingdom, "castle": castle});
+  }
+  startRoyalBonus(castle, kingdom){
+
+    //every 30 seconds the royal adds to the health of the castle
+    var royalEvent = kingdom.game.time.addEvent({ delay: 30*1000, callback: this.endRoyalBonus,
+      callbackScope: this, loop: true, args: [castle, kingdom] });
+  }
+
+  endRoyalBonus(castle, kingdom){
+    if(this.isInCastle(kingdom) === castle){
+      castle.updateHealth(5);
+    }
   }
 }
