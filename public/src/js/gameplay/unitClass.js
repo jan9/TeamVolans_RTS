@@ -94,7 +94,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.state = state;
   }
 
-  //moves the unit to the desired location
+    //moves the unit to the desired location
    move(xLocation, yLocation, game, action){
 
      if(this.destinationX != xLocation|| this.destinationY != yLocation){
@@ -155,13 +155,17 @@ class Unit extends Phaser.GameObjects.Sprite{
 
 
   playerStopMovement(){
-    this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
-    this.bar.body.velocity.x=0;
-    this.bar.body.velocity.y=0;
 
-    this.setState("Idle");
-    this.anims.stop();
+    //put it in an if statement in case unit is dead
+    if(this){
+      this.body.velocity.x = 0;
+      this.body.velocity.y = 0;
+      this.bar.body.velocity.x=0;
+      this.bar.body.velocity.y=0;
+
+      this.setState("Idle");
+      this.anims.stop();
+    }
   }
   //stops the unit's movement and sets the state to idle
   stopMovement(destinationX, destinationY, action){

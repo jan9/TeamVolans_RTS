@@ -3,6 +3,14 @@
 */
 // global variables
 
+/*
+Use below code to disable menu coming up on right-click
+CITATION: Code from the following stack overflow answer: https://stackoverflow.com/questions/737022/how-do-i-disable-right-click-on-my-web-page
+document.addEventListener("contextmenu", function(e){
+    e.preventDefault();
+}, false);
+*/
+
 var x;
 var y;
 var pointer;
