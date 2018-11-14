@@ -7,6 +7,7 @@ const config = {
   type: Phaser.AUTO,
   width: _width,
   height: _height,
+  pixelArt: true,
   physics: {
     default: 'arcade'
   },
