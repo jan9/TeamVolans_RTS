@@ -12,8 +12,10 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
     this.startingX = xCoord;
     this.startingY = yCoord;
     this.playerKingdom = isPlayer;
+    this.goldDeposits = [];
 
     //create the starting buildings and units
+    this.createGoldDeposits(startingObjects);
     this.createStartingBuildings(kingdomInformation.buildings, startingObjects);
     this.createStartingUnits(kingdomInformation.units, startingObjects);
 
@@ -40,9 +42,9 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
       let randYVal = Math.random() * (20 - 1) + 1;
 
       //randomly decide whether x is positive or negative
-      let xType = Math.random() * (2-1) + 1;
+      let xType = Math.floor(Math.random() * 2);
 
-      if(xType == 2){
+      if(xType == 0){
         xType = -1;
       }
 
@@ -65,8 +67,8 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
       let areaOpen = true;
     //from the starting point, look for an area that's open for a size 160px (structures only)
     for(let building of this.buildings){
-      if (((xCoord - 80) < building.x && (xCoord+80) > building.x) &&
-      ((yCoord - 80) < building.y && (yCoord+80) > building.y)){
+      if (((xCoord - _maxStructW) < building.x && (xCoord+_maxStructW) > building.x) &&
+      ((yCoord - _maxStructH) < building.y && (yCoord+_maxStructH) > building.y)){
         areaOpen = false;
       }
     }
@@ -151,7 +153,10 @@ getStructureInfo(buildingType){
 
     var coordinates = {"x": 0, "y": 0};
 
-    if(itemInformation.type === "Castle"){
+    if(itemInformation.type === "Deposit"){
+      positionName += "_Gold_"+itemNum.toString();
+    }
+    else if(itemInformation.type === "Castle"){
         positionName+="_Castle";
     }
     else if (itemInformation.baseType === "Structure"){
@@ -171,6 +176,16 @@ getStructureInfo(buildingType){
     return coordinates;
   }
 
+
+  createGoldDeposits(startingObjectsList){
+    for(var i = 0; i< _goldDepositsNum; i++){
+      var depositCoords = this.findStartingPosition({"type": "Deposit", "baseType": "Deposit"}, i+1, startingObjectsList);
+      let goldDeposit = new Phaser.GameObjects.Sprite(this.scene, depositCoords.x, depositCoords.y, 'deposit');
+      this.scene.add.existing(goldDeposit);
+      goldDeposit.setInteractive();
+      this.goldDeposits.push(goldDeposit);
+    }
+  }
 
  createStartingBuildings(buildings, startingObjectsList){
 

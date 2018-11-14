@@ -290,8 +290,6 @@ class Unit extends Phaser.GameObjects.Sprite{
         else if (this.type === "Miner"){
           kingdom.addGold(6);
         }
-
-        this.setState("Idle");
       }
     }
   }
@@ -430,7 +428,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.move(castle.x, castle.y, kingdom.game, {"name": "Royal_Bonus", "kingdom": kingdom, "castle": castle});
   }
   startRoyalBonus(castle, kingdom){
-
+    this.unitAnimations("Action");
     //every 30 seconds the royal adds to the health of the castle
     var royalEvent = kingdom.game.time.addEvent({ delay: 30*1000, callback: this.endRoyalBonus,
       callbackScope: this, loop: true, args: [castle, kingdom] });

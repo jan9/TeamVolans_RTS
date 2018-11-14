@@ -75,8 +75,8 @@
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":899,
-                 "y":1
+                 "x":898,
+                 "y":33
                 }, 
                 {
                  "height":160,
@@ -92,7 +92,7 @@
                 {
                  "height":96,
                  "id":6,
-                 "name":"Gold_1",
+                 "name":"Enemy_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -103,13 +103,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":1344,
-                 "y":35
+                 "x":1345,
+                 "y":62
                 }, 
                 {
                  "height":96,
                  "id":7,
-                 "name":"Gold_2",
+                 "name":"Enemy_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -120,8 +120,8 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":64,
-                 "y":33
+                 "x":131,
+                 "y":59
                 }, 
                 {
                  "height":96,
@@ -143,7 +143,7 @@
                 {
                  "height":96,
                  "id":9,
-                 "name":"Gold_4",
+                 "name":"Player_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -154,13 +154,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":161,
-                 "y":1322
+                 "x":166,
+                 "y":1357
                 }, 
                 {
                  "height":96,
                  "id":10,
-                 "name":"Gold_5",
+                 "name":"Player_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -171,8 +171,8 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":1282,
-                 "y":1312
+                 "x":1345,
+                 "y":1408
                 }, 
                 {
                  "height":32,
@@ -314,7 +314,7 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1284,
+                 "x":1249,
                  "y":161
                 }, 
                 {
@@ -359,7 +359,7 @@
                  "visible":true,
                  "width":32,
                  "x":833,
-                 "y":130
+                 "y":225
                 }, 
                 {
                  "height":32,
@@ -369,8 +369,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":929,
-                 "y":160
+                 "x":962,
+                 "y":225
                 }, 
                 {
                  "height":32,
@@ -391,8 +391,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":577,
-                 "y":96
+                 "x":1280,
+                 "y":257
                 }, 
                 {
                  "height":32,
@@ -424,8 +424,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":578,
-                 "y":33
+                 "x":511,
+                 "y":160
                 }, 
                 {
                  "height":32,

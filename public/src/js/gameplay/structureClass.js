@@ -11,21 +11,18 @@ class Structure extends Phaser.GameObjects.Sprite{
 
       // set up a health bar
     this.maxHealth = structureInformation.health; // store max health of a unit
-    this.bar = new Phaser.GameObjects.Graphics(scene);
-    this.barX = xCoord-50;
-    this.barY = yCoord-90;
-    this.percent = this.health/this.maxHealth;
-    this.drawHealthBar();
+
+    this.bar = new Phaser.GameObjects.Sprite(scene, xCoord, yCoord-80, 'healthBar100');
+
+    scene.add.existing(this.bar);
+    this.bar.setSize(16,16);
 
     this.scene = scene;
-    //a game container containing a unit and its health bar
-    this.unitContainer = new Phaser.GameObjects.Container(scene, xCoord, yCoord, [this,this.bar]);
-    this.unitContainer.x = 0;
-    this.unitContainer.y = 0;
+
     //scene.physics.world.enable(this);
     //scene.physics.world.enable(this.bar);
-    scene.physics.world.enable(this.unitContainer);
-    this.scene.add.existing(this.unitContainer);
+    scene.physics.world.enable(this);
+    this.scene.add.existing(this);
   }
 
   getState(){
@@ -58,14 +55,34 @@ class Structure extends Phaser.GameObjects.Sprite{
     this.state = state;
   }
 
+
   //updates the health of the structure based on how many points it's been hurt by
   updateHealth(points){
     this.health += points;
     if (this.health < 0) {
       this.health = 0;
     }
-    this.drawHealthBar();
+    this.updateHealthBar();
   }
+
+  updateHealthBar(){
+    let percent = Math.round((this.health/this.maxHealth)*10);
+    percent *=10;
+    //if there is less than 5% of health but unit is not dead, still use health bar for 10%
+    if(percent < 10 && this.health > 0){
+      this.bar.setTexture('healthBar10');
+    }
+
+    //castle health can go > 100
+    else if(percent >= 100){
+      this.bar.setTexture('healthBar100');
+    }
+    //otherwise use health bar rounded to closest 10
+    else{
+      this.bar.setTexture('healthBar'+percent);
+    }
+  }
+
 
   //starts building the structure
   startBuildUnit(unitType, kingdom, game){

@@ -1,6 +1,8 @@
 function minerAI(miner, kingdom){
   if(miner.isIdle() ){
-    miner.mine(kingdom, kingdom.game);
+    //randomly chooses which mine to go to
+    let randMine = Math.floor(Math.random() * 2);
+    miner.move(kingdom.goldDeposits[randMine].x, kingdom.goldDeposits[randMine].y, kingdom.scene, {"name": "Mine", "kingdom": kingdom});
   }
 }
 
@@ -141,7 +143,9 @@ function villagerAI(villager, kingdom){
     }
     //if nothing to build and not already mining, then mine
     else if (villager.isIdle()){
-      villager.mine(kingdom, kingdom.game)
+      //randomly chooses which mine to go to
+      let randMine = Math.floor(Math.random() * 2);
+      villager.move(kingdom.goldDeposits[randMine].x, kingdom.goldDeposits[randMine].y, kingdom.scene, {"name": "Mine", "kingdom": kingdom});
     }
   }
 }

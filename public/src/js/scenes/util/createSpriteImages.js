@@ -110,6 +110,11 @@ function createStructureSprites(scene){
     { frameWidth: 96, frameHeight: 96}
   );
 
+  scene.load.spritesheet('deposit',
+   'Graphics/misc/gold_deposit.png',
+    { frameWidth: 96, frameHeight: 96}
+  );
+
   scene.load.spritesheet('temple',
     'Graphics/buildings/temple.png',
     { frameWidth: 128, frameHeight: 128}

@@ -5,7 +5,19 @@ class AIKingdom extends Kingdom{
       this.buildOrder = kingdomInformation.buildOrder;
       this.currentBuild = 0;
       this.isHardMode = isHardMode;
-      this.attackGroup = [];
+
+      //attack group which attacks whoever is closest to the castle
+      this.closestTargetAttackGroup = [];
+
+      //attack group which goes after utility units like miners/villagers or structures
+      //to slow down player production
+      this.utilityTargetsAttackGroup = [];
+
+      //attack group to attack the castle
+      this.castleAttackGroup = [];
+
+      //attack group to support the other attack groups when one is low on units
+      this.supportAttackGroup = [];
 
 
 
