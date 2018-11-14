@@ -287,25 +287,29 @@ isPlayer(){
 
   updatePlayerKingdom(){
       //TO DO
-      for(let unit of playerUnitSelected){
+    for(var i = 0; i < playerUnitSelected.length; i++){
+      var add_x, add_y;
+      var unit = playerUnitSelected[i];
       // if the unit selected, move it to a new position
-      if(unit.player_selected  === true){
+      if(i === 0){
         // mouse x and y stored in global variables x and y in level 1
-      //  var new_x = x-unit.x;
-      //  var new_y = y-unit.y;
-        unit.move(x, y, this.game);
+        //only calculate this for the firt item in the list
+        add_x = Phaser.Math.RoundAwayFromZero(x-unit.x);
+        add_y = Phaser.Math.RoundAwayFromZero(y-unit.y);
+      }
+      if(unit.player_selected  === true){
+        unit.move(Phaser.Math.RoundAwayFromZero(unit.x)+add_x/2,Phaser.Math.RoundAwayFromZero(unit.y)+add_y/2, this.game);
       }
       // if the unit deselected, stop the movement and set its state to idle
       // TODO: add this as an event
       else if(unit.player_selected  === false){
         unit.playerStopMovement();
       }
+    }
 
       // if unit type is attack
 
         //updateHealth(points);
 
-
-      }
   }
 }

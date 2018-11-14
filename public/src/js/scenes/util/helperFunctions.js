@@ -63,6 +63,7 @@ function calculateWinner(playerKingdom, aiKingdom){
     }
   }
 
+  
 //if the ai has more castles than the ai wins
   if(aiCastles > playerCastles){
     playerWinner = false;

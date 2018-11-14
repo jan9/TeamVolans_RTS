@@ -109,8 +109,8 @@ function dragSelect(scene, kingdom) {
   });
   scene.input.on('pointermove', function(pointer) {
       if (draw) {
-          mousePointerData.width = pointer.worldX -  mousePointerData.x;
-          mousePointerData.height = pointer.worldY -  mousePointerData.y;
+          mousePointerData.width = Phaser.Math.RoundAwayFromZero(pointer.worldX) -  mousePointerData.x;
+          mousePointerData.height = Phaser.Math.RoundAwayFromZero(pointer.worldY) -  mousePointerData.y;
           //console.log("height and width clicked");
           if(oldSelectionArea) {
             oldSelectionArea.clear();

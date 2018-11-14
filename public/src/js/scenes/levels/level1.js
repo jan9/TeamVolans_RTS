@@ -106,6 +106,7 @@ class Level1 extends Phaser.Scene {
       player = new Kingdom(remoteRealmInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     };
 
+
     // set up the ai kingdom
     console.log(opponentKingdom);
     if (opponentKingdom === "Dueling Dominion") {
@@ -133,6 +134,7 @@ class Level1 extends Phaser.Scene {
 
     dragSelect(this, player);
     this.pointerInput();
+
     console.log('[Level1] create() complete');
   }
 
@@ -168,7 +170,7 @@ class Level1 extends Phaser.Scene {
       var structureInfo;
       x = Phaser.Math.RoundAwayFromZero(pointer.worldX);
       y = Phaser.Math.RoundAwayFromZero(pointer.worldY);
-
+      console.log("[Level1] pointerInput() x,y: "+ x +","+y);
       //check if we were selecting a game object, not doing pointer Input
       //basically setting the input for gameObjectDown also calls this input function...even if we don't want it Called
       //so this is a check to ignore this function if gameObject is really what we were calling

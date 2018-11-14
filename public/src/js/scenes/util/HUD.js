@@ -10,6 +10,7 @@ var currentGold;
 var currentPopulation;
 var displayGold,displayPop;
 var image1, timedEvent;
+var gameMessage;
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
 
@@ -47,6 +48,8 @@ class gameHUD extends Phaser.Scene {
    displayGold = this.add.text(600,17,'CURRENT GOLD: ');
 
    displayPop = this.add.text(850,17,'POPULATION: ');
+   gameMessage = this.add.text(3, 53, '');
+  // gameMessage.setText('');
      }
 
   update() {
