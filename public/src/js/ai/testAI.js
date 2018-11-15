@@ -55,7 +55,8 @@ class TestAI extends Phaser.Scene {
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
-
+    // the parameter values hold true only for level 1 map
+    getMiniMap(this, -160, 260, 400, 400, 0.125);
     var cursors = this.input.keyboard.createCursorKeys();
 
     this.input.on('gameobjectdown', onObjectClicked);
