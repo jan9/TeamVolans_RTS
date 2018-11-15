@@ -63,7 +63,7 @@ function calculateWinner(playerKingdom, aiKingdom){
     }
   }
 
-  
+
 //if the ai has more castles than the ai wins
   if(aiCastles > playerCastles){
     playerWinner = false;
@@ -113,4 +113,8 @@ function overlapOccurred(unit1, unit2){
   else{
 
   }
+}
+
+function getMiniMap(scene, camX, camY, width, height, zoom) {
+  scene.minimap = scene.cameras.add(camX, camY, width, height).setZoom(zoom).setName('minimap');
 }

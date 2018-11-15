@@ -56,22 +56,17 @@ class Level1 extends Phaser.Scene {
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
     // sets a boundary for main camera
-    this.cameras.main.setBounds(0, -100, _width*1.28, ((_height*2.6)+16));
+    this.cameras.main.setBounds(-100, -100, this.map.widthInPixels+200, this.map.heightInPixels+200);
     this.cameras.main.centerOn(_width*0.5, _height*2.5);
-    this.physics.world.setBounds(0, 0, _width*1.28, ((_height*2.5)+16));
+    this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
 
-    //TODO: minimap
-    /*
-    //  The miniCam is 400px wide, so can display the whole world at a zoom of 0.2
-   this.minimap = this.cameras.add(0, -100, _width*1.28, _height*2.6).setZoom(0.2).setName('mini');
-   //this.minimap.setBackgroundColor(0x002244);
-   this.minimap.scrollX = 3600;
-   this.minimap.scrollY = 300;
-   */
+    // the parameter values hold true only for level 1 map
+    getMiniMap(this, -160, 260, 400, 400, 0.125);
+
     var cursors = this.input.keyboard.createCursorKeys();
 
     this.input.on('gameobjectdown', onObjectClicked, this.scene);

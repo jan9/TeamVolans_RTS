@@ -29,6 +29,7 @@ class gameHUD extends Phaser.Scene {
     this.load.image('button_castle','Graphics/UI/buildButtons/5.png');
     this.load.image('button_temple','Graphics/UI/buildButtons/6.png');
     this.load.image('button_machinery','Graphics/UI/buildButtons/7.png');
+    this.load.image('boxframe', 'Graphics/screens/start_screen/BoxFrame.png');
   }
 
   create() {
@@ -37,6 +38,10 @@ class gameHUD extends Phaser.Scene {
     topHUD.alpha = 0.5;
     this.button_Title();
     this.buildButtons();
+
+    //minimap frame
+    var minimapbg = this.add.sprite(115, _height-130, "boxframe").setDisplaySize(225,250).setScrollFactor(0);
+    minimapbg.setDepth(0);
 
     // have a message box?
     var displayLevel = this.add.text(150,17,'CURRENT LEVEL: ' + currentLevel);
