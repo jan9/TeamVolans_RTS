@@ -8,6 +8,7 @@ const config = {
   width: _width,
   height: _height,
   pixelArt: true,
+  disableContextMenu: true, // disables option menu from right click
   physics: {
     default: 'arcade'
   },

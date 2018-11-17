@@ -42,6 +42,7 @@ class gameHUD extends Phaser.Scene {
     this.load.image('button_machinery_selected','Graphics/UI/buildButtons/7_Chosen.png');
 
     createOptionsSprites(this);
+    this.load.image('boxframe', 'Graphics/screens/start_screen/BoxFrame.png');
   }
 
   create() {
@@ -51,6 +52,10 @@ class gameHUD extends Phaser.Scene {
     this.button_Title();
     this.buildButtons();
     this.optionButton();
+
+    //minimap frame
+    var minimapbg = this.add.sprite(115, _height-130, "boxframe").setDisplaySize(225,250).setScrollFactor(0);
+    minimapbg.setDepth(0);
 
     // have a message box?
     var displayLevel = this.add.text(150,17,'CURRENT LEVEL: ' + currentLevel);

@@ -946,21 +946,21 @@
  <objectgroup id="5" name="ObjectLayer">
   <object id="1" name="Player_Castle" x="1121" y="2815" width="160" height="160"/>
   <object id="2" name="Player_Building" x="865" y="2688" width="128" height="128"/>
-  <object id="3" name="Player_Unit1" x="1119" y="3007" width="32" height="32"/>
-  <object id="4" name="Player_Unit2" x="1215" y="3008" width="32" height="32"/>
-  <object id="5" name="Player_Unit7" x="993" y="3008" width="32" height="32"/>
-  <object id="6" name="Player_Unit6" x="1409" y="2879" width="32" height="32"/>
-  <object id="7" name="Player_Unit5" x="1312" y="3037" width="32" height="32"/>
-  <object id="8" name="Player_Unit4" x="1313" y="3135" width="32" height="32"/>
-  <object id="9" name="Player_Unit3" x="1119" y="3104" width="32" height="32"/>
+  <object id="3" name="Player_Unit1" x="810" y="2924" width="32" height="32"/>
+  <object id="4" name="Player_Unit2" x="1324" y="2926" width="32" height="32"/>
+  <object id="5" name="Player_Unit7" x="1022" y="2924" width="32" height="32"/>
+  <object id="6" name="Player_Unit6" x="1429" y="2849" width="32" height="32"/>
+  <object id="7" name="Player_Unit5" x="1538" y="2851" width="32" height="32"/>
+  <object id="8" name="Player_Unit4" x="1322" y="2754" width="32" height="32"/>
+  <object id="9" name="Player_Unit3" x="1425" y="2756" width="32" height="32"/>
   <object id="10" name="Player_Unit11" x="1023" y="2847" width="32" height="32"/>
-  <object id="11" name="Player_Unit10" x="1185" y="3166" width="32" height="32"/>
-  <object id="12" name="Player_Unit9" x="1440" y="3103" width="32" height="32"/>
-  <object id="13" name="Player_Unit8" x="896" y="2942" width="32" height="32"/>
-  <object id="14" name="Player_Unit7" x="1504" y="3007" width="32" height="32"/>
-  <object id="15" name="Player_Unit6" x="991" y="3135" width="32" height="32"/>
-  <object id="17" name="Player_Unit14" x="895" y="3069" width="32" height="32"/>
-  <object id="18" name="Player_Unit13" x="1312" y="2880" width="32" height="32"/>
+  <object id="11" name="Player_Unit10" x="806" y="2849" width="32" height="32"/>
+  <object id="12" name="Player_Unit9" x="1537" y="2929" width="32" height="32"/>
+  <object id="13" name="Player_Unit8" x="910" y="2847" width="32" height="32"/>
+  <object id="14" name="Player_Unit7" x="1432" y="2931" width="32" height="32"/>
+  <object id="15" name="Player_Unit6" x="1537" y="2757" width="32" height="32"/>
+  <object id="17" name="Player_Unit14" x="919" y="2925" width="32" height="32"/>
+  <object id="18" name="Player_Unit13" x="1322" y="2848" width="32" height="32"/>
   <object id="19" name="Player_Unit12" x="1185" y="2751" width="32" height="32"/>
   <object id="20" name="Gold_1" x="2176" y="2305" width="96" height="96">
    <properties>
@@ -972,7 +972,7 @@
     <property name="isMine" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="23" name="Gold_3" x="319" y="30" width="96" height="96">
+  <object id="23" name="Gold_3" x="216" y="257" width="96" height="96">
    <properties>
     <property name="isMine" type="bool" value="false"/>
    </properties>
@@ -987,22 +987,22 @@
     <property name="isMine" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="27" name="Enemy_Castle" x="928" y="30" width="160" height="160"/>
+  <object id="27" name="Enemy_Castle" x="882" y="56" width="160" height="160"/>
   <object id="28" name="Enemy_Building" x="896" y="354" width="128" height="128"/>
-  <object id="29" name="Enemy_Unit12" x="1313" y="61" width="32" height="32"/>
-  <object id="30" name="Enemy_Unit11" x="831" y="162" width="32" height="32"/>
-  <object id="31" name="Enemy_Unit10" x="895" y="223" width="32" height="32"/>
-  <object id="33" name="Enemy_Unit7" x="1313" y="190" width="32" height="32"/>
-  <object id="34" name="Enemy_Unit13" x="830" y="32" width="32" height="32"/>
-  <object id="35" name="Enemy_Unit9" x="1212" y="416" width="32" height="32"/>
-  <object id="36" name="Enemy_Unit8" x="1119" y="221" width="32" height="32"/>
+  <object id="29" name="Enemy_Unit12" x="1101" y="587" width="32" height="32"/>
+  <object id="30" name="Enemy_Unit11" x="726" y="204" width="32" height="32"/>
+  <object id="31" name="Enemy_Unit10" x="447" y="482" width="32" height="32"/>
+  <object id="33" name="Enemy_Unit7" x="1143" y="252" width="32" height="32"/>
+  <object id="34" name="Enemy_Unit13" x="605" y="263" width="32" height="32"/>
+  <object id="35" name="Enemy_Unit9" x="1186" y="355" width="32" height="32"/>
+  <object id="36" name="Enemy_Unit8" x="857" y="264" width="32" height="32"/>
   <object id="37" name="Enemy_Unit6" x="801" y="543" width="32" height="32"/>
-  <object id="38" name="Enemy_Unit5" x="768" y="449" width="32" height="32"/>
-  <object id="39" name="Enemy_Unit4" x="738" y="256" width="32" height="32"/>
+  <object id="38" name="Enemy_Unit5" x="641" y="530" width="32" height="32"/>
+  <object id="39" name="Enemy_Unit4" x="512" y="372" width="32" height="32"/>
   <object id="40" name="Enemy_Unit3" x="960" y="545" width="32" height="32"/>
-  <object id="41" name="Enemy_Unit2" x="1056" y="414" width="32" height="32"/>
-  <object id="42" name="Enemy_Unit1" x="1152" y="350" width="32" height="32"/>
-  <object id="43" name="Enemy_Unit14" x="709" y="354" width="32" height="32"/>
+  <object id="41" name="Enemy_Unit2" x="1063" y="393" width="32" height="32"/>
+  <object id="42" name="Enemy_Unit1" x="1012" y="270" width="32" height="32"/>
+  <object id="43" name="Enemy_Unit14" x="721" y="433" width="32" height="32"/>
  </objectgroup>
  <layer id="3" name="Tile Layer 3" width="100" height="100">
   <data encoding="base64">

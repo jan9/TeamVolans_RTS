@@ -616,18 +616,18 @@
   <object id="21" name="Player_Unit1" x="1919" y="1793" width="32" height="32"/>
   <object id="2" name="Enemy_Castle" x="771.364" y="102.121" width="160" height="160"/>
   <object id="9" name="Enemy_Building" x="449" y="63" width="128" height="128"/>
-  <object id="24" name="Enemy_Unit12" x="830" y="33" width="32" height="32"/>
+  <object id="24" name="Enemy_Unit12" x="975" y="96" width="32" height="32"/>
   <object id="25" name="Enemy_Unit11" x="387" y="194" width="32" height="32"/>
-  <object id="26" name="Enemy_Unit10" x="642" y="318" width="32" height="32"/>
-  <object id="27" name="Enemy_Unit9" x="384" y="28" width="32" height="32"/>
-  <object id="28" name="Enemy_Unit8" x="705" y="221" width="32" height="32"/>
-  <object id="29" name="Enemy_Unit7" x="639" y="192" width="32" height="32"/>
-  <object id="30" name="Enemy_Unit6" x="544" y="286" width="32" height="32"/>
-  <object id="31" name="Enemy_Unit5" x="544" y="222" width="32" height="32"/>
-  <object id="32" name="Enemy_Unit4" x="671" y="64" width="32" height="32"/>
-  <object id="33" name="Enemy_Unit3" x="672" y="127" width="32" height="32"/>
-  <object id="34" name="Enemy_Unit2" x="607" y="126" width="32" height="32"/>
-  <object id="23" name="Enemy_Unit1" x="608" y="63" width="32" height="32"/>
+  <object id="26" name="Enemy_Unit10" x="648" y="322" width="32" height="32"/>
+  <object id="27" name="Enemy_Unit9" x="332" y="65" width="32" height="32"/>
+  <object id="28" name="Enemy_Unit8" x="646" y="245" width="32" height="32"/>
+  <object id="29" name="Enemy_Unit7" x="643" y="154" width="32" height="32"/>
+  <object id="30" name="Enemy_Unit6" x="514" y="275" width="32" height="32"/>
+  <object id="31" name="Enemy_Unit5" x="381" y="295" width="32" height="32"/>
+  <object id="32" name="Enemy_Unit4" x="971" y="311" width="32" height="32"/>
+  <object id="33" name="Enemy_Unit3" x="977" y="189" width="32" height="32"/>
+  <object id="34" name="Enemy_Unit2" x="642" y="70" width="32" height="32"/>
+  <object id="23" name="Enemy_Unit1" x="810" y="311" width="32" height="32"/>
  </objectgroup>
  <layer id="3" name="Layer3" width="75" height="75">
   <data encoding="base64">
