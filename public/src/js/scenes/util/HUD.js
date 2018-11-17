@@ -11,6 +11,9 @@ var currentPopulation;
 var displayGold,displayPop;
 var image1, timedEvent;
 var gameMessage;
+var buttons = [];
+var optionClicked = "none";
+
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
 
@@ -29,6 +32,16 @@ class gameHUD extends Phaser.Scene {
     this.load.image('button_castle','Graphics/UI/buildButtons/5.png');
     this.load.image('button_temple','Graphics/UI/buildButtons/6.png');
     this.load.image('button_machinery','Graphics/UI/buildButtons/7.png');
+
+    this.load.image('button_mine_selected','Graphics/UI/buildButtons/1_Chosen.png');
+    this.load.image('button_archeryRange_selected','Graphics/UI/buildButtons/2_Chosen.png');
+    this.load.image('button_townCenter_selected','Graphics/UI/buildButtons/3_Chosen.png');
+    this.load.image('button_barracks_selected','Graphics/UI/buildButtons/4_Chosen.png');
+    this.load.image('button_castle_selected','Graphics/UI/buildButtons/5_Chosen.png');
+    this.load.image('button_temple_selected','Graphics/UI/buildButtons/6_Chosen.png');
+    this.load.image('button_machinery_selected','Graphics/UI/buildButtons/7_Chosen.png');
+
+    createOptionsSprites(this);
   }
 
   create() {
@@ -37,6 +50,7 @@ class gameHUD extends Phaser.Scene {
     topHUD.alpha = 0.5;
     this.button_Title();
     this.buildButtons();
+    this.optionButton();
 
     // have a message box?
     var displayLevel = this.add.text(150,17,'CURRENT LEVEL: ' + currentLevel);
@@ -113,63 +127,130 @@ class gameHUD extends Phaser.Scene {
     }
   }
 
+  removeSelected(){
+    for(let button of buttons){
+      button.setTexture('button_'+button.name);
+    }
+  }
+
+  optionButton(){
+    var optionButton = this.add.sprite(_width-100, _height-80, "none_option").setOrigin(0.5,0.5);
+    for(let option of _options){
+      this.optionInput(optionButton, option.key, option.name);
+    }
+  }
+
+  optionInput(optionButton, key, name){
+    this.input.keyboard.on('keydown_'+key, function(event){
+        optionClicked = name;
+        optionButton.setTexture(name+"_option");
+    });
+  }
+
   // build structures: create buttons using hud and if button is clicked, then trigger it to build a buildings
   // TODO: if not enough money -> http://labs.phaser.io/edit.html?src=src/tweens\total%20duration.js
   buildButtons() {
     // archeryRange
     var buildButton_archeryRange = this.add.sprite(_width-460, _height-25,"button_archeryRange").setOrigin(0.5,0.5);
+    buildButton_archeryRange.name="archeryRange";
+
+    buttons.push(buildButton_archeryRange);
     buildButton_archeryRange.setInteractive({useHandCursor:true});
     buildButton_archeryRange.on('pointerdown', function(pointer) {
       console.log("archery range button");
-      if (currentGold >= archeryRangeInfo.cost) {build_signal = 1;} else { build_signal = -1; }
+      if (player.gold >= archeryRangeInfo.cost) {
+        build_signal = 1;
+        this.removeSelected();
+        buildButton_archeryRange.setTexture('button_archeryRange_selected');
+      }
     }, this);
 
     // barracks
     var buildButton_barracks = this.add.sprite(_width-400, _height-25,"button_barracks").setOrigin(0.5,0.5);
+    buildButton_barracks.name="barracks";
+
+    buttons.push(buildButton_barracks);
+
     buildButton_barracks.setInteractive({useHandCursor:true});
     buildButton_barracks.on('pointerdown', function(pointer) {
       console.log("barracks button");
-      if (currentGold >= barracksInfo.cost) {build_signal = 2;} else { build_signal = -1; }
+      if (player.gold >= barracksInfo.cost) {
+        build_signal = 2;
+        this.removeSelected();
+        buildButton_barracks.setTexture('button_barracks_selected');
+          }
     }, this);
 
     // castle
     var buildButton_castle = this.add.sprite(_width-340, _height-25,"button_castle").setOrigin(0.5,0.5);
+    buildButton_castle.name="castle";
+    buttons.push(buildButton_castle);
+
     buildButton_castle.setInteractive({useHandCursor:true});
     buildButton_castle.on('pointerdown', function(pointer) {
       console.log("castle button");
-      if (currentGold >= castleInfo.cost) {build_signal = 3;} else { build_signal = -1; }
+      if (player.gold >= castleInfo.cost) {
+        this.removeSelected();
+        build_signal = 3;
+        buildButton_castle.setTexture('button_castle_selected');
+      }
     }, this);
 
     // machinery
     var buildButton_machinery = this.add.sprite(_width-280, _height-25,"button_machinery").setOrigin(0.5,0.5);
+    buildButton_machinery.name = "machinery";
+    buttons.push(buildButton_machinery);
+
     buildButton_machinery.setInteractive({useHandCursor:true});
     buildButton_machinery.on('pointerdown', function(pointer) {
       console.log("machinery button");
-      if (currentGold >= machineryInfo.cost) {build_signal = 4;} else { build_signal = -1; }
+      if (player.gold >= machineryInfo.cost) {
+        this.removeSelected();
+        build_signal = 4;
+        buildButton_machinery.setTexture('button_machinery_selected');
+      }
     }, this);
 
     // mine
     var buildButton_mine = this.add.sprite(_width-220, _height-25,"button_mine").setOrigin(0.5,0.5);
+    buildButton_mine.name = "mine";
+    buttons.push(buildButton_mine);
     buildButton_mine.setInteractive({useHandCursor:true});
     buildButton_mine.on('pointerdown', function(pointer) {
       console.log("mine button");
-      if (currentGold >= mineInfo.cost) {build_signal = 5;} else { build_signal = -1; }
+      if (player.gold >= mineInfo.cost) {
+        this.removeSelected();
+        build_signal = 5;
+        buildButton_mine.setTexture('button_mine_selected');
+      }
     }, this);
 
     // temple
     var buildButton_temple = this.add.sprite(_width-160, _height-25,"button_temple").setOrigin(0.5,0.5);
+    buildButton_temple.name = "temple";
+    buttons.push(buildButton_temple);
     buildButton_temple.setInteractive({useHandCursor:true});
     buildButton_temple.on('pointerdown', function(pointer) {
       console.log("temple button");
-      if (currentGold >= templeInfo.cost) {build_signal = 6;} else { build_signal = -1; }
+      if (player.gold >= templeInfo.cost) {
+        this.removeSelected();
+        build_signal = 6;
+        buildButton_temple.setTexture('button_temple_selected');
+      }
     }, this);
 
     // towncenter
     var buildButton_townCenter = this.add.sprite(_width-100, _height-25,"button_townCenter").setOrigin(0.5,0.5);
+    buildButton_townCenter.name = "townCenter";
+    buttons.push(buildButton_townCenter);
     buildButton_townCenter.setInteractive({useHandCursor:true});
     buildButton_townCenter.on('pointerdown', function(pointer) {
       console.log("town center button");
-      if (currentGold >= townCenterInfo.cost) {build_signal = 7;} else { build_signal = -1; }
+      if (player.gold >= townCenterInfo.cost) {
+        this.removeSelected();
+        build_signal = 7;
+        buildButton_townCenter.setTexture('button_townCenter_selected');
+      }
     }, this);
   }
 

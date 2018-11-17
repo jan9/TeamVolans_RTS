@@ -64,10 +64,13 @@ const swordsmanActions = ["Attack", "Die"];
 
 function createHealthBarSprites(scene){
   for(var i = 0; i <= 100; i+=10){
-  scene.load.spritesheet('healthBar'+i,
-       'Graphics/misc/health_bar_'+i+'.png',
-       { frameWidth: 34, frameHeight: 20}
-   );
+    scene.load.image('healthBar'+i, 'Graphics/misc/health_bar_'+i+'.png');
+ }
+}
+
+function createOptionsSprites(scene){
+  for(let option of _options){
+    scene.load.image(option.name+'_option', 'Graphics/UI/optionButtons/'+option.name +'_option.png');
  }
 }
 

@@ -29,6 +29,24 @@ class AIKingdom extends Kingdom{
 
     }
 
+    //checks to see whether the kingdom can build the unit (aka has the necessary structure built)
+    canBuildUnit(unit){
+      return this.hasStructure(unit.buildingProduced);
+    }
+
+
+    //checks to see whether or not the kingdom has 1 of the structure
+    hasStructure(structure){
+
+      let buildingFound = false;
+      for(let building of this.buildings){
+        if(building.type === structure){
+          buildingFound = true;
+        }
+      }
+
+    return buildingFound;
+  }
 
   hardModeBonus(){
     if(this.isHardMode){
@@ -165,6 +183,14 @@ class AIKingdom extends Kingdom{
       for( var i = 0; i < this.buildings.length; i++){
         var currentBuilding = this.buildings[i];
           structureAI(currentBuilding, this);
+      }
+
+      //if the current build order is a unit and that unit cannot be built
+      //(because the structure to build it doesn't exist) then skip that build order
+      if(_unitList.includes(this.getCurrentBuild())){
+        if(!this.canBuildUnit(this.getCurrentBuild())){
+          this.incrementBuildOrder();
+        }
       }
     }
 }

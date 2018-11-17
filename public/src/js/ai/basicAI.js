@@ -9,17 +9,18 @@ function minerAI(miner, kingdom){
 
 function structureAI(structure, kingdom){
   if(structure.isIdle()){
+
     if(kingdom.getCurrentBuild() === structure.unitProduced){
 
-      var unitInfo = kingdom.getUnitInfo(kingdom.getCurrentBuild());
+        var unitInfo = kingdom.getUnitInfo(kingdom.getCurrentBuild());
 
-      //only increase currentBuild if we have enough gold to make the unit
-      if(unitInfo.cost < kingdom.getGold()){
-        structure.startBuildUnit(kingdom.getCurrentBuild(), kingdom, kingdom.game);
-        kingdom.incrementBuildOrder();
+        //only increase currentBuild if we have enough gold to make the unit
+        if(unitInfo.cost < kingdom.getGold()){
+          structure.startBuildUnit(kingdom.getCurrentBuild(), kingdom, kingdom.game);
+          kingdom.incrementBuildOrder();
+        }
       }
     }
-  }
 }
 
 
@@ -135,9 +136,9 @@ function villagerAI(villager, kingdom){
       var structureInfo = kingdom.getStructureInfo(currentBuildItem);
       //only increase currentBuild if we have enough gold to make the structure
       if(structureInfo.cost < kingdom.getGold()){
+        kingdom.incrementBuildOrder();
         let coordinates = kingdom.findOpenArea();
         villager.move(coordinates.x+32, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
-        kingdom.incrementBuildOrder();
       }
 
     }

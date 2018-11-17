@@ -40,34 +40,45 @@ class Level3 extends Phaser.Scene {
 
     // checking to have received correct data
     console.log(gameMode.name);
+    let hardMode = false;
+    if(gameMode.name === "hard"){
+      hardMode = true;
+    }
+
+    var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
-      player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, this);
+      player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     } else if (kingdomSelection.name === "Equal Empire") {
-      player = new Kingdom(equalEmpireInfo, _width*0.9, _height*0.9, this);
+      player = new Kingdom(equalEmpireInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     } else if (kingdomSelection.name === "Fortune Federation") {
-      player = new Kingdom(fortuneFederationInfo, _width*0.9, _height*0.9, this);
+      player = new Kingdom(fortuneFederationInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     } else if (kingdomSelection.name === "Security Syndicate") {
-      player = new Kingdom(securitySyndicateInfo, _width*0.9, _height*0.9, this);
+      player = new Kingdom(securitySyndicateInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     } else if (kingdomSelection.name === "Remote Realm") {
-      player = new Kingdom(remoteRealmInfo, _width*0.9, _height*0.9, this);
+      player = new Kingdom(remoteRealmInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     };
+
 
     // set up the ai kingdom
     console.log(opponentKingdom);
     if (opponentKingdom === "Dueling Dominion") {
-      ai = new AIKingdom(duelingDominionInfo, 50, 50, this);
+      ai = new AIKingdom(duelingDominionInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Equal Empire") {
-      ai = new AIKingdom(equalEmpireInfo, 50, 50, this);
+      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Fortune Federation") {
-      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this);
+      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Security Syndicate") {
-      ai = new AIKingdom(securitySyndicateInfo, 50, 50, this);
+      ai = new AIKingdom(securitySyndicateInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Remote Realm") {
-      ai = new AIKingdom(remoteRealmInfo, 50, 50, this);
+      ai = new AIKingdom(remoteRealmInfo, 50, 50, this, startingObjects, hardMode);
     };
+
+    //runs every 1 second to get the ai priority attack locations
+    var aiEvent = this.time.addEvent({ delay: 1000, callback: this.aiUpdate,
+    callbackScope: this, loop: true, args: [] });
 
     currentLevel = 3;
     //goto = 'Level3';
@@ -77,6 +88,11 @@ class Level3 extends Phaser.Scene {
     console.log('[Level3] create() complete');
   }
 
+  //updates the target list of the ai (done every 10 seconds)
+  aiUpdate(){
+    ai.updateCurrentTargetList(player);
+  }
+  
   update(delta) {
       controls.update(delta);
     // randomly assign different AI?

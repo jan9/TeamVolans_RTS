@@ -14,6 +14,11 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.baseType = unitInformation.baseType;
     this.scene = scene
 
+    //used for keeping track of the amount of time the unit has been in its state
+    //(to ensure player can't game the system by something like
+    //going mine -> move -> mine -> move, and getting multiple mine events for 1 miner within 30 seconds)
+    this.stateLength;
+
     //used to have the unit be in front of buildings
     this.depth = 1;
 
@@ -91,13 +96,15 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   //lets the state be set
   setState(state){
+    this.stateLength = Date.now();
     this.state = state;
   }
+
 
     //moves the unit to the desired location
    move(xLocation, yLocation, game, action){
 
-     if(this.destinationX != xLocation|| this.destinationY != yLocation){
+     if(!this.isDead() && (this.destinationX != xLocation|| this.destinationY != yLocation)){
 
        this.playerStopMovement();
 
@@ -207,8 +214,10 @@ class Unit extends Phaser.GameObjects.Sprite{
     var buildingInfo = kingdom.getStructureInfo(buildingType);
 
     //a villager can make all buildings except Castle
-    //other units can only make their building type
-    if(this.type === "Villager" || this.buildingProduced === buildingType){
+    //royalty can make the castle
+    //only build if not already building - once you start building the unit is LOCKED INTO BUILDING THAT ITEM. THE unit cannot change
+    if((this.type === "Villager" || this.buildingProduced === buildingType)){
+
     //can only build if the money is there for it
       if(buildingInfo.cost < kingdom.getGold()){
 
@@ -224,13 +233,13 @@ class Unit extends Phaser.GameObjects.Sprite{
         callbackScope: this, loop: false, args: [buildingInfo, kingdom, game] });
       }
     }
-
   }
+
 
   //finished building the structure. occurs 30 seconds after start
   finishBuildStructure(buildingInfo, kingdom, game){
 
-    //if unit is still alive and still has their state set to build, build the building
+    //if unit is still alive and still has their state set to build and the building they are building hasn't changed, build the building
     if(this.getState() === "Build" && !this.isDead()){
       var coordinates = kingdom.findOpenArea();
 
@@ -246,10 +255,11 @@ class Unit extends Phaser.GameObjects.Sprite{
       if(kingdom.isPlayer()){
         structure.setInteractive();
       }
-      console.log(structure);
       kingdom.buildings.push(structure);
       kingdom.buildingsAmount++;
+
       this.setState("Idle");
+      this.anims.stop();
     }
 
     //if the unit has been killed or isn't making the building anymore, give the kingdom back the gold from the buildings
@@ -260,17 +270,50 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
   }
 
+  isInMine(kingdom){
+
+    let inMine = false;
+    let availableMiningLocs = [];
+
+    //find all the available mining locations
+    for(let structure of kingdom.buildings){
+      if(structure.type === "Mine"){
+        availableMiningLocs.push({"x": structure.x, "y": structure.y});
+      }
+    }
+
+    for(let miningLocation of kingdom.goldDeposits){
+      availableMiningLocs.push({"x": miningLocation.x, "y": miningLocation.y});
+    }
+
+    //find out if the unit is in one of the available mining locations
+    for(let miningLoc of availableMiningLocs){
+      if(this.x+_maxStructW > miningLoc.x && this.x-_maxStructW < miningLoc.x
+      &&this.y+_maxStructH > miningLoc.y && this.y-_maxStructH < miningLoc.y){
+        inMine = true;
+      }
+    }
+
+    return inMine;
+  }
+
+
   //mines for gold (every 30 seconds miner gets 6 gold, villager gets 3)
   mine(kingdom, game){
 
-    this.setState("Mine");
-    this.unitAnimations("Action");
+    if(this.type === "Villager" || this.type === "Miner"){
+      if(this.isInMine(kingdom) && this.getState()!=="Mine"){
 
-    //TIMER INFO
-    //https://phaser.io/phaser3/devlog/87
-    var miningEvent = game.time.addEvent({ delay: 30000, callback: this.mineGold,
-      callbackScope: this, loop: false, args: [kingdom] });
+        this.setState("Mine");
+        this.unitAnimations("Action");
+
+      //TIMER INFO
+      //https://phaser.io/phaser3/devlog/87
+      var miningEvent = game.time.addEvent({ delay: 30000, callback: this.mineGold,
+        callbackScope: this, loop: false, args: [kingdom]});
+    }
   }
+}
 
   //callback function after 30 seconds elapses to give the kingdom the mined gold
   mineGold(kingdom){
@@ -278,8 +321,8 @@ class Unit extends Phaser.GameObjects.Sprite{
     //check to make sure the unit is still alive
     if(!this.isDead()){
 
-      //check to make sure the unit is still meant to be mining
-      if(this.getState() === "Mine"){
+      //check to make sure the unit is still meant to be mining and still in the mine
+      if(this.getState() === "Mine" && this.isInMine(kingdom)){
 
         //if the unit is a villager, they mine 3 gold every 30 seconds
         if(this.type === "Villager"){

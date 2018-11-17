@@ -53,7 +53,6 @@ class Level1 extends Phaser.Scene {
     this.map.createDynamicLayer("Tile Layer 2", tileset);
     this.map.createDynamicLayer("Tile Layer 3", tileset);
 
-    var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
     // sets a boundary for main camera
     this.cameras.main.setBounds(0, -100, _width*1.28, ((_height*2.6)+16));
@@ -100,6 +99,8 @@ class Level1 extends Phaser.Scene {
       hardMode = true;
     }
 
+    var startingObjects = this.map.getObjectLayer("GameObjects").objects;
+
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
@@ -118,19 +119,19 @@ class Level1 extends Phaser.Scene {
     // set up the ai kingdom
     console.log(opponentKingdom);
     if (opponentKingdom === "Dueling Dominion") {
-      ai = new AIKingdom(duelingDominionInfo, 50, 50, this, startingObjects, true);
+      ai = new AIKingdom(duelingDominionInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Equal Empire") {
-      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, true);
+      ai = new AIKingdom(equalEmpireInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Fortune Federation") {
-      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this, startingObjects, true);
+      ai = new AIKingdom(fortuneFederationInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Security Syndicate") {
-      ai = new AIKingdom(securitySyndicateInfo, 50, 50, this, startingObjects, true);
+      ai = new AIKingdom(securitySyndicateInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Remote Realm") {
-      ai = new AIKingdom(remoteRealmInfo, 50, 50, this, startingObjects, true);
+      ai = new AIKingdom(remoteRealmInfo, 50, 50, this, startingObjects, hardMode);
     };
 
-    //runs every 10 seconds to get the ai priority attack locations
-    var aiEvent = this.time.addEvent({ delay: 10000, callback: this.aiUpdate,
+    //runs every 1 second to get the ai priority attack locations
+    var aiEvent = this.time.addEvent({ delay: 1000, callback: this.aiUpdate,
     callbackScope: this, loop: true, args: [] });
 
     playerWon = false;
@@ -183,6 +184,7 @@ class Level1 extends Phaser.Scene {
       //basically setting the input for gameObjectDown also calls this input function...even if we don't want it Called
       //so this is a check to ignore this function if gameObject is really what we were calling
       if(gameObjectClicked){
+        console.log("Here???");
         gameObjectClicked = false;
       }
 

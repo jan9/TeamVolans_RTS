@@ -274,7 +274,7 @@ getStructureInfo(buildingType){
 
         this.units[i].unitAnimations("Die");
         //used to play the death animation for 4 seconds
-        var deathEvent = this.game.time.addEvent({ delay: 4000, callback: this.destroyUnit,
+        var deathEvent = this.game.time.addEvent({ delay: 3000, callback: this.destroyUnit,
           callbackScope: this, loop: false, args: [this.units[i]]});
 
           this.units.splice(i, 1);
@@ -322,7 +322,10 @@ isPlayer(){
         add_x = Phaser.Math.RoundAwayFromZero(x-unit.x);
         add_y = Phaser.Math.RoundAwayFromZero(y-unit.y);
       }
-      if(unit.player_selected  === true){
+      if(unit.player_selected === true && optionClicked === "mine"){
+          unit.mine(this, this.game);
+      }
+      else if(unit.player_selected  === true && optionClicked === "travel"){
         unit.move(Phaser.Math.RoundAwayFromZero(unit.x)+add_x/2,Phaser.Math.RoundAwayFromZero(unit.y)+add_y/2, this.game);
       }
       // if the unit deselected, stop the movement and set its state to idle
@@ -330,6 +333,7 @@ isPlayer(){
       else if(unit.player_selected  === false){
         unit.playerStopMovement();
       }
+
     }
 
       // if unit type is attack
