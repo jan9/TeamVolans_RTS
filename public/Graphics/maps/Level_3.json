@@ -30,7 +30,7 @@
         {
          "draworder":"topdown",
          "id":5,
-         "name":"ObjectLayer",
+         "name":"GameObjects",
          "objects":[
                 {
                  "height":160,

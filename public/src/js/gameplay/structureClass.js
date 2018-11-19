@@ -1,6 +1,6 @@
 class Structure extends Phaser.GameObjects.Sprite{
 
-  constructor(structureInformation, xCoord, yCoord, scene) {
+  constructor(structureInformation, xCoord, yCoord, scene, playerCheck) {
     super(scene, xCoord, yCoord, structureInformation.texture);
     this.type = structureInformation.type;
     this.baseType = structureInformation.baseType;
@@ -8,6 +8,9 @@ class Structure extends Phaser.GameObjects.Sprite{
     this.cost = structureInformation.cost;
     this.unitProduced = structureInformation.unitProduced;
     this.state = "Idle";
+    this.isPlayerObject = playerCheck;
+
+    this.setInteractive();
 
       // set up a health bar
     this.maxHealth = structureInformation.health; // store max health of a unit
@@ -25,6 +28,9 @@ class Structure extends Phaser.GameObjects.Sprite{
     this.scene.add.existing(this);
   }
 
+  isPlayerObj(){
+    return this.isPlayerObject;
+  }
   getState(){
     return this.state;
   }
@@ -90,8 +96,13 @@ class Structure extends Phaser.GameObjects.Sprite{
     var unitInfo = kingdom.getUnitInfo(unitType);
 
     //if the building can create the unit, and has the gold to create it, then creates the unit
-    if(this.getUnitProduced() === unitType){
+    if(this.getUnitProduced() === unitType && this.getState() === "Idle"){
       if(unitInfo.cost < kingdom.getGold()){
+
+        //if this is the player object tint it to green
+        if(this.isPlayerObj()){
+          this.tint = 0x00FF00;
+        }
 
         //set the state to build
         this.setState("Build");
@@ -112,14 +123,8 @@ class Structure extends Phaser.GameObjects.Sprite{
 
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && this.health > 0){
-      var unit = new Unit(unitInfo, this.x+75, this.y, game);
+      var unit = new Unit(unitInfo, this.x+75, this.y, game, kingdom.isPlayer());
         //once the unit has been built, add it to the kingdom and increase the unitamount
-        if(kingdom.isPlayer()){
-          unit.setInteractive();
-        }
-
-        //add the unit to the group
-        kingdom.add(unit);
 
         kingdom.units.push(unit);
         kingdom.unitAmount++;
@@ -128,6 +133,12 @@ class Structure extends Phaser.GameObjects.Sprite{
           currentPopulation++;
         }
         this.setState("Idle");
+
+        //if this is the player object make it normal colored again as build is finished
+        if(this.isPlayerObj()){
+          this.tint = 0xFFFFFF;
+        }
+
     }
     else{
 
@@ -136,29 +147,5 @@ class Structure extends Phaser.GameObjects.Sprite{
 
 
     }
-  }
-  drawHealthBar() {
-    this.bar.clear();
-    this.percent = this.health/this.maxHealth;
-    //  BG
-    this.bar.fillStyle(0x000000);
-    this.bar.fillRect(this.barX, this.barY, 50, 10);
-
-    //  Health
-    this.bar.fillStyle(0xffffff);
-    this.bar.fillRect(this.barX + 2, this.barY + 2, 46, 6);
-
-    if (this.percent < 0.3)
-    {
-        this.bar.fillStyle(0xff0000);
-    }
-    else
-    {
-        this.bar.fillStyle(0x00ff00);
-    }
-
-  var d = Math.floor( this.percent * 46);
-
-    this.bar.fillRect(this.barX + 2, this.barY + 2, d, 6);
   }
 }

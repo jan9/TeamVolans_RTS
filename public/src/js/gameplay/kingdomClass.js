@@ -30,9 +30,9 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
   }
 
   //finds an area with no other structures built in it
-  findOpenArea(){
-    let x = this.startingX;
-    let y = this.startingY;
+  findOpenArea(startingXPoint, startingYPoint){
+    let x = startingXPoint;
+    let y = startingYPoint;
 
     while(!(this.checkArea(x, y))){
 
@@ -65,10 +65,10 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
 
   checkArea(xCoord, yCoord){
       let areaOpen = true;
+
     //from the starting point, look for an area that's open for a size 160px (structures only)
     for(let building of this.buildings){
-      if (((xCoord - _maxStructW) < building.x && (xCoord+_maxStructW) > building.x) &&
-      ((yCoord - _maxStructH) < building.y && (yCoord+_maxStructH) > building.y)){
+      if (distance(xCoord, yCoord, building.x, building.y) < _maxStructH){
         areaOpen = false;
       }
     }
@@ -182,7 +182,6 @@ getStructureInfo(buildingType){
       var depositCoords = this.findStartingPosition({"type": "Deposit", "baseType": "Deposit"}, i+1, startingObjectsList);
       let goldDeposit = new Phaser.GameObjects.Sprite(this.scene, depositCoords.x, depositCoords.y, 'deposit');
       this.scene.add.existing(goldDeposit);
-      goldDeposit.setInteractive();
       this.goldDeposits.push(goldDeposit);
     }
   }
@@ -202,8 +201,9 @@ getStructureInfo(buildingType){
      //creates the correct amount of buildings for the current type
      for(var j = 0; j < amount; j++){
        this.buildingsAmount++;
+
       var structureCoords = this.findStartingPosition(buildingInfo, this.buildingsAmount, startingObjectsList);
-       var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game);
+       var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
 
        //add the structure to the group
       // this.add(structure);
@@ -217,10 +217,7 @@ getStructureInfo(buildingType){
          this.startingY= structure.y;
        }
 
-       //if this is the player's kingdom, set it to interactive
-      if(this.isPlayer()){
-         structure.setInteractive();
-       }
+
         this.buildings.push(structure);
      }
  }
@@ -243,17 +240,12 @@ getStructureInfo(buildingType){
 
       //goes through and creates the starting units
       for(var j = 0; j < amount; j++){
+
           this.unitAmount++;
           var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
-          var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game);
-
-          //add the unit to the group
-        // this.add(unit);
+          var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
 
 
-          if(this.isPlayer()){
-            unit.setInteractive();
-          }
           this.units.push(unit);
       }
     }
@@ -313,20 +305,34 @@ isPlayer(){
   updatePlayerKingdom(){
       //TO DO
     for(var i = 0; i < playerUnitSelected.length; i++){
-      var add_x, add_y;
+
       var unit = playerUnitSelected[i];
       // if the unit selected, move it to a new position
-      if(i === 0){
-        // mouse x and y stored in global variables x and y in level 1
-        //only calculate this for the firt item in the list
-        add_x = Phaser.Math.RoundAwayFromZero(x-unit.x);
-        add_y = Phaser.Math.RoundAwayFromZero(y-unit.y);
-      }
+
       if(unit.player_selected === true && optionClicked === "mine"){
           unit.mine(this, this.game);
       }
+      else if(unit.player_selected === true && optionClicked === "build"){
+        if(build_signal > 0){
+          let buildingType = signalToStructName(build_signal);
+
+          if(buildingType === "castle" && unit.getType() === "Royalty"){
+            unit.startBuildStructure(buildingType, this, this.game);
+          }
+          else if(buildingType !== "castle" && unit.getType() === "Villager"){
+            unit.startBuildStructure(buildingType, this, this.game);
+          }
+        }
+      }
+      else if(unit.player_selected && unit.type==="Royalty" && optionClicked === "royalty"){
+        let castle = unit.isInCastle(this);
+        if(castle){
+          unit.startRoyalBonus(castle, this);
+        }
+      }
       else if(unit.player_selected  === true && optionClicked === "travel"){
-        unit.move(Phaser.Math.RoundAwayFromZero(unit.x)+add_x/2,Phaser.Math.RoundAwayFromZero(unit.y)+add_y/2, this.game);
+        let coordinates = spiralLocation(i);
+        unit.move(x+coordinates.x, y+coordinates.y, this.game);
       }
       // if the unit deselected, stop the movement and set its state to idle
       // TODO: add this as an event

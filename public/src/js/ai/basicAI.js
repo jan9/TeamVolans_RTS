@@ -70,7 +70,7 @@ function royaltyAI(royal, kingdom){
 
       //only increase currentBuild if we have enough gold to make the structure
       if(structureInfo.cost < kingdom.getGold()){
-        let coordinates = kingdom.findOpenArea();
+        let coordinates = kingdom.findOpenArea(kingdom.startingX, kingdom.startingY);
         royal.move(coordinates.x+32, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
         kingdom.incrementBuildOrder();
       }
@@ -95,7 +95,7 @@ function attackArea(attackUnit){
   }
   else if (attackUnit.type === "Catapult"){
     x=0;
-    y=-40
+    y=-40;
   }
 
   return {"x": x, "y": y};
@@ -137,7 +137,7 @@ function villagerAI(villager, kingdom){
       //only increase currentBuild if we have enough gold to make the structure
       if(structureInfo.cost < kingdom.getGold()){
         kingdom.incrementBuildOrder();
-        let coordinates = kingdom.findOpenArea();
+        let coordinates = kingdom.findOpenArea(kingdom.startingX, kingdom.startingY);
         villager.move(coordinates.x+32, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
       }
 

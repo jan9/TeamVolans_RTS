@@ -4,35 +4,40 @@ var playerUnitSelected = [];
 
 function onObjectClicked(pointer,gameObject)
 {
-  console.log("Selected: " + gameObject.type);
-  if(gameObject.baseType === "Structure"){
-    gameObject.startBuildUnit(gameObject.unitProduced, player, player.game, true);
-    console.log(gameObject.type + ' is creating ' + gameObject.unitProduced);
-  }
-  else if (gameObject.baseType === "Unit") {
-    selectedUnit = gameObject;
-    console.log(selectedUnit.type + ' is set to "Move" ');
-    // selected units move
-    if (pointer.leftButtonDown() ){
-      selectedUnit.player_selected  = true;
-      playerUnitSelected.push(selectedUnit);
+  if(gameObject.isPlayerObj()){
+    if(gameObject.baseType === "Structure" && optionClicked === "create"){
+      gameObject.startBuildUnit(gameObject.unitProduced, player, player.game, true);
     }
-    // if not selected, not move
-    if (pointer.rightButtonDown()){
-      selectedUnit.player_selected = false;
-      for(let unit of playerUnitSelected) {
-        unit.playerStopMovement();
-        unit.player_selected = false;
-        unit.tint = 0xFFFFFF;
+    else if (gameObject.baseType === "Unit") {
+      selectedUnit = gameObject;
+      // selected units move
+      if (pointer.leftButtonDown() ){
+        selectedUnit.player_selected  = true;
+        if(!(playerUnitSelected.includes(selectedUnit))){
+          playerUnitSelected.push(selectedUnit);
+        }
       }
-      playerUnitSelected = [];
+      // if not selected, not move
+      if (pointer.rightButtonDown()){
+        selectedUnit.player_selected = false;
+        for(let unit of playerUnitSelected) {
+          unit.playerStopMovement();
+          unit.player_selected = false;
+          unit.tint = 0xFFFFFF;
+        }
+        playerUnitSelected = [];
+      }
     }
   }
+  else{
 
-  //gameobjectdown input also calls normal down input. This is a check used in
-  //the normal down input to see if we were choosing a game object to then move or choosing a location
-  if(!(selectedUnit.type === "Villager" && build_signal > 0) ){
-    gameObjectClicked = true;
+    //if a unit was already selected, revert it back to what the tint should be
+    if(aiObjectSelected){
+    aiObjectSelected.tint = 0xFFFFFF;
+    }
+    //update which unit is selected and the tint
+    aiObjectSelected = gameObject;
+    aiObjectSelected.tint = 0xFF0000;
   }
 }
 
@@ -138,4 +143,34 @@ function dragSelect(scene, kingdom) {
         //console.log("reset");
       }
   });
+}
+
+
+function signalToStructName(signal){
+
+  let name = "town_center";
+
+  switch(signal){
+    case 1:
+      name="archery_range";
+      break;
+    case 2:
+      name= "barracks";
+      break;
+    case 3:
+      name="castle";
+      break;
+    case 4:
+      name= "machinery";
+      break;
+    case 5:
+      name="mine";
+      break;
+    case 6:
+      name="temple";
+      break;
+    default:
+      name="town_center";
+  }
+  return name;
 }

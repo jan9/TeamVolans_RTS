@@ -1,6 +1,6 @@
 class Unit extends Phaser.GameObjects.Sprite{
 
-  constructor(unitInformation, xCoord, yCoord, scene) {
+  constructor(unitInformation, xCoord, yCoord, scene, playerCheck) {
     super(scene, xCoord, yCoord, unitInformation.texture);
     this.type = unitInformation.type;
     this.health = unitInformation.health;
@@ -13,6 +13,10 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
     this.scene = scene
+
+    this.isPlayerObject = playerCheck;
+
+    this.setInteractive();
 
     //used for keeping track of the amount of time the unit has been in its state
     //(to ensure player can't game the system by something like
@@ -48,6 +52,9 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.scene.add.existing(this);
 
 }
+  isPlayerObj(){
+    return this.isPlayerObject;
+  }
 
   getState(){
     return this.state;
@@ -104,7 +111,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     //moves the unit to the desired location
    move(xLocation, yLocation, game, action){
 
-     if(!this.isDead() && (this.destinationX != xLocation|| this.destinationY != yLocation)){
+     if(!this.isDead() && (this.destinationX != xLocation || this.destinationY != yLocation)){
 
        this.playerStopMovement();
 
@@ -165,6 +172,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //put it in an if statement in case unit is dead
     if(this){
+      if(this.getState() === "Move"){
       this.body.velocity.x = 0;
       this.body.velocity.y = 0;
       this.bar.body.velocity.x=0;
@@ -172,6 +180,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
       this.setState("Idle");
       this.anims.stop();
+      }
     }
   }
   //stops the unit's movement and sets the state to idle
@@ -213,10 +222,9 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     var buildingInfo = kingdom.getStructureInfo(buildingType);
 
-    //a villager can make all buildings except Castle
     //royalty can make the castle
     //only build if not already building - once you start building the unit is LOCKED INTO BUILDING THAT ITEM. THE unit cannot change
-    if((this.type === "Villager" || this.buildingProduced === buildingType)){
+    if((this.type === "Villager" || this.buildingProduced === buildingType) && this.getState() !== "Build"){
 
     //can only build if the money is there for it
       if(buildingInfo.cost < kingdom.getGold()){
@@ -241,9 +249,18 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //if unit is still alive and still has their state set to build and the building they are building hasn't changed, build the building
     if(this.getState() === "Build" && !this.isDead()){
-      var coordinates = kingdom.findOpenArea();
 
-      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game);
+      let coordinates;
+
+      if(this.isPlayerObj()){
+       coordinates = kingdom.findOpenArea(this.x, this.y);
+     }
+     else{
+       coordinates = kingdom.findOpenArea(kingdom.startingX, kingdom.startingY);
+     }
+
+
+      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, kingdom.isPlayer());
 
       //add the structure to the Group
       kingdom.add(structure);
@@ -252,9 +269,6 @@ class Unit extends Phaser.GameObjects.Sprite{
        structure.body.setImmovable(true);
 
 
-      if(kingdom.isPlayer()){
-        structure.setInteractive();
-      }
       kingdom.buildings.push(structure);
       kingdom.buildingsAmount++;
 
@@ -288,8 +302,8 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //find out if the unit is in one of the available mining locations
     for(let miningLoc of availableMiningLocs){
-      if(this.x+_maxStructW > miningLoc.x && this.x-_maxStructW < miningLoc.x
-      &&this.y+_maxStructH > miningLoc.y && this.y-_maxStructH < miningLoc.y){
+      if(this.x+(_maxStructW/2) > miningLoc.x && this.x-(_maxStructW/2) < miningLoc.x
+      &&this.y+(_maxStructH/2) > miningLoc.y && this.y-(_maxStructH/2) < miningLoc.y){
         inMine = true;
       }
     }
@@ -344,37 +358,60 @@ class Unit extends Phaser.GameObjects.Sprite{
   }
 
 
+  //checks whether or not the unit passed in is within range
+  checkWithinRange(unitToCheck){
+    let withinRange = false;
+    let range = _attackRangeOne;
+    if(this.range === 2){
+      range = _attackRangeTwo;
+    }
+    else if (this.range === 3){
+      range = _attackRangeThree;
+    }
+
+    if(distance(this.x, this.y, unitToCheck.x, unitToCheck.y) < range){
+      withinRange = true;
+    }
+
+    return withinRange;
+  }
+
+
   //attacks an enemy
   //also used for the priest to heal allies
   attackEnemy(attackedUnit){
 
     if(attackedUnit){
-      let game = this.scene;
-      this.destinationX = attackedUnit.x;
-      this.destinationY= attackedUnit.y;
 
-      //attack if unit isn't dead attack(dead units get removed at end of each update but
-      // there's a chance it might have been killed in between)
-      if(!this.isDead() && !attackedUnit.isDead()){
-        this.setState("Attack");
+      //only attack if the unit is within range
+      if(this.checkWithinRange(attackedUnit)){
+        let game = this.scene;
+        this.destinationX = attackedUnit.x;
+        this.destinationY= attackedUnit.y;
 
-        //waits 2.5 seconds to actually attack/land the hit
-        //starts the attack animations
-        if(this.getType() === "Archer"){
-          this.unitAnimations("Shoot");
-        }
-        else if (this.getType() === "Swordsman"){
-          this.unitAnimations("Attack");
-        }
-        //catapult needs special frames
-        else if (this.getType() === "Catapult"){}
-        else{
-          this.unitAnimations("Action");
-        }
+        //attack if unit isn't dead attack(dead units get removed at end of each update but
+        // there's a chance it might have been killed in between)
+        if(!this.isDead() && !attackedUnit.isDead()){
+          this.setState("Attack");
 
-        //the actual attack takes 3 seconds to account for the animation playing
-        var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
-          callbackScope: this, loop: false, args: [attackedUnit] });
+          //waits 2.5 seconds to actually attack/land the hit
+          //starts the attack animations
+          if(this.getType() === "Archer"){
+            this.unitAnimations("Shoot");
+          }
+          else if (this.getType() === "Swordsman"){
+            this.unitAnimations("Attack");
+          }
+          //catapult needs special frames
+          else if (this.getType() === "Catapult"){}
+          else{
+            this.unitAnimations("Action");
+          }
+
+          //the actual attack takes 3 seconds to account for the animation playing
+          var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
+            callbackScope: this, loop: false, args: [attackedUnit] });
+        }
       }
     }
   }
@@ -444,13 +481,15 @@ class Unit extends Phaser.GameObjects.Sprite{
     return closestInjuredUnit;
   }
 
+
+
   //checks if the royalty is in a castles
   //if so, returns the castle
   isInCastle(kingdom){
     let castle = undefined;
     for(let building of kingdom.buildings){
       if(building.type === "Castle"){
-        if(distance(this.x, this.y, building.x, building.y) < 10){
+        if(distance(this.x, this.y, building.x, building.y) < _maxStructH){
           castle = building;
         }
       }
@@ -467,18 +506,27 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
     return castle;
   }
+
   royalBonus(castle, kingdom){
     this.move(castle.x, castle.y, kingdom.game, {"name": "Royal_Bonus", "kingdom": kingdom, "castle": castle});
   }
+
+
   startRoyalBonus(castle, kingdom){
-    this.unitAnimations("Action");
-    //every 30 seconds the royal adds to the health of the castle
-    var royalEvent = kingdom.game.time.addEvent({ delay: 30*1000, callback: this.endRoyalBonus,
-      callbackScope: this, loop: true, args: [castle, kingdom] });
+
+
+    if(this.getState() !== "Train" && this.getType() === "Royalty"){
+      this.setState("Train");
+      this.unitAnimations("Action");
+      //every 30 seconds the royal adds to the health of the castle
+      var royalEvent = kingdom.game.time.addEvent({ delay: 30*1000, callback: this.endRoyalBonus,
+        callbackScope: this, loop: true, args: [castle, kingdom] });
+      }
   }
 
   endRoyalBonus(castle, kingdom){
-    if(this.isInCastle(kingdom) === castle){
+
+    if(this.isInCastle(kingdom) === castle && this.getState() === "Train"){
       castle.updateHealth(5);
     }
   }

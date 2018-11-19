@@ -17,6 +17,7 @@ var pointer;
 var playerKingdom, aiKingdom;
 var controls;
 var selectedUnit;
+var aiObjectSelected;
 var dragSelect_Rect;
 class Level1 extends Phaser.Scene {
 
@@ -175,56 +176,6 @@ class Level1 extends Phaser.Scene {
       x = Phaser.Math.RoundAwayFromZero(pointer.worldX);
       y = Phaser.Math.RoundAwayFromZero(pointer.worldY);
       console.log("[Level1] pointerInput() x,y: "+ x +","+y);
-      //check if we were selecting a game object, not doing pointer Input
-      //basically setting the input for gameObjectDown also calls this input function...even if we don't want it Called
-      //so this is a check to ignore this function if gameObject is really what we were calling
-      if(gameObjectClicked){
-        console.log("Here???");
-        gameObjectClicked = false;
-      }
-
-      else{
-      if(selectedUnit){
-        //if there is a build signa; and a unit selected is villager, build the structure
-        if(build_signal > 0 && selectedUnit.type === "Villager"){
-
-          if (build_signal === 1) {
-            structureInfo = "Archery Range";
-            build_signal = 0;
-          }
-          else if (build_signal === 2) {
-            structureInfo = "Barracks";
-            build_signal = 0;
-          }
-          else if (build_signal === 3) {
-            structureInfo = "Castle";
-            build_signal = 0;
-          }
-          else if (build_signal === 4) {
-            structureInfo = "Machinery";
-            build_signal = 0;
-          }
-          else if (build_signal === 5) {
-            structureInfo = "Mine";
-            build_signal = 0;
-          }
-          else if (build_signal === 6) {
-            structureInfo = "Temple";
-            build_signal = 0;
-          }
-          else if (build_signal === 7) {
-            structureInfo = "Town Center";
-            build_signal = 0;
-          }
-          selectedUnit.startBuildStructure(structureInfo, player, this);
-        }
-        /*//move the unit to the location
-        else if (build_signal <= 0){
-            selectedUnit.move(x, y, this);
-        }*/
-      }
-    }
   },this);
   }
-
 }
