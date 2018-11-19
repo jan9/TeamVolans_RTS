@@ -71,7 +71,15 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   //updates the health of the unit based on whether it's being healed or attacked
   updateHealth(points){
-    this.health += points;
+
+    //don't let the health go over max health
+    if((this.heal + points) >= this.maxHealth){
+      this.health = this.maxHealth;
+    }
+    else {
+      this.health += points;
+    }
+
     if (this.health < 0) {
       this.health = 0;
     }
@@ -81,8 +89,12 @@ class Unit extends Phaser.GameObjects.Sprite{
   updateHealthBar(){
     let percent = Math.round((this.health/this.maxHealth)*10);
     percent *=10;
+
+    if(this.health == this.maxHealth){
+      this.bar.setTexture('healthBar100');
+    }
     //if there is less than 5% of health but unit is not dead, still use health bar for 10%
-    if(percent < 10 && this.health > 0){
+    else if(percent < 10 && this.health > 0){
       this.bar.setTexture('healthBar10');
     }
     //otherwise use health bar rounded to closest 10
@@ -107,6 +119,36 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.state = state;
   }
 
+
+    healUnit(unitToHeal){
+      if(this.getType() === "Priest" && this.getState() !== "Heal"){
+        if(distance(this.x, this.y, unitToHeal.x, unitToHeal.y) < _attackRangeTwo){
+          this.setState("Heal");
+          this.unitAnimations("Action");
+          var healEvent = this.scene.time.addEvent({ delay: 3*1000, callback: this.endHealUnit,
+            callbackScope: this, loop: false, args: [unitToHeal] });
+        }
+
+        }
+      }
+
+
+    endHealUnit(unitToHeal){
+
+      if(this && unitToHeal){
+        //if unit  to heal is already dead then set state to idle
+        if(this.getState() === "Heal" && unitToHeal.isDead()){
+          this.setState("Idle");
+          this.anims.stop();
+        }
+        //otherwise if the healing unit isn't dead and the state is still heal, then heal the unit
+        else if (this.getState() === "Heal" && !this.isDead()){
+          unitToHeal.updateHealth(this.getAttack());
+          this.setState("Idle");
+          this.anims.stop();
+        }
+      }
+    }
 
     //moves the unit to the desired location
    move(xLocation, yLocation, game, action){
@@ -383,8 +425,8 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     if(attackedUnit){
 
-      //only attack if the unit is within range
-      if(this.checkWithinRange(attackedUnit)){
+      //only attack if the unit is within range and not already attacking something
+      if(this.checkWithinRange(attackedUnit) && this.getState() !== "Attack"){
         let game = this.scene;
         this.destinationX = attackedUnit.x;
         this.destinationY= attackedUnit.y;

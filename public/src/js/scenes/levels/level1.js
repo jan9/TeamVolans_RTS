@@ -18,6 +18,7 @@ var playerKingdom, aiKingdom;
 var controls;
 var selectedUnit;
 var aiObjectSelected;
+var specificPlayerSelected;
 var dragSelect_Rect;
 class Level1 extends Phaser.Scene {
 

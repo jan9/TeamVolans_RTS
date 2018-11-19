@@ -330,6 +330,14 @@ isPlayer(){
           unit.startRoyalBonus(castle, this);
         }
       }
+      else if(unit.player_selected && optionClicked === "fight" && aiObjectSelected){
+        if(unit.type !== "priest"){
+          unit.attackEnemy(aiObjectSelected);
+        }
+      }
+      else if(unit.player_selected && optionClicked === "heal" && specificPlayerSelected){
+        unit.healUnit(specificPlayerSelected);
+      }
       else if(unit.player_selected  === true && optionClicked === "travel"){
         let coordinates = spiralLocation(i);
         unit.move(x+coordinates.x, y+coordinates.y, this.game);

@@ -11,4 +11,4 @@ const _attackRangeThree = 102;
 
 const _options = [{"key": "T", "name": "travel"}, {"key": "B", "name": "build"},
 {"key": "F", "name": "fight"}, {"key": "C", "name": "create"},
-{"key": "M", "name": "mine"}, {"key": "R", "name": "royalty"},{"key": "N", "name": "none"}];
+{"key": "M", "name": "mine"}, {"key": "R", "name": "royalty"},{"key": "N", "name": "none"}, {"key": "H", "name": "heal"}];
