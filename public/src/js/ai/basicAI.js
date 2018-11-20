@@ -81,42 +81,18 @@ function royaltyAI(royal, kingdom){
   }
 }
 
-function attackArea(attackUnit){
-  let x = 0;
-  let y = 0;
-
-  if(attackUnit.type === "Archer"){
-    x = 32;
-    y = 32;
+function attackUnitAI(attackUnit, kingdom){
+  if(!kingdom.unitInGroup(attackUnit)){
+    let group = kingdom.findBestFitGroup(attackUnit);
+    group.push(attackUnit);
   }
-  else if (attackUnit.type === "Swordsman"){
-    x=-32;
-    y=0;
-  }
-  else if (attackUnit.type === "Catapult"){
-    x=0;
-    y=-40;
-  }
-
-  return {"x": x, "y": y};
 }
 
+function attackGroupAI(group, kingdom){
 
-function attackUnitAI(attackUnit, kingdom){
-
-  var coordinateChange = attackArea(attackUnit);
-  //if the currentTargets list isn't empty, attack the target
-  if(kingdom.currentTargets.length > 0){
-
-    //go after units first
-    if(kingdom.currentTargets[1] && attackUnit.getState() !== "Attack"){
-      attackUnit.move(kingdom.currentTargets[1].x+coordinateChange.x, kingdom.currentTargets[1].y+coordinateChange.y, kingdom.game, {"name": "Attack", "target": kingdom.currentTargets[1]});
+    if(group.length >= 5){
+    
     }
-    //then go after buildings
-    else if(attackUnit.getState() !== "Attack"){
-      attackUnit.move(kingdom.currentTargets[0].x+(coordinateChange.x*2), kingdom.currentTargets[0].y+(coordinateChange.y*2), kingdom.game);
-    }
-  }
 }
 
 

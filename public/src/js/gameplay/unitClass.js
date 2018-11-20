@@ -72,17 +72,16 @@ class Unit extends Phaser.GameObjects.Sprite{
   //updates the health of the unit based on whether it's being healed or attacked
   updateHealth(points){
 
-    //don't let the health go over max health
-    if((this.heal + points) >= this.maxHealth){
-      this.health = this.maxHealth;
-    }
-    else {
       this.health += points;
-    }
 
-    if (this.health < 0) {
-      this.health = 0;
-    }
+      //don't let the health go over max health
+      if(this.health > this.maxHealth){
+        this.health = this.maxHealth;
+      }
+      //don't let health go below 0
+      else  if (this.health < 0) {
+            this.health = 0;
+      }
     this.updateHealthBar();
   }
 
@@ -423,7 +422,7 @@ class Unit extends Phaser.GameObjects.Sprite{
   //also used for the priest to heal allies
   attackEnemy(attackedUnit){
 
-    if(attackedUnit){
+    if(attackedUnit && this.getType() !== "Priest"){
 
       //only attack if the unit is within range and not already attacking something
       if(this.checkWithinRange(attackedUnit) && this.getState() !== "Attack"){

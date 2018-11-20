@@ -25,8 +25,6 @@ class Level2 extends Phaser.Scene {
     this.map.createDynamicLayer("Layer2", tileset);
     this.map.createDynamicLayer("Layer3", tileset);
 
-    var startingObjects = this.map.getObjectLayer("ObjectLayer").objects;
-
     // sets a boundary for main camera
     this.cameras.main.setBounds(-100, -100, this.map.widthInPixels+200, this.map.heightInPixels+200);
     this.cameras.main.centerOn(_width*0.5, _height*2.5);

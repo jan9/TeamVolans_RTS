@@ -3,7 +3,7 @@ var remoteRealmInfo = {
   "gold" : 250,
   "unitAmount": 10,
   "buildingAmount": 2,
-  "buildOrder": ["Mine", "Miner", "Archer", "Miner", "Miner", "Temple", "Miner", "Priest", "Miner", "Town Center", "Archer", "Priest"],
+  "buildOrder": ["Mine", "Miner", "Archer", "Miner", "Miner", "Temple", "Archer", "Priest", "Archer", "Town Center", "Villager", "Priest", "Machinery", "Catapult", "Archer", "Archer"],
   "units":{
     "swordsman": 0,
     "archer": 2,

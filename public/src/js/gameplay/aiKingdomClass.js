@@ -21,8 +21,15 @@ class AIKingdom extends Kingdom{
 
 
 
-      //keeps track of the AI's current targets of attack
-      this.currentTargets = [];
+      //keeps track of the attack unit (swordsman, archer, catapult) closest to the Castle
+      this.closestEnemyAttackUnit;
+
+      //keeps track of the enemies castle
+      this.enemyCastle;
+
+      //keeps track of the closest enemy utility object (villager/miner, structure)
+      this.closestEnemyUtilityObj;
+
 
       this.hardModeBonus();
 
@@ -95,24 +102,135 @@ class AIKingdom extends Kingdom{
       this.gold+=100;
   }
 
-  //runs every 10 seconds to find the 3 closest enemy units to the castle and find the current structure closest to the castle
+   attackArea(attackUnit){
+    let x = 0;
+    let y = 0;
+
+    if(attackUnit.getType() === "Archer"){
+      x = 32;
+      y = 32;
+    }
+    else if (attackUnit.getType() === "Swordsman"){
+      x=-32;
+      y=0;
+    }
+    else if (attackUnit.getType() === "Catapult"){
+      x=0;
+      y=-40;
+    }
+
+    return {"x": x, "y": y};
+  }
+
+
+  aiAttackTarget(attackUnit, currentTarget){
+
+    var coordinateChange = this.attackArea(attackUnit);
+    attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Attack", "target": currentTarget});
+  }
+
+
+  //checks whether or not th especified unit is in a group
+  unitInGroup(unit){
+    let inGroup = false;
+    if(this.closestTargetAttackGroup.includes(unit)
+      || this.utilityTargetsAttackGroup.includes(unit)
+      || this.supportAttackGroup.includes(unit)
+      ||this.castleAttackGroup.includes(unit)){
+          inGroup = true;
+    }
+
+    return inGroup;
+  }
+
+
+  priestBestFit(unit){
+    if(!this.priestInGroup(this.closestTargetAttackGroup)){
+      this.closestTargetAttackGroup.push(unit);
+    }
+
+  }
+
+  //finds the best fit for the unit based on certain criteria
+  findBestFitGroup(unit){
+
+    let group;
+
+    if(unit.getType() === "Priest"){
+      this.priestBestFit(unit);
+    }
+
+  }
+
+
+  //runs every seconds to find the following: the closest castle, the closest utility object, and the closest attack enemy
   updateCurrentTargetList(playersKingdom){
 
-    //clears out the previous targets
-    this.currentTargets.splice(0,this.currentTargets.length)
+    this.closestEnemyAttackUnit = this.findAttackEnemy(playersKingdom.units);
 
-    //get the closest structure, if it exists, add it to the array
-    var closestStructure = this.findClosest(playersKingdom.buildings)
-    if(closestStructure){
-      this.currentTargets.push(closestStructure);
+    this.enemyCastle = this.findEnemyCastle(playersKingdom.buildings);
+
+    this.closestEnemyUtilityObj = this.findEnemyUtility(playersKingdom);
+
+  };
+
+  //find the closest enemy's castle
+  findEnemyCastle(buildings){
+
+    let castles = [];
+    for(let structure of buildings){
+      if(structure.getType() === "Castle"){
+        castles.push(structure);
+      }
     }
 
-    //get the closest unit, if it exists add it to the array
-    var closestUnit = this.findClosest(playersKingdom.units);
-    if(closestUnit){
-      this.currentTargets.push(closestUnit);
+    let castle = this.findClosest(castles);
+
+    return castle;
+  }
+
+
+  //find the closest enemy utility (miner/villager or structure)
+  findEnemyUtility(playersKingdom){
+    let utilityUnitList = [];
+    let closestUtility;
+
+    //get the list of villagers/miners
+    for(let unit of playersKingdom.units){
+      if(unit.getType() === "Miner" || unit.getType() === "Villager" || "Royalty"){
+        utilityUnitList.push(unit);
+      }
     }
-};
+
+    //get the closest utility unit and the closest utility structure
+    let closestUtilityUnit = this.findClosest(utilityUnitList);
+    let closestUtilityStructure = this.findClosest(playersKingdom.buildings);
+
+    //set the closest (unit or structure) to be the closest utility
+    if(distance(this.startingX, this.startingY, closestUtilityUnit.x, closestUtilityUnit.y) <
+    distance(this.startingX, this.startingY, closestUtilityStructure.x, closestUtilityStructure.y)){
+      closestUtility = closestUtilityUnit;
+    }
+    else{
+      closestUtility = closestUtilityStructure;
+    }
+    return closestUtility;
+  }
+
+  findAttackEnemy(units){
+    let attackEnemies = [];
+
+    for(let unit of units){
+      if(unit.getType() === "Archer" || unit.getType() === "Swordsman"
+      || unit.getType() === "Priest" || unit.getType() === "Catapult"){
+        attackEnemies.push(unit);
+      }
+    }
+
+    let closestATKEnemy = this.findClosest(attackEnemies)
+
+    return closestATKEnemy;
+  }
 
  incrementBuildOrder(){
    this.currentBuild++;
@@ -137,6 +255,17 @@ class AIKingdom extends Kingdom{
     }
   }
 
+  priestInGroup(groupArr){
+    let inGroup = false;
+    for(let member of groupArr){
+      if(member.type === "Priest"){
+        inGroup = true;
+      }
+    }
+
+    return inGroup;
+  }
+
   //updates the ai kingdom
     updateAIKingdom(enemyKingdom){
 
@@ -158,7 +287,7 @@ class AIKingdom extends Kingdom{
         else if(currentUnit.getType()==="Swordsman"
         ||currentUnit.getType()==="Archer"
         ||currentUnit.getType()==="Catapult"){
-            attackUnitAI(currentUnit, this);
+            //attackUnitAI(currentUnit, this);
         }
 
         //have the Villager build structures
