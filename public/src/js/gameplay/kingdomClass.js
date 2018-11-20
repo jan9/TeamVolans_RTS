@@ -257,6 +257,11 @@ getStructureInfo(buildingType){
   destroyUnit(unit){
     unit.bar.destroy();
     unit.destroy();
+
+    //if this is an ai kingdom, we need to remove any undefined units from the groups
+    if(!this.isPlayer()){
+      this.removeUndefinedFromGroups();
+    }
   }
 
   //removes the dead units (occurs at the end of the update function)

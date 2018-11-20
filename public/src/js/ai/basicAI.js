@@ -23,42 +23,6 @@ function structureAI(structure, kingdom){
     }
 }
 
-
-//finds any injured units within 100px of the castle and heals them
-//otherwise, adds them to an attackgroup
-function priestAI(priest, kingdom){
-
-  var radius = 100;
-  var injuredUnit = priest.closestInjured(kingdom.units);
-
-  //if the priest is idle check if anyone near the kingdom needs healing
-  //if so (and if the priest is close to the injured unit), move to heal the unit
-  if(priest.isIdle()){
-    if(distance(injuredUnit.x, injuredUnit.y, kingdom.startingX, kingdom.startingY) < radius
-      && distance(injuredUnit.x, injuredUnited.y, priest.x, priest.y) < radius){
-      priest.move(injuredUnit.x, injuredUnit.y, kingdom.game);
-    }
-    else if(distance(injuredUnit.x, injuredUnited.y, priest.x, priest.y) < 2){
-      priest.attackEnemy(injuredUnit, kingdom.game);
-    }
-    //if no close units to heal see if should add to the attack group
-    //currently get added to attackgroup as long as the group already
-    //has 4 members and not already in the group
-    else{
-      if(kingdom.attackGroup.length > 4 && kingdom.attackGroup.indexOf(priest) < 0){
-        kingdom.attackGroup.push(priest);
-      }
-    }
-  }
-
-  //if the priest has stopped moving find the injured unit and heal them
-  else if (priest.getState() === "Move"){
-
-  }
-
-}
-
-
 function royaltyAI(royal, kingdom){
 
   // the castle gain 5 extra health every 30 seconds for each royal inside it
@@ -79,20 +43,6 @@ function royaltyAI(royal, kingdom){
     let foundCastle = royal.findCastle(kingdom);
     royal.royalBonus(foundCastle, kingdom);
   }
-}
-
-function attackUnitAI(attackUnit, kingdom){
-  if(!kingdom.unitInGroup(attackUnit)){
-    let group = kingdom.findBestFitGroup(attackUnit);
-    group.push(attackUnit);
-  }
-}
-
-function attackGroupAI(group, kingdom){
-
-    if(group.length >= 5){
-    
-    }
 }
 
 

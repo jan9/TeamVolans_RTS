@@ -102,6 +102,7 @@ class AIKingdom extends Kingdom{
       this.gold+=100;
   }
 
+  //calculates where the unit attacks from (so units aren't all clumped together)
    attackArea(attackUnit){
     let x = 0;
     let y = 0;
@@ -118,6 +119,10 @@ class AIKingdom extends Kingdom{
       x=0;
       y=-40;
     }
+    else if(attackUnit.getType() === "Priest"){
+      x = -32;
+      y = -32;
+    }
 
     return {"x": x, "y": y};
   }
@@ -126,7 +131,13 @@ class AIKingdom extends Kingdom{
   aiAttackTarget(attackUnit, currentTarget){
 
     var coordinateChange = this.attackArea(attackUnit);
-    attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Attack", "target": currentTarget});
+
+    if(attackUnit.getType() !== "Priest"){
+      attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Attack", "target": currentTarget});
+    }
+    else{
+      attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Heal", "kingdom": this});
+    }
   }
 
 
@@ -144,20 +155,102 @@ class AIKingdom extends Kingdom{
   }
 
 
-  priestBestFit(unit){
-    if(!this.priestInGroup(this.closestTargetAttackGroup)){
-      this.closestTargetAttackGroup.push(unit);
+  //clean up the groups and remove undefined values (which were deleted earlier when they died)
+  //CITATION: Used the following resource in figuring out how to remove undefined Values
+  //https://stackoverflow.com/questions/28607451/removing-undefined-values-from-array
+  removeUndefinedFromGroups(){
+    this.closestTargetAttackGroup.filter(item => item);
+    this.utilityTargetsAttackGroup.filter(item => item);
+    this.supportAttackGroup.filter(item => item);
+    this.castleAttackGroup.filter(item => item);
+  }
+
+
+  //checks to see if the group already has units
+  groupHasUnits(group){
+    return group[0];
+  }
+
+
+  //checks to see if the group is reasonably close to the unit
+  groupReasonablyClose(unitToCheck, group){
+
+    let closeDistance = false;
+    if(distance(unitToCheck.x, unitToCheck.y, group[0].x, group[0].y) < 200){
+      closeDistance = true;
     }
 
+    return closeDistance
+  }
+
+
+  //checks to find if the fit is good for the unit (group is close enough if it already has units)
+  overallGroupCheck(unitToCheck, group){
+    let groupPassesCheck = false;
+
+    if(this.groupHasUnits(this.closestTargetAttackGroup)){
+        if(this.groupReasonablyClose(unitToCheck, this.closestTargetAttackGroup)){
+          groupPassesCheck = true;
+        }
+    }
+    else{
+      groupPassesCheck = true;
+    }
+
+    return groupPassesCheck;
+  }
+
+
+  //finds the best fit for the priest unit. Each group gets 1 priest max but support group can have more and is default
+  priestBestFit(unit){
+
+    if(this.overallGroupCheck(unit, this.closestTargetAttackGroup) && !this.priestInGroup(this.closestTargetAttackGroup)){
+      this.closestTargetAttackGroup.push(unit);
+    }
+    else if(this.overallGroupCheck(unit, this.utilityTargetsAttackGroup) && !this.priestInGroup(this.utilityTargetsAttackGroup)){
+      this.utilityTargetsAttackGroup.push(unit);
+    }
+    else if(this.overallGroupCheck(unit, this.castleAttackGroup) && !this.priestInGroup(this.castleAttackGroup)){
+      this.castleAttackGroup.push(unit);
+    }
+    else{
+      this.supportAttackGroup.push(unit);
+    }
+  }
+
+
+  //checks to see if there is room in the group (groups cap at 6-7)
+  attackGroupFull(group){
+    return (group.length >= 6);
+  }
+
+
+  //finds the best fit for the attack unit
+  //as long as their is room joins the closest target, then the utility group, then the castle group
+  //however once groups get to 6 units, stop adding members and just add them to the support group
+  attackUnitBestFit(unit){
+    if(this.overallGroupCheck(unit, this.closestTargetAttackGroup) && !this.attackGroupFull(this.closestTargetAttackGroup)){
+      this.closestTargetAttackGroup.push(unit);
+    }
+    else if(this.overallGroupCheck(unit, this.utilityTargetsAttackGroup) && !this.attackGroupFull(this.utilityTargetsAttackGroup)){
+      this.utilityTargetsAttackGroup.push(unit);
+    }
+    else if(this.overallGroupCheck(unit, this.castleAttackGroup) && !this.attackGroupFull(this.castleAttackGroup)){
+      this.castleAttackGroup.push(unit);
+    }
+    else{
+      this.supportAttackGroup.push(unit);
+    }
   }
 
   //finds the best fit for the unit based on certain criteria
   findBestFitGroup(unit){
 
-    let group;
-
     if(unit.getType() === "Priest"){
       this.priestBestFit(unit);
+    }
+    else{
+      this.attackUnitBestFit(unit);
     }
 
   }
@@ -232,6 +325,81 @@ class AIKingdom extends Kingdom{
     return closestATKEnemy;
   }
 
+
+  //action: 1 is attack, 0 is move back to home castle
+  attackGroupAction(group, currentTarget, action){
+
+
+    //move each member to the location and have them attack/heal
+    for(let member of group){
+
+      if(action == 0){
+        if(member.getType() === "Priest"){
+        member.move(this.startingX, this.startingY, this.game, {"action": "Heal", "kingdom": this});
+        }
+        else{
+          member.move(this.startingX, this.startingY, this.game);
+        }
+      }
+      else{
+          this.aiAttackTarget(member, currentTarget);
+      }
+  }
+
+  }
+
+
+  //checks to see if the enemy unit is near the castle, if so attacks it
+  enemyNearCastle(enemyUnit){
+    let closeToCastle = false;
+
+    if(distance(enemyUnit.x, enemyUnit.y, this.startingX, this.startingY) < 200){
+      closeToCastle = true;
+    }
+
+    return closeToCastle;
+  }
+
+
+  //sends the different attack groups out to attack their targets
+  attackGroupAI(){
+    if(this.closestEnemyAttackUnit){
+
+      //if the enemy is near the castle or the attack group is full, send them to attack the closest target
+      if(this.enemyNearCastle(this.closestEnemyAttackUnit) || this.closestTargetAttackGroup >= 3){
+        this.attackGroupAction(this.closestTargetAttackGroup, this.closestEnemyAttackUnit, 1);
+      }
+      //otherwise move back towards the castle
+      else{
+        this.attackGroupAction(this.closestTargetAttackGroup, this.closestEnemyAttackUnit, 0);
+      }
+
+      //if the closest enemy attack unit is close to the castle, then have the supportAttackGroup come out and help
+      if(this.enemyNearCastle(this.closestEnemyAttackUnit)){
+        this.attackGroupAction(this.supportAttackGroup, this.closestEnemyAttackUnit, 1);
+      }
+      else{
+        this.attackGroupAction(this.supportAttackGroup, this.closestEnemyAttackUnit, 0);
+      }
+    }
+
+    //if the group is full and there is a closest enemy utility object, then attack it
+    if(this.closestEnemyUtilityObj && this.utilityTargetsAttackGroup.length >= 3){
+      this.attackGroupAction(this.utilityTargetsAttackGroup, this.closestEnemyUtilityObj, 1);
+    }
+    else{
+      this.attackGroupAction(this.utilityTargetsAttackGroup, this.closestEnemyUtilityObj, 0);
+    }
+
+    //if there is an enemy castle and the group size is 5 or greater, move to attack it. Otherwise, go back to the starting position
+    if(this.enemyCastle && this.castleAttackGroup.length >= 5){
+      this.attackGroupAction(this.castleAttackGroup, this.enemyCastle, 1);
+    }
+    else{
+      this.attackGroupAction(this.castleAttackGroup, this.enemyCastle, 0);
+    }
+  }
+
  incrementBuildOrder(){
    this.currentBuild++;
  }
@@ -283,11 +451,12 @@ class AIKingdom extends Kingdom{
           minerAI(currentUnit, this);
         }
 
-        //have the attack units attack
+        //if the unit is not already in a group, add it to one
         else if(currentUnit.getType()==="Swordsman"
         ||currentUnit.getType()==="Archer"
-        ||currentUnit.getType()==="Catapult"){
-            //attackUnitAI(currentUnit, this);
+        ||currentUnit.getType()==="Catapult"
+        ||currentUnit.getType() === "Priest" && !this.unitInGroup(currentUnit)){
+            this.findBestFitGroup(currentUnit);
         }
 
         //have the Villager build structures
@@ -295,10 +464,6 @@ class AIKingdom extends Kingdom{
             villagerAI(currentUnit, this);
           }
 
-        //have the priests heal
-        else if(currentUnit.getType() === "Priest"){
-          //priestAI(currentUnit, this);
-        }
         //have royalty go to castles and support them
         else if(currentUnit.getType() === "Royalty"){
           royaltyAI(currentUnit, this);
@@ -313,6 +478,8 @@ class AIKingdom extends Kingdom{
         var currentBuilding = this.buildings[i];
           structureAI(currentBuilding, this);
       }
+
+      this.attackGroupAI();
 
       //if the current build order is a unit and that unit cannot be built
       //(because the structure to build it doesn't exist) then skip that build order
