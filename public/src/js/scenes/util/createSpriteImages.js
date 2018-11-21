@@ -48,6 +48,20 @@ var swordsmanDieNEFrames = swordsmanDieNFrames = swordsman_revDieSFrames = sword
 var swordsmanDieEFrames = swordsmanDieSEFrames = swordsman_revDieWFrames = swordsman_revDieNWFrames = [48, 53, 58];
 
 
+//catapult movement frames
+var catapultMoveNFrames = [0, 5];
+var catapultMoveNEFrames = catapultMoveSWFrames = [1, 6];
+var catapultMoveEFrames = catapultMoveWFrames = [2, 7];
+var catapultMoveSEFrames = catapultMoveNWFrames = [3, 8];
+var catapultMoveSFrames = [4, 9];
+
+//catapult action frames
+var catapultShootNFrames = [5, 10, 15];
+var catapultShootNEFrames = catapultShootSWFrames = [6, 11, 16];
+var catapultShootEFrames = catapultShootWFrames = [7, 12, 17];
+var catapultShootSEFrames = catapultNWFrames = [8, 13, 18];
+var catapultShootSFrames = [9, 14, 19];
+
 var unitSprites = ['archer', 'archer_rev', 'catapult', 'catapult_rev', 'priest', 'priest_rev',
 'villager', 'villager_rev', 'royalty', 'royalty_rev',
 'swordsman', 'swordsman_rev', 'miner', 'miner_rev'];
@@ -60,6 +74,8 @@ const revWalkDirectionList = ["W", "NW", "SW"];
 const actionsList = [ "Action", "Die"];
 const archerActions = ["Shoot", "Melee", "Die"];
 const swordsmanActions = ["Attack", "Die"];
+
+const catapultActions = ["Shoot"]
 
 
 function createHealthBarSprites(scene){
@@ -104,7 +120,7 @@ function createStructureSprites(scene){
        { frameWidth: 160, frameHeight: 160}
    );
   scene.load.spritesheet('machinery',
-      'Graphics/buildings/machinery.png',
+      'Graphics/buildings/gold_mine.png',
       { frameWidth: 128, frameHeight: 128}
   );
 
@@ -183,7 +199,22 @@ function createSpecialUnitAnims(scene, type, specialActionArray){
 }
 
 function createWalkAnims(scene, type){
-  if(type.includes("rev")){
+
+  if(type.includes("rev") && type.includes("catapult")) {
+  	for(var i =0; i < revWalkDirectionList.length; i++){
+  		createAnim(type+"Walk"+revWalkDirectionList[i],
+  			type, "move"+revWalkDirectionList[i]+"Frames", scene);
+  	}
+  }
+
+  else if(type.includes("catapult")) {
+  	for(var i = 0; i < walkDirectionList.length; i++){
+      createAnim(type+"Walk"+walkDirectionList[i],
+         type, "move"+walkDirectionList[i]+"Frames", scene);
+  	}
+   }
+  
+  else if(type.includes("rev")){
     for(var i = 0; i < revWalkDirectionList.length; i++){
       createAnim(type+"Walk"+revWalkDirectionList[i],
          type, "walk"+revWalkDirectionList[i]+"Frames", scene);
@@ -209,6 +240,10 @@ function createAnims(scene, type){
     //create the swordsman animations
     else if (type.includes("swordsman")){
       createSpecialUnitAnims(scene, type, swordsmanActions);
+    }
+
+    else if (type.includes("catapult")) {
+    	createSpecialUnitAnims(scene, type, catapultActions);
     }
     else{
       createGeneralUnitAnims(scene, type);
