@@ -67,6 +67,11 @@ class Level2 extends Phaser.Scene {
 
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
+    if (loadingSavedGame === true) {
+      gameMode.name = level1Saved.gameMode;
+      kingdomSelection.name = level1Saved.kingdomName;
+      opponentKingdom = level1Saved.enemyKingdomName;
+    }
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
@@ -110,13 +115,10 @@ class Level2 extends Phaser.Scene {
     dragSelect(this, player);
     this.pointerInput();
 
+    this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
     console.log('[Level2] create() complete');
   }
 
-  //updates the target list of the ai (done every 10 seconds)
-  aiUpdate(){
-    ai.updateCurrentTargetList(player);
-  }
 
   update(delta) {
       controls.update(delta);
@@ -137,6 +139,19 @@ class Level2 extends Phaser.Scene {
   aiUpdate(){
     ai.updateCurrentTargetList(player);
   }
+
+  pauseGame() {
+  pauseStartTime = Date.now();
+  if (gamePaused === true) {
+    this.resume();
+    console.log("game resumed");
+  }
+  else {
+    gamePaused = true;
+    this.pause();
+    console.log("game paused");
+  }
+}
 
   pointerInput() {
     this.input.on('pointerdown', function(pointer) {

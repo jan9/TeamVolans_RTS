@@ -20,7 +20,7 @@ class Selection extends Phaser.Scene {
   preload() {
     this.load.image('title_g','Graphics/UI/sampleSelection.jpg');
     // this.load.image('box','Graphics/screens/start_screen/StartScreen_Box.png');
-    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
+    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/buttons/Button_MainMenu.png');
     this.load.image('Dueling Dominion', 'Graphics/UI/emblem/Dueling Dominion.svg');
     this.load.image('Equal Empire', 'Graphics/UI/emblem/Equal Empire.svg');
     this.load.image('Fortune Federation', 'Graphics/UI/emblem/Fortune Federation.svg');

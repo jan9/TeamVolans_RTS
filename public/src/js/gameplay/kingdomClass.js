@@ -2,6 +2,7 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
 
   constructor(kingdomInformation, xCoord, yCoord, isPlayer, game, startingObjects) {
     super(game.physics.world, game);
+
     this.type = kingdomInformation.type;
     this.gold = kingdomInformation.gold;
     this.buildings = [];

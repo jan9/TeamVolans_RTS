@@ -16,7 +16,9 @@ function calculateTime(seconds){
 
   //creates the string to display the time
   var timeString = minutes+"M:"+secondsUpdated+"S";
-
+  if (gamePaused === true) {
+    timeString = "PAUSED";
+  }
   return timeString;
 }
 
@@ -117,4 +119,27 @@ function overlapOccurred(unit1, unit2){
 
 function getMiniMap(scene, camX, camY, width, height, zoom) {
   scene.minimap = scene.cameras.add(camX, camY, width, height).setZoom(zoom).setName('minimap');
+}
+
+function getTime() {
+  var time = Math.round((pauseStartTime - gameStartTime)/1000);
+  return time;
+}
+
+function timeStamp() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  var hours = today.getHours();
+  var minutes = today.getMinutes();
+  var seconds = today.getSeconds();
+
+  if(dd<10) { dd = '0'+dd; }
+  if(mm<10) { mm = '0'+mm; }
+  if (hours < 10) { hours = '0' + hours;}
+  if (minutes < 10) { minutes = "0" + minutes; }
+  if (seconds < 10) { seconds = "0" + seconds; }
+  today = mm + '/' + dd + '/' + yyyy + '  ' + hours + ':' + minutes + ':' + seconds;
+  return today;
 }

@@ -5,10 +5,10 @@ class Title extends Phaser.Scene {
 
   preload() {
     this.load.image('bg_Title','Graphics/screens/start_screen/StartScreen_NoBox.png');
-    this.load.image('box','Graphics/screens/start_screen/StartScreen_Box.png');
-    this.load.image('startButton','Graphics/screens/start_screen/StartScreen_Start.png');
-    this.load.image('howtoplayButton','Graphics/screens/start_screen/misc_buttons/Button_HowtoPlay.png');
-    this.load.image('loadButton', 'Graphics/screens/start_screen/StartScreen_Load copy.png');
+    this.load.image('box','Graphics/screens/start_screen/boxes/StartScreen_Box.png');
+    this.load.image('startButton','Graphics/screens/start_screen/buttons/StartScreen_Start.png');
+    this.load.image('howtoplayButton','Graphics/screens/start_screen/buttons/Button_HowtoPlay.png');
+    this.load.image('loadButton', 'Graphics/screens/start_screen/buttons/StartScreen_Load.png');
     this.load.image('button', 'Graphics/UI/button/button1.png');  // for AI testing
   }
 
@@ -20,12 +20,15 @@ class Title extends Phaser.Scene {
     this.add.image(_width*0.5, _height*0.78,'box').setDisplaySize(_width/2,_height/2.5);
     // add the buttons
     this.buttons();
+    currentLevel = 0;
+    check_gameover = 0;
+    loadingSavedGame = false;
+    loadinglevel = 0;
     console.log("[Title] create() complete");
   }
 
   update() {
-    currentLevel = 0;
-    check_gameover = 0;
+
   }
 
   /* Helper functions  */

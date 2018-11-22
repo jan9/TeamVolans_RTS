@@ -44,7 +44,7 @@ class Level1 extends Phaser.Scene {
   create() {
     createUnitAnims(this);
 
-    this.scene.sendToBack('Selection');
+    this.scene.sendToBack('Load');
     this.map = this.add.tilemap('map');
     var tileset =[this.map.addTilesetImage('Background1', 'tiles1'),
     this.map.addTilesetImage('Background2', 'tiles2'),
@@ -98,6 +98,12 @@ class Level1 extends Phaser.Scene {
 
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
 
+    if (loadingSavedGame === true) {
+      gameMode.name = level1Saved.gameMode;
+      kingdomSelection.name = level1Saved.kingdomName;
+      opponentKingdom = level1Saved.enemyKingdomName;
+    }
+
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
@@ -141,6 +147,7 @@ class Level1 extends Phaser.Scene {
     dragSelect(this, player);
     this.pointerInput();
 
+    this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
     console.log('[Level1] create() complete');
   }
 
@@ -169,6 +176,18 @@ class Level1 extends Phaser.Scene {
 
   }
 
+  pauseGame() {
+  pauseStartTime = Date.now();
+  if (gamePaused === true) {
+    this.resume();
+    console.log("game resumed");
+  }
+  else {
+    gamePaused = true;
+    this.pause();
+    console.log("game paused");
+  }
+}
 
 
   pointerInput() {
@@ -179,4 +198,13 @@ class Level1 extends Phaser.Scene {
       console.log("[Level1] pointerInput() x,y: "+ x +","+y);
   },this);
   }
+
+  test() {
+  console.log("I'm in test! I heard 'pause' and paused the game");
+}
+
+test2() {
+  console.log("I'm in test2! I heard 'resume' and resumed the game");
+}
+
 }

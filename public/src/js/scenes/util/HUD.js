@@ -13,6 +13,8 @@ var image1, timedEvent;
 var gameMessage;
 var buttons = [];
 var optionClicked = "none";
+var gamePaused, pauseStartTime, pauseEndTime;
+var pauseButton, pauseMenuBox, pauseCloseButton, yesButton, noButton;
 
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
@@ -24,7 +26,7 @@ class gameHUD extends Phaser.Scene {
   preload() {
     this.load.image('win','Graphics/UI/WIN.png');
     this.load.image('lackOfGold','Graphics/UI/Not-Enough-Gold.png');
-    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
+    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/buttons/Button_MainMenu.png');
     this.load.image('button_mine','Graphics/UI/buildButtons/1.png');
     this.load.image('button_archeryRange','Graphics/UI/buildButtons/2.png');
     this.load.image('button_townCenter','Graphics/UI/buildButtons/3.png');
@@ -42,7 +44,13 @@ class gameHUD extends Phaser.Scene {
     this.load.image('button_machinery_selected','Graphics/UI/buildButtons/7_Chosen.png');
 
     createOptionsSprites(this);
-    this.load.image('boxframe', 'Graphics/screens/start_screen/BoxFrame.png');
+    this.load.image('boxframe', 'Graphics/screens/start_screen/boxes/BoxFrame.png');
+    this.load.image('pauseMenuBox', 'Graphics/screens/start_screen/boxes/pauseMenu.png');
+    this.load.image('pauseButton', 'Graphics/screens/start_screen/buttons/paused.png');
+    this.load.image('pauseCloseButton', 'Graphics/screens/start_screen/buttons/pauseClose.png');
+    this.load.image('saveButton', 'Graphics/screens/start_screen/buttons/save.png');
+    this.load.image('yesButton', 'Graphics/screens/start_screen/buttons/yes.png');
+    this.load.image('noButton', 'Graphics/screens/start_screen/buttons/no.png');
   }
 
   create() {
@@ -69,12 +77,17 @@ class gameHUD extends Phaser.Scene {
    displayPop = this.add.text(850,17,'POPULATION: ');
    gameMessage = this.add.text(3, 53, '');
   // gameMessage.setText('');
+  this.pauseBox();
      }
 
   update() {
     var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
     var readableTime = calculateTime(timeElapsed);
-
+    if (gamePaused === true) {
+      this.pauseBox_shown();
+    } else if (gamePaused === false) {
+      this.pauseBox_notShown();
+    }
     //currentTime variable is in HUD so...need to check if it exists first
     if(currentTime){
       currentTime.setText('CURRENT TIME: ' + readableTime);
@@ -114,6 +127,109 @@ class gameHUD extends Phaser.Scene {
     }
   }
 }
+
+  pauseBox_shown() {
+    pauseMenuBox.setVisible(true);
+    pauseButton.setVisible(true);
+    yesButton.setVisible(true);
+    noButton.setVisible(true);
+    pauseCloseButton.setVisible(true);
+  }
+
+  pauseBox_notShown() {
+    pauseMenuBox.setVisible(false);
+    pauseButton.setVisible(false);
+    yesButton.setVisible(false);
+    noButton.setVisible(false);
+    pauseCloseButton.setVisible(false);
+  }
+
+  pauseBox() {
+  pauseMenuBox = this.add.sprite(_width/2, _height/2, 'pauseMenuBox').setDepth(12).setScrollFactor(0).setVisible(false);
+  pauseCloseButton = this.add.sprite(_width*0.69, _height*0.32, 'pauseCloseButton').setDisplaySize(25,25).setDepth(13).setScrollFactor(0).setVisible(false);
+  pauseButton = this.add.sprite(_width*0.5, _height*0.275, 'pauseButton').setDepth(13).setVisible(false);
+  yesButton = this.add.sprite(_width*0.4, _height*0.55, 'yesButton').setDisplaySize(120, 60).setDepth(13).setVisible(false);
+  noButton = this.add.sprite(_width*0.6, _height*0.55, 'noButton').setDisplaySize(120, 60).setDepth(13).setVisible(false);
+  var pauseBoxText = this.add.text(_width*0.43, _height*0.65,"", {fontSize: '15px', fontFamily: 'Georgia', color: 'black'}).setDepth(16);
+
+  pauseCloseButton.setInteractive({useHandCursor:true});
+  pauseCloseButton.on('pointerdown', function(pointer) {
+    pauseBoxText.setText("");
+    gamePaused = false;
+    pauseEndTime = Date.now();
+    this.scene.resume('Level1');
+    this.scene.resume('Level2');
+    this.scene.resume('Level3');
+    }, this);
+
+  noButton.setInteractive({useHandCursor:true});
+  noButton.on('pointerdown', function(pointer) {
+    pauseBoxText.setText("");
+    gamePaused = false;
+    pauseEndTime = Date.now();
+    this.scene.resume('Level1');
+    this.scene.resume('Level2');
+    this.scene.resume('Level3');
+    }, this);
+
+  yesButton.setInteractive({useHandCursor:true});
+  yesButton.on('pointerdown', function(pointer) {
+    console.log("save current player and ai data");
+    var data = {
+      dateSaved: timeStamp(),
+      gameMode: gameMode.name,
+      kingdomName: kingdomSelection.name,
+      enemyKingdomName: opponentKingdom,
+
+      // player data
+      gold: player.gold,
+      buildings: player.buildings,
+      units: player.units,
+      buildingsAmount: player.buildingsAmount,
+      unitAmount: player.unitAmount,
+      startingX: player.startingX,
+      startingY: player.startingY,
+      playerKingdom: player.playerKingdom,
+      goldDeposits: player.goldDeposits,
+
+      // ai data
+      ai_gold: ai.gold,
+      ai_buildings: ai.buildings,
+      ai_units: ai.units,
+      ai_buildingsAmount: ai.buildingsAmount,
+      ai_unitAmount: ai.unitAmount,
+      ai_startingX: ai.startingX,
+      ai_startingY: ai.startingY,
+      ai_playerKingdom: ai.playerKingdom,
+      ai_goldDeposits: ai.goldDeposits,
+
+      //closestTargetAttackGroup: ai.closestTargetAttackGroup,
+      //utilityTargetsAttackGroup: ai.utilityTargetsAttackGroup,
+      //castleAttackGroup: ai.castleAttackGroup,
+      //supportAttackGroup: ai.supportAttackGroup
+    }
+
+    if (currentLevel === 1 ) {
+        localStorage.removeItem('level1Data');
+        localStorage.setItem('level1Data', JSON.stringify(data));
+        if (localStorage.hasOwnProperty('level1Data') === true) {
+          pauseBoxText.setText("Current data has been saved");
+        }
+      } else if (currentLevel === 2) {
+        localStorage.removeItem('level2Data');
+        localStorage.setItem('level2Data', JSON.stringify(data));
+        if (localStorage.hasOwnProperty('level2Data') === true) {
+          pauseBoxText.setText("Current data has been saved");
+        }
+      } else if(currentLevel === 3) {
+        localStorage.removeItem('level3Data');
+          localStorage.setItem('level3Data', JSON.stringify(data));
+          if (localStorage.hasOwnProperty('level3Data') === true) {
+            pauseBoxText.setText("Current data has been saved");
+          }
+      }
+    }, this);
+  }
 
   button_Title() {
   // button for going back to the main menu
