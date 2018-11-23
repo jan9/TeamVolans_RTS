@@ -166,7 +166,7 @@ getStructureInfo(buildingType){
     else{
         positionName+="_Unit"+itemNum.toString();
     }
-
+    //console.log(positionName);
     for(var i = 0; i < startingObjectsList.length; i++){
       if(startingObjectsList[i].name === positionName){
         coordinates.x = startingObjectsList[i].x;
@@ -309,6 +309,7 @@ isPlayer(){
 }
 
   updatePlayerKingdom(){
+    this.unitAmount = this.units.length;
       //TO DO
     for(var i = 0; i < playerUnitSelected.length; i++){
 

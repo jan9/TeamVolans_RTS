@@ -19,7 +19,7 @@ class Load extends Phaser.Scene {
     this.scene.sendToBack('Selection');
     this.scene.setVisible(false,'gameHUD');
     this.add.image(400,300,'title_l');
-    this.homeButton();
+    //this.homeButton();
     var box1 = this.add.image(_width*0.05, _height*0.05,'box').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
 
     currentLevel = 0;
@@ -52,6 +52,7 @@ class Load extends Phaser.Scene {
   }
 
   update() {
+    this.homeButton();
   }
 
   getLevel1Data(savedDateInfo) {

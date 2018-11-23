@@ -175,6 +175,119 @@ class gameHUD extends Phaser.Scene {
   yesButton.setInteractive({useHandCursor:true});
   yesButton.on('pointerdown', function(pointer) {
     console.log("save current player and ai data");
+    var temp = [], temp2 = [];
+    for (var i = 0; i < player.buildings.length; i++) {
+      if (player.buildings[i] === "") {
+        continue;
+      } else {
+        var type ="";
+        if (player.buildings[i].type === "Castle") {
+          type = "Player_Castle";
+        } else {
+          type = "Player_Building";
+        }
+        temp[i] = {
+          height: player.buildings[i].height,
+          id: i,
+          rotation: player.buildings[i].rotation,
+          name: type,
+          baseType: player.buildings[i].baseType,
+          type: player.buildings[i].type,
+          visible: player.buildings[i].visible,
+          width: player.buildings[i].width,
+          x: player.buildings[i].x,
+          y: player.buildings[i].y
+        }
+      }
+    }
+    for (var i = 0; i < player.units.length; i++) {
+      if (player.units[i] === "") {
+        continue;
+      } else {
+        temp2[i] = {
+          height: player.units[i].height,
+          id: i,
+          rotation: player.units[i].rotation,
+          name: "Player_Unit"+(i+1).toString(),
+          type: player.units[i].type,
+          visible: player.units[i].visible,
+          width: player.units[i].width,
+          x: player.units[i].x,
+          y: player.units[i].y
+      }
+    }
+  }
+    var info_player = temp.concat(temp2);
+
+    var temp_ai = [], temp_ai2 = [];
+    for (var i = 0; i < ai.buildings.length; i++) {
+      var type ="";
+      if (ai.buildings[i].type === "Castle") {
+        type = "Enemy_Castle";
+      } else {
+        type = "Enemy_Building";
+      }
+      temp_ai[i] = {
+        height: ai.buildings[i].height,
+        id: i,
+        rotation: ai.buildings[i].rotation,
+        name: type,
+        baseType: ai.buildings[i].baseType,
+        type: ai.buildings[i].type,
+        visible: ai.buildings[i].visible,
+        width: ai.buildings[i].width,
+        x: ai.buildings[i].x,
+        y: ai.buildings[i].y
+      }
+    }
+    for (var i = 0; i < ai.units.length; i++) {
+      temp_ai2[i] = {
+        height: ai.units[i].height,
+        id: i,
+        rotation: ai.units[i].rotation,
+        name: "Enemy_Unit"+(i+1).toString(),
+        type: ai.units[i].type,
+        visible: ai.units[i].visible,
+        width: ai.units[i].width,
+        x: ai.units[i].x,
+        y: ai.units[i].y
+      }
+    }
+    var info_ai = temp_ai.concat(temp_ai2);
+
+    var gold_player = [], gold_ai = [];
+    for (var i = 0; i < player.goldDeposits.length; i++) {
+      gold_player[i] = {
+        height: player.goldDeposits[i].height,
+        id: i,
+        rotation: player.goldDeposits[i].rotation,
+        name: "Player_Gold_"+(i+1).toString(),
+        type: player.goldDeposits[i].type,
+        visible: player.goldDeposits[i].visible,
+        width: player.goldDeposits[i].width,
+        x: player.goldDeposits[i].x,
+        y: player.goldDeposits[i].y,
+        properties: {name: "isMine", type: "bool", value: false}
+      }
+    }
+    for (var i = 0; i < ai.goldDeposits.length; i++) {
+      gold_ai[i] = {
+        height: ai.goldDeposits[i].height,
+        id: i,
+        rotation: ai.goldDeposits[i].rotation,
+        name: "Enemy_Gold_"+(i+1).toString(),
+        type: ai.goldDeposits[i].type,
+        visible: ai.goldDeposits[i].visible,
+        width: ai.goldDeposits[i].width,
+        x: ai.goldDeposits[i].x,
+        y: ai.goldDeposits[i].y,
+        properties: {name: "isMine", type: "bool", value: false}
+      }
+    }
+    var gold = gold_player.concat(gold_ai);
+    var info_all = info_player.concat(info_ai);
+
+    var objects = info_all.concat(gold);
     var data = {
       dateSaved: timeStamp(),
       gameMode: gameMode.name,
@@ -183,32 +296,13 @@ class gameHUD extends Phaser.Scene {
 
       // player data
       gold: player.gold,
-      buildings: player.buildings,
-      units: player.units,
-      buildingsAmount: player.buildingsAmount,
-      unitAmount: player.unitAmount,
-      startingX: player.startingX,
-      startingY: player.startingY,
-      playerKingdom: player.playerKingdom,
-      goldDeposits: player.goldDeposits,
+      objects: objects,
+      population:player.units.legnth,
 
       // ai data
       ai_gold: ai.gold,
-      ai_buildings: ai.buildings,
-      ai_units: ai.units,
-      ai_buildingsAmount: ai.buildingsAmount,
-      ai_unitAmount: ai.unitAmount,
-      ai_startingX: ai.startingX,
-      ai_startingY: ai.startingY,
-      ai_playerKingdom: ai.playerKingdom,
-      ai_goldDeposits: ai.goldDeposits,
-
-      //closestTargetAttackGroup: ai.closestTargetAttackGroup,
-      //utilityTargetsAttackGroup: ai.utilityTargetsAttackGroup,
-      //castleAttackGroup: ai.castleAttackGroup,
-      //supportAttackGroup: ai.supportAttackGroup
+      ai_population: ai.units.legnth
     }
-
     if (currentLevel === 1 ) {
         localStorage.removeItem('level1Data');
         localStorage.setItem('level1Data', JSON.stringify(data));

@@ -89,6 +89,12 @@ class Level1 extends Phaser.Scene {
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+    if (loadingSavedGame === true) {
+      gameMode.name = level1Saved.gameMode;
+      kingdomSelection.name = level1Saved.kingdomName;
+      opponentKingdom = level1Saved.enemyKingdomName;
+    }
+
     // checking to have received correct data
     console.log(gameMode.name);
     let hardMode = false;
@@ -97,13 +103,12 @@ class Level1 extends Phaser.Scene {
     }
 
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
-
+    // starting object if loadingSavedGame is true
     if (loadingSavedGame === true) {
-      gameMode.name = level1Saved.gameMode;
-      kingdomSelection.name = level1Saved.kingdomName;
-      opponentKingdom = level1Saved.enemyKingdomName;
+      startingObjects = level1Saved.objects;
     }
-
+    //localStorage.setItem('level1Data', JSON.stringify(data));
+    //console.log(startingObjects);
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
@@ -117,7 +122,6 @@ class Level1 extends Phaser.Scene {
     } else if (kingdomSelection.name === "Remote Realm") {
       player = new Kingdom(remoteRealmInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     };
-
 
     // set up the ai kingdom
     console.log(opponentKingdom);
@@ -141,6 +145,10 @@ class Level1 extends Phaser.Scene {
     currentLevel = 1;
     goto = 'Level2';
     gameStartTime = Date.now();
+    if (loadingSavedGame === true) {
+      player.gold = level1Saved.gold;
+      player.unitAmount = level1Saved.unitAmount;
+    }
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
 

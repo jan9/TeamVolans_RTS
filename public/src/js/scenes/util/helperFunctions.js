@@ -31,9 +31,8 @@ function getGold(currentGold, playerKingdom) {
 }
 
 function getPopulation(currentPopulation, playerKingdom){
-  var newPop;
-  newPop = currentPopulation;
-  return newPop;
+  currentPopulation = player.units.length;
+  return currentPopulation;
 }
 
 

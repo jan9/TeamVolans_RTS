@@ -58,6 +58,12 @@ class Level2 extends Phaser.Scene {
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+    if (loadingSavedGame === true) {
+      gameMode.name = level2Saved.gameMode;
+      kingdomSelection.name = level2Saved.kingdomName;
+      opponentKingdom = level2Saved.enemyKingdomName;
+    }
+
     // checking to have received correct data
     console.log(gameMode.name);
     let hardMode = false;
@@ -66,12 +72,10 @@ class Level2 extends Phaser.Scene {
     }
 
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
-
     if (loadingSavedGame === true) {
-      gameMode.name = level1Saved.gameMode;
-      kingdomSelection.name = level1Saved.kingdomName;
-      opponentKingdom = level1Saved.enemyKingdomName;
+      startingObjects = level2Saved.objects;
     }
+
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
@@ -109,6 +113,10 @@ class Level2 extends Phaser.Scene {
     currentLevel = 2;
     goto = 'Level3';
     gameStartTime = Date.now();
+    if (loadingSavedGame === true) {
+      player.gold = level2Saved.gold;
+      player.unitAmount = level2Saved.unitAmount;
+    }
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
 
