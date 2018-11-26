@@ -32,8 +32,7 @@ class AIKingdom extends Kingdom{
 
 
       this.hardModeBonus();
-
-
+      this.addStartingUnitsToGroup();
     }
 
     //checks to see whether the kingdom can build the unit (aka has the necessary structure built)
@@ -41,6 +40,14 @@ class AIKingdom extends Kingdom{
       return this.hasStructure(unit.buildingProduced);
     }
 
+    //function to add the starting units to the attack closest unit group
+    addStartingUnitsToGroup(){
+      for(let unit of this.units){
+        if(unit.getType() === "Swordsman" || unit.getType() === "Catapult" || unit.getType() === "Archer" || unit.getType() === "Priest"){
+          this.closestTargetAttackGroup.push(unit);
+        }
+      }
+    }
 
     //checks to see whether or not the kingdom has 1 of the structure
     hasStructure(structure){
@@ -133,10 +140,25 @@ class AIKingdom extends Kingdom{
     var coordinateChange = this.attackArea(attackUnit);
 
     if(attackUnit.getType() !== "Priest"){
-      attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Attack", "target": currentTarget});
+      if((attackUnit.getType() === "Archer" || attackUnit.getType() === "Catapult" ) &&
+      distance(currentTarget.x, currentTarget.y, attackUnit.x, attackUnit.y) <= _attackRangeTwo){
+          attackUnit.attackEnemy(currentTarget);
+      }
+      else if(attackUnit.getType() === "Swordsman" && distance(currentTarget.x, currentTarget.y, attackUnit.x, attackUnit.y) <= _attackRangeOne){
+          attackUnit.attackEnemy(currentTarget);
+      }
+      else{
+        attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Attack", "target": currentTarget});
+      }
     }
     else{
-      attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Heal", "kingdom": this});
+      if(distance(currentTarget.x, currentTarget.y, attackUnit.x, attackUnit.y) < _attackRangeTwo){
+        let injuredUnit = attackUnit.closestInjured(this.units);
+        attackUnit.healUnit(injuredUnit);
+      }
+      else{
+        attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Heal", "kingdom": this});
+      }
     }
   }
 
@@ -147,7 +169,7 @@ class AIKingdom extends Kingdom{
     if(this.closestTargetAttackGroup.includes(unit)
       || this.utilityTargetsAttackGroup.includes(unit)
       || this.supportAttackGroup.includes(unit)
-      ||this.castleAttackGroup.includes(unit)){
+      || this.castleAttackGroup.includes(unit)){
           inGroup = true;
     }
 
@@ -176,7 +198,9 @@ class AIKingdom extends Kingdom{
   groupReasonablyClose(unitToCheck, group){
 
     let closeDistance = false;
-    if(distance(unitToCheck.x, unitToCheck.y, group[0].x, group[0].y) < 200){
+
+    //If the group is close to the unit or the castle, have the unit join the group
+    if(distance((unitToCheck.x, unitToCheck.y, group[0].x, group[0].y) <= 200 || distance(this.startingX, this.startingY, group[0].x, group[0].y) <= 200)){
       closeDistance = true;
     }
 
@@ -188,8 +212,8 @@ class AIKingdom extends Kingdom{
   overallGroupCheck(unitToCheck, group){
     let groupPassesCheck = false;
 
-    if(this.groupHasUnits(this.closestTargetAttackGroup)){
-        if(this.groupReasonablyClose(unitToCheck, this.closestTargetAttackGroup)){
+    if(this.groupHasUnits(group)){
+        if(this.groupReasonablyClose(unitToCheck, group)){
           groupPassesCheck = true;
         }
     }
@@ -265,6 +289,18 @@ class AIKingdom extends Kingdom{
 
     this.closestEnemyUtilityObj = this.findEnemyUtility(playersKingdom);
 
+    console.log(this.closestEnemyAttackUnit);
+/*
+    console.log("Attack group:");
+    console.log(this.closestTargetAttackGroup);
+    console.log("SupportGroup:");
+    console.log(this.supportAttackGroup);
+    console.log("Utility group:");
+    console.log(this.utilityTargetsAttackGroup);
+    console.log("Castle group:");
+    console.log(this.castleAttackGroup);
+    */
+
   };
 
   //find the closest enemy's castle
@@ -329,7 +365,6 @@ class AIKingdom extends Kingdom{
   //action: 1 is attack, 0 is move back to home castle
   attackGroupAction(group, currentTarget, action){
 
-
     //move each member to the location and have them attack/heal
     for(let member of group){
 
@@ -366,7 +401,7 @@ class AIKingdom extends Kingdom{
     if(this.closestEnemyAttackUnit){
 
       //if the enemy is near the castle or the attack group is full, send them to attack the closest target
-      if(this.enemyNearCastle(this.closestEnemyAttackUnit) || this.closestTargetAttackGroup >= 3){
+      if(this.enemyNearCastle(this.closestEnemyAttackUnit) || this.closestTargetAttackGroup.length >= 4){
         this.attackGroupAction(this.closestTargetAttackGroup, this.closestEnemyAttackUnit, 1);
       }
       //otherwise move back towards the castle
@@ -452,10 +487,10 @@ class AIKingdom extends Kingdom{
         }
 
         //if the unit is not already in a group, add it to one
-        else if(currentUnit.getType()==="Swordsman"
+        else if((currentUnit.getType()==="Swordsman"
         ||currentUnit.getType()==="Archer"
         ||currentUnit.getType()==="Catapult"
-        ||currentUnit.getType() === "Priest" && !this.unitInGroup(currentUnit)){
+        ||currentUnit.getType() === "Priest") && !this.unitInGroup(currentUnit)){
             this.findBestFitGroup(currentUnit);
         }
 

@@ -13,7 +13,8 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.destinationY=yCoord+1;
     this.baseType = unitInformation.baseType;
     this.scene = scene
-
+    this.directionX = xCoord+1;
+    this.directionY = yCoord+1;
     this.isPlayerObject = playerCheck;
 
     this.setInteractive();
@@ -160,8 +161,8 @@ class Unit extends Phaser.GameObjects.Sprite{
        this.playerStopMovement();
 
        //sets what the unit's destination is and gives it the Move state
-       this.destinationX = xLocation;
-       this.destinationY = yLocation;
+      this.directionX = this.destinationX = xLocation;
+       this.directionY = this.destinationY = yLocation;
 
 
        this.unitAnimations("Walk");
@@ -181,18 +182,18 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     var direction = "";
 
-    if(this.destinationY != this.y){
-      if(this.destinationY > this.y){
+    if(this.directionY != this.y){
+      if(this.directionY  > this.y){
          direction = "S";
       }
       else{
         direction = "N";
       }
     }
-    if(this.destinationX > this.x){
+    if(this.directionX > this.x){
       direction+="E"
     }
-    else if(this.destinationX < this.x){
+    else if(this.directionX < this.x){
       direction+="W";
     }
 
@@ -434,8 +435,8 @@ class Unit extends Phaser.GameObjects.Sprite{
       //only attack if the unit is within range and not already attacking something
       if(this.checkWithinRange(attackedUnit) && this.getState() !== "Attack"){
         let game = this.scene;
-        this.destinationX = attackedUnit.x;
-        this.destinationY= attackedUnit.y;
+        this.directionX = attackedUnit.x;
+        this.directionY = attackedUnit.y;
 
         //attack if unit isn't dead attack(dead units get removed at end of each update but
         // there's a chance it might have been killed in between)
