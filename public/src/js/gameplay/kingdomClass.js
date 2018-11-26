@@ -194,12 +194,12 @@ getStructureInfo(buildingType){
      if(this.isPlayer() === true) {
 
          keys = currentData.buildings;
-         console.log("Player keys", keys);
+         //console.log("Player keys", keys);
 
          for(var i = 0; i < keys.length; i++){
 
            buildingInfo = this.getStructureInfo(keys[i].type);
-           console.log (buildingInfo);
+           //console.log (buildingInfo);
            amount = 1;
 
            //creates the correct amount of buildings for the current type
@@ -225,7 +225,7 @@ getStructureInfo(buildingType){
        } // creating player buildings using saved data
      else {
        keys = currentData.ai_buildings;
-       console.log("AI keys", keys);
+       //console.log("AI keys", keys);
        for(var i = 0; i < keys.length; i++){
 
           buildingInfo = this.getStructureInfo(keys[i].type);
@@ -253,7 +253,7 @@ getStructureInfo(buildingType){
      } // creating ai buildings using saved data
    } else {
       keys = Object.keys(buildings);
-       console.log(keys);
+       //console.log(keys);
 
        //goes through and creates the starting buildings based on the given kingdom's information
        for(var i = 0; i < keys.length; i++){
@@ -294,12 +294,12 @@ getStructureInfo(buildingType){
     if (loadingSavedGame === true) {
       if(this.isPlayer() === true) {
           keys = currentData.units;
-          console.log("Player units", keys);
+          //console.log("Player units", keys);
 
           for(var i = 0; i < keys.length; i++){
 
             unitInfo = this.getUnitInfo(keys[i].type);
-            console.log (unitInfo);
+            //console.log (unitInfo);
             amount = 1;
 
             //creates the correct amount of buildings for the current type
@@ -318,12 +318,12 @@ getStructureInfo(buildingType){
         } // creating player units using saved data
       else {
         keys = currentData.ai_units;
-        console.log("Enemy units", keys);
+        //console.log("Enemy units", keys);
 
         for(var i = 0; i < keys.length; i++){
 
           unitInfo = this.getUnitInfo(keys[i].type);
-          console.log (unitInfo);
+          //console.log (unitInfo);
           amount = 1;
 
           //creates the correct amount of buildings for the current type
@@ -387,6 +387,7 @@ getStructureInfo(buildingType){
 
         this.units[i].unitAnimations("Die");
         //used to play the death animation for 4 seconds
+
         var deathEvent = this.game.time.addEvent({ delay: 3000, callback: this.destroyUnit,
           callbackScope: this, loop: false, args: [this.units[i]]});
 

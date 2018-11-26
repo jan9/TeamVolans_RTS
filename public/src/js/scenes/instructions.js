@@ -5,8 +5,6 @@ class Instructions extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('title_bg','Graphics/screens/start_screen/StartScreen_NoBox.png');
-    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/buttons/Button_MainMenu.png');
   }
 
   create() {

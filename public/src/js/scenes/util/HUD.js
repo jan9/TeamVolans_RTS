@@ -24,33 +24,7 @@ class gameHUD extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('win','Graphics/UI/WIN.png');
-    this.load.image('lackOfGold','Graphics/UI/Not-Enough-Gold.png');
-    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/buttons/Button_MainMenu.png');
-    this.load.image('button_mine','Graphics/UI/buildButtons/1.png');
-    this.load.image('button_archeryRange','Graphics/UI/buildButtons/2.png');
-    this.load.image('button_townCenter','Graphics/UI/buildButtons/3.png');
-    this.load.image('button_barracks','Graphics/UI/buildButtons/4.png');
-    this.load.image('button_castle','Graphics/UI/buildButtons/5.png');
-    this.load.image('button_temple','Graphics/UI/buildButtons/6.png');
-    this.load.image('button_machinery','Graphics/UI/buildButtons/7.png');
-
-    this.load.image('button_mine_selected','Graphics/UI/buildButtons/1_Chosen.png');
-    this.load.image('button_archeryRange_selected','Graphics/UI/buildButtons/2_Chosen.png');
-    this.load.image('button_townCenter_selected','Graphics/UI/buildButtons/3_Chosen.png');
-    this.load.image('button_barracks_selected','Graphics/UI/buildButtons/4_Chosen.png');
-    this.load.image('button_castle_selected','Graphics/UI/buildButtons/5_Chosen.png');
-    this.load.image('button_temple_selected','Graphics/UI/buildButtons/6_Chosen.png');
-    this.load.image('button_machinery_selected','Graphics/UI/buildButtons/7_Chosen.png');
-
-    createOptionsSprites(this);
-    this.load.image('boxframe', 'Graphics/screens/start_screen/boxes/BoxFrame.png');
-    this.load.image('pauseMenuBox', 'Graphics/screens/start_screen/boxes/pauseMenu.png');
-    this.load.image('pauseButton', 'Graphics/screens/start_screen/buttons/paused.png');
-    this.load.image('pauseCloseButton', 'Graphics/screens/start_screen/buttons/pauseClose.png');
-    this.load.image('saveButton', 'Graphics/screens/start_screen/buttons/save.png');
-    this.load.image('yesButton', 'Graphics/screens/start_screen/buttons/yes.png');
-    this.load.image('noButton', 'Graphics/screens/start_screen/buttons/no.png');
+    
   }
 
   create() {

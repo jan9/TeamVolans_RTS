@@ -4,9 +4,7 @@ class Gameover extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('bg_Gameover','Graphics/screens/start_screen/StartScreen_NoBox.png');
-    this.load.image('gameover','Graphics/UI/Game-Over (1).png');
-    this.load.image('mainmenuButton', 'Graphics/screens/start_screen/misc_buttons/Button_MainMenu.png');
+    
   }
 
   create() {

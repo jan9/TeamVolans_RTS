@@ -28,21 +28,10 @@ class Level1 extends Phaser.Scene {
 
   preload() {
 
-    createUnitSprites(this);    // found in scenes/util/createSpriteImages.js
-    createStructureSprites(this); // found in scenes/util/createSpriteImages.js
-    createHealthBarSprites(this);
-
-    this.load.image('tiles1', 'Graphics/TileSets/Background1.png');
-    this.load.image('tiles2', 'Graphics/TileSets/Background2.png');
-    this.load.image('tiles5', 'Graphics/TileSets/Background5.png');
-    this.load.image('tilesW', 'Graphics/TileSets/water.png');
-    this.load.tilemapTiledJSON('map', 'Graphics/maps/Level_1b.json');
-    this.load.image('button', 'Graphics/UI/button/button.png');
 
   }
 
   create() {
-    createUnitAnims(this);
 
     this.scene.sendToBack('Load');
     this.map = this.add.tilemap('map');

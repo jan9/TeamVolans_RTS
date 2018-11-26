@@ -4,12 +4,7 @@ class Title extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('bg_Title','Graphics/screens/start_screen/StartScreen_NoBox.png');
-    this.load.image('box','Graphics/screens/start_screen/boxes/StartScreen_Box.png');
-    this.load.image('startButton','Graphics/screens/start_screen/buttons/StartScreen_Start.png');
-    this.load.image('howtoplayButton','Graphics/screens/start_screen/buttons/Button_HowtoPlay.png');
-    this.load.image('loadButton', 'Graphics/screens/start_screen/buttons/StartScreen_Load.png');
-    this.load.image('button', 'Graphics/UI/button/button1.png');  // for AI testing
+    
   }
 
   create() {
