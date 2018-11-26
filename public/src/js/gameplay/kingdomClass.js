@@ -162,6 +162,7 @@ getStructureInfo(buildingType){
     }
     else if (itemInformation.baseType === "Structure"){
         positionName+="_Building";
+
     }
     else{
         positionName+="_Unit"+itemNum.toString();
@@ -173,7 +174,7 @@ getStructureInfo(buildingType){
         coordinates.y = startingObjectsList[i].y;
       }
     }
-
+    //console.log(positionName, coordinates);
     return coordinates;
   }
 
@@ -188,69 +189,183 @@ getStructureInfo(buildingType){
   }
 
  createStartingBuildings(buildings, startingObjectsList){
+   var keys, buildingInfo, amount, structureCoords;
+   if (loadingSavedGame === true) {
+     if(this.isPlayer() === true) {
 
-   var keys = Object.keys(buildings);
+         keys = currentData.buildings;
+         console.log("Player keys", keys);
 
-   //goes through and creates the starting buildings based on the given kingdom's information
-   for(var i = 0; i < keys.length; i++){
+         for(var i = 0; i < keys.length; i++){
 
-     var buildingInfo = this.getStructureInfo(keys[i]);
-     var amount = buildings[keys[i]];
+           buildingInfo = this.getStructureInfo(keys[i].type);
+           console.log (buildingInfo);
+           amount = 1;
 
+           //creates the correct amount of buildings for the current type
+           for(var j = 0; j < amount; j++){
+             this.buildingsAmount++;
 
+            structureCoords = {
+                 x: keys[i].x,
+                 y: keys[i].y
+               }
 
-     //creates the correct amount of buildings for the current type
-     for(var j = 0; j < amount; j++){
-       this.buildingsAmount++;
+            var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
 
-      var structureCoords = this.findStartingPosition(buildingInfo, this.buildingsAmount, startingObjectsList);
-       var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
+             //set the statting x and y to the castle's position
+             if(structure.type === "Castle"){
+               this.startingX = structure.x;
+               this.startingY= structure.y;
+             }
 
-       //add the structure to the group
-      // this.add(structure);
+              this.buildings.push(structure);
+           }
+         }
+       } // creating player buildings using saved data
+     else {
+       keys = currentData.ai_buildings;
+       console.log("AI keys", keys);
+       for(var i = 0; i < keys.length; i++){
 
-       //make it so structures can't be moved by collisions
-      // structure.body.setImmovable();
+          buildingInfo = this.getStructureInfo(keys[i].type);
+          amount = 1;
 
-       //set the statting x and y to the castle's position
-       if(structure.type === "Castle"){
-         this.startingX = structure.x;
-         this.startingY= structure.y;
+         //creates the correct amount of buildings for the current type
+         for(var j = 0; j < amount; j++){
+           this.buildingsAmount++;
+
+           structureCoords = {
+               x: keys[i].x,
+               y: keys[i].y
+            }
+             var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
+
+           //set the statting x and y to the castle's position
+           if(structure.type === "Castle"){
+             this.startingX = structure.x;
+             this.startingY= structure.y;
+           }
+
+            this.buildings.push(structure);
+         }
        }
+     } // creating ai buildings using saved data
+   } else {
+      keys = Object.keys(buildings);
+       console.log(keys);
 
+       //goes through and creates the starting buildings based on the given kingdom's information
+       for(var i = 0; i < keys.length; i++){
 
-        this.buildings.push(structure);
+          buildingInfo = this.getStructureInfo(keys[i]);
+          amount = buildings[keys[i]];
+
+         //creates the correct amount of buildings for the current type
+         for(var j = 0; j < amount; j++){
+           this.buildingsAmount++;
+
+          structureCoords = this.findStartingPosition(buildingInfo, this.buildingsAmount, startingObjectsList);
+           var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
+
+           //add the structure to the group
+          // this.add(structure);
+
+           //make it so structures can't be moved by collisions
+          // structure.body.setImmovable();
+
+           //set the statting x and y to the castle's position
+           if(structure.type === "Castle"){
+             this.startingX = structure.x;
+             this.startingY= structure.y;
+           }
+
+            this.buildings.push(structure);
+         }
      }
- }
+   } // creating player and ai buildings on a new game
 }
 
 
 
 //creates all the starting units
   createStartingUnits(units, startingObjectsList){
+    var keys, unitInfo, unitCoords, amount;
+    if (loadingSavedGame === true) {
+      if(this.isPlayer() === true) {
+          keys = currentData.units;
+          console.log("Player units", keys);
 
-    //gets all the types of the starting units
-    var keys = Object.keys(units);
+          for(var i = 0; i < keys.length; i++){
 
-    //goes through the different types of units the kingdom starts with and creates the given kingdom's base starting units
-    for(var i = 0; i < keys.length; i++){
-      var unitInfo = this.getUnitInfo(keys[i]);
-      var amount = units[keys[i]];
+            unitInfo = this.getUnitInfo(keys[i].type);
+            console.log (unitInfo);
+            amount = 1;
 
+            //creates the correct amount of buildings for the current type
+            for(var j = 0; j < amount; j++){
+              this.unitAmount++;
 
+             unitCoords = {
+                  x: keys[i].x,
+                  y: keys[i].y
+                }
 
-      //goes through and creates the starting units
-      for(var j = 0; j < amount; j++){
+              var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
+              this.units.push(unit);
+            }
+          }
+        } // creating player units using saved data
+      else {
+        keys = currentData.ai_units;
+        console.log("Enemy units", keys);
 
-          this.unitAmount++;
-          var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
-          var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
+        for(var i = 0; i < keys.length; i++){
 
+          unitInfo = this.getUnitInfo(keys[i].type);
+          console.log (unitInfo);
+          amount = 1;
 
-          this.units.push(unit);
+          //creates the correct amount of buildings for the current type
+          for(var j = 0; j < amount; j++){
+            this.unitAmount++;
+
+           unitCoords = {
+                x: keys[i].x,
+                y: keys[i].y
+              }
+
+            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
+            this.units.push(unit);
+          }
+        }
       }
-    }
+    } // creating ai units using saved data
+    else {
+      //gets all the types of the starting units
+      var keys = Object.keys(units);
+
+      //goes through the different types of units the kingdom starts with and creates the given kingdom's base starting units
+      for(var i = 0; i < keys.length; i++){
+        var unitInfo = this.getUnitInfo(keys[i]);
+        var amount = units[keys[i]];
+
+
+
+        //goes through and creates the starting units
+        for(var j = 0; j < amount; j++){
+
+            this.unitAmount++;
+            var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
+            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
+
+
+            this.units.push(unit);
+        }
+      }
+    } // creating player and ai units on a new game
   }
+
 
 
 
@@ -309,7 +424,7 @@ isPlayer(){
 }
 
   updatePlayerKingdom(){
-    this.unitAmount = this.units.length;
+    //this.unitAmount = this.units.length;
       //TO DO
     for(var i = 0; i < playerUnitSelected.length; i++){
 

@@ -30,6 +30,9 @@ class Selection extends Phaser.Scene {
   }
 
   create() {
+    kingdomSelection = {name: '', chosen:'no'};
+    gameMode = {name:''};
+
     // 0. load the background and button to go back to the main menu
     this.scene.setVisible(false,'gameHUD');
     this.add.image(400,300,'title_g');
@@ -72,13 +75,16 @@ class Selection extends Phaser.Scene {
     warningMessage = this.add.text(_width*0.11, _height*0.75, "Please select a kingdom and game mode!",{font: "32px Georgia", color: "red"}).setPadding(1,1);
     aiMessage = aiMessage = this.add.text(_width*0.11, _height*0.75, '' ,{font: "32px Georgia", color: "black"}).setPadding(1,1);
 
-    // optional: player provides a kingdom name (to be used when saving/loading a game)?
+    // optional: player provides a kingdom name (to be used when saving/loading a game)? Nope
+
+
     console.log('[Selection] create() complete');
     }
 
   update() {
     currentLevel = 0;
     check_gameover = 0;
+    currentData = "";
     if (kingdomSelection.name != '' && gameMode.name != '') {
       warningMessage = warningMessage.setText('');
       aiMessage = aiMessage.setText("Your AI opponent will be: " + opponentKingdom);

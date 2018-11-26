@@ -1,6 +1,7 @@
 var level1Saved, level2Saved, level3Saved;
 var loadingSavedGame = false;
 var loadinglevel = 0;
+var currentData;
 class Load extends Phaser.Scene {
 
   constructor() {
@@ -25,7 +26,7 @@ class Load extends Phaser.Scene {
     currentLevel = 0;
     check_gameover = 0;
     loadinglevel = 0;
-
+    currentData = "";
     var loadMenuText = this.add.text(_width*0.38, _height*0.15, "Load Game", {font: "60px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
 
 
@@ -126,16 +127,6 @@ class Load extends Phaser.Scene {
      }
    }, this);
  }
-
-  level1Button() {
-    // button directed to level 1
-    var shadow = this.add.sprite(_width*0.775+5, _height*0.78+5,'startButton');
-    shadow.tint = 0x000000;
-    shadow.alpha = 0.6;
-    var button2 = this.add.sprite(_width*0.775,_height*0.78,'startButton');
-    button2.setInteractive({useHandCursor:true});
-    button2.on('pointerdown', function(pointer) {this.scene.start('Level1');}, this);
-  }
 
   homeButton() {
     // button for going back to the main menu

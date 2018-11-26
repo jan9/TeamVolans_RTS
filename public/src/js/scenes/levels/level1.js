@@ -66,7 +66,8 @@ class Level1 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     // the parameter values hold true only for level 1 map
-    getMiniMap(this, -160, 260, 400, 400, 0.125);
+    getMiniMap(this, _width*-0.125, _height*0.395, 400, 400, 0.125);
+    //getMiniMap(this, -160, 260, 400, 400, 0.125);
 
     var cursors = this.input.keyboard.createCursorKeys();
 
@@ -88,11 +89,22 @@ class Level1 extends Phaser.Scene {
         maxSpeed: 0.6
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-
+    currentData = "";
     if (loadingSavedGame === true) {
-      gameMode.name = level1Saved.gameMode;
-      kingdomSelection.name = level1Saved.kingdomName;
-      opponentKingdom = level1Saved.enemyKingdomName;
+      switch(loadinglevel) {
+        case 1:
+          currentData = level1Saved;
+          break;
+        case 2:
+          currentData = level2Saved;
+          break;
+        case 3:
+          currentData = level3Saved;
+          break;
+      }
+      gameMode.name = currentData.gameMode;
+      kingdomSelection.name = currentData.kingdomName;
+      opponentKingdom = currentData.enemyKingdomName;
     }
 
     // checking to have received correct data
@@ -105,7 +117,7 @@ class Level1 extends Phaser.Scene {
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
     // starting object if loadingSavedGame is true
     if (loadingSavedGame === true) {
-      startingObjects = level1Saved.objects;
+      startingObjects = currentData.objects;
     }
     //localStorage.setItem('level1Data', JSON.stringify(data));
     //console.log(startingObjects);
@@ -146,8 +158,8 @@ class Level1 extends Phaser.Scene {
     goto = 'Level2';
     gameStartTime = Date.now();
     if (loadingSavedGame === true) {
-      player.gold = level1Saved.gold;
-      player.unitAmount = level1Saved.unitAmount;
+      player.gold = currentData.gold;
+      player.unitAmount = currentData.unitAmount;
     }
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
@@ -160,10 +172,6 @@ class Level1 extends Phaser.Scene {
   }
 
 
-  //updates the target list of the ai (done every 10 seconds)
-  aiUpdate(){
-    ai.updateCurrentTargetList(player);
-  }
 
   update(delta) {
     controls.update(delta);
@@ -183,6 +191,11 @@ class Level1 extends Phaser.Scene {
     player.updatePlayerKingdom(player);
 
   }
+
+    //updates the target list of the ai (done every 10 seconds)
+    aiUpdate(){
+      ai.updateCurrentTargetList(player);
+    }
 
   pauseGame() {
   pauseStartTime = Date.now();

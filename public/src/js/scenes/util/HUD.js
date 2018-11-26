@@ -84,6 +84,8 @@ class gameHUD extends Phaser.Scene {
     var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
     var readableTime = calculateTime(timeElapsed);
     if (gamePaused === true) {
+      pauseStartTime;
+      //console.log(pauseStartTime);
       this.pauseBox_shown();
     } else if (gamePaused === false) {
       this.pauseBox_notShown();
@@ -200,6 +202,7 @@ class gameHUD extends Phaser.Scene {
         }
       }
     }
+
     for (var i = 0; i < player.units.length; i++) {
       if (player.units[i] === "") {
         continue;
@@ -217,7 +220,9 @@ class gameHUD extends Phaser.Scene {
       }
     }
   }
-    var info_player = temp.concat(temp2);
+  var buildingsInfo = temp;
+  var unitsInfo = temp2;
+  var info_player = temp.concat(temp2);
 
     var temp_ai = [], temp_ai2 = [];
     for (var i = 0; i < ai.buildings.length; i++) {
@@ -240,6 +245,7 @@ class gameHUD extends Phaser.Scene {
         y: ai.buildings[i].y
       }
     }
+
     for (var i = 0; i < ai.units.length; i++) {
       temp_ai2[i] = {
         height: ai.units[i].height,
@@ -253,6 +259,8 @@ class gameHUD extends Phaser.Scene {
         y: ai.units[i].y
       }
     }
+    var ai_buildingsInfo = temp_ai;
+    var ai_unitsInfo = temp_ai2;
     var info_ai = temp_ai.concat(temp_ai2);
 
     var gold_player = [], gold_ai = [];
@@ -286,22 +294,43 @@ class gameHUD extends Phaser.Scene {
     }
     var gold = gold_player.concat(gold_ai);
     var info_all = info_player.concat(info_ai);
-
     var objects = info_all.concat(gold);
+
+    // building and unit info
+    var player_buildingList =  [];
+    for (var i = 0; i < player.buildings.length; i++) {
+        var temp = player.buildings[i].type;
+        player_buildingList.push(temp);
+    }
+
+    var ai_buildingList =  [];
+    for (var i = 0; i < ai.buildings.length; i++) {
+        var temp = ai.buildings[i].type;
+
+        ai_buildingList.push(temp);
+    }
+
+
     var data = {
       dateSaved: timeStamp(),
       gameMode: gameMode.name,
       kingdomName: kingdomSelection.name,
       enemyKingdomName: opponentKingdom,
+      objects: objects,
 
       // player data
       gold: player.gold,
-      objects: objects,
       population:player.units.legnth,
+      buildings:  buildingsInfo,
+      units: unitsInfo,
+      buildingList: player_buildingList,
 
       // ai data
       ai_gold: ai.gold,
-      ai_population: ai.units.legnth
+      ai_population: ai.units.legnth,
+      ai_buildings:  ai_buildingsInfo,
+      ai_units: ai_unitsInfo,
+      ai_buildingList: ai_buildingList
     }
     if (currentLevel === 1 ) {
         localStorage.removeItem('level1Data');

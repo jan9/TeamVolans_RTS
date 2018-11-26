@@ -18,6 +18,7 @@ class Level3 extends Phaser.Scene {
 
   create() {
     createUnitAnims(this);
+
     this.scene.sendToBack('Level2');
     this.map = this.add.tilemap('map3');
     var tileset =[this.map.addTilesetImage('BackgroundComplete', 'tiles')];
@@ -28,7 +29,7 @@ class Level3 extends Phaser.Scene {
 
     // sets a boundary for main camera
     this.cameras.main.setBounds(-100, -100, this.map.widthInPixels+200, this.map.heightInPixels+200);
-    this.cameras.main.centerOn(_width*0.5, _height*2.5);
+    this.cameras.main.centerOn(_width*0.9, _height*4.1);
     this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
     this.scene.launch('gameHUD');
@@ -36,7 +37,9 @@ class Level3 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     // the parameter values hold true only for level 3 map
-    getMiniMap(this, -160, 260, 375, 375, 0.065);
+    //_width*-0.125, _height*0.395
+    getMiniMap(this, _width*-0.125, _height*0.392, 375, 375, 0.065);
+    //getMiniMap(this, -160, 260, 375, 375, 0.065);
 
     var cursors = this.input.keyboard.createCursorKeys();
 
@@ -58,13 +61,24 @@ class Level3 extends Phaser.Scene {
         maxSpeed: 0.6
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-
-
+    currentData = "";
     if (loadingSavedGame === true) {
-      gameMode.name = level3Saved.gameMode;
-      kingdomSelection.name = level3Saved.kingdomName;
-      opponentKingdom = level3Saved.enemyKingdomName;
+      switch(loadinglevel) {
+        case 1:
+          currentData = level1Saved;
+          break;
+        case 2:
+          currentData = level2Saved;
+          break;
+        case 3:
+          currentData = level3Saved;
+          break;
+      }
+      gameMode.name = currentData.gameMode;
+      kingdomSelection.name = currentData.kingdomName;
+      opponentKingdom = currentData.enemyKingdomName;
     }
+
 
     // checking to have received correct data
     console.log(gameMode.name);
@@ -75,7 +89,7 @@ class Level3 extends Phaser.Scene {
 
     var startingObjects = this.map.getObjectLayer("GameObjects").objects;
     if (loadingSavedGame === true) {
-      startingObjects = level3Saved.objects;
+      startingObjects = currentData.objects;
     }
 
     // set up the player kingdom
@@ -111,11 +125,12 @@ class Level3 extends Phaser.Scene {
     var aiEvent = this.time.addEvent({ delay: 1000, callback: this.aiUpdate,
     callbackScope: this, loop: true, args: [] });
 
+    playerWon = false;
     currentLevel = 3;
     gameStartTime = Date.now();
     if (loadingSavedGame === true) {
-      player.gold = level3Saved.gold;
-      player.unitAmount = level3Saved.unitAmount;
+      player.gold = currentData.gold;
+      player.unitAmount = currentData.unitAmount;
     }
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
@@ -155,8 +170,8 @@ class Level3 extends Phaser.Scene {
     gamePaused = true;
     this.pause();
     console.log("game paused");
+    }
   }
-}
 
   pointerInput() {
     this.input.on('pointerdown', function(pointer) {
@@ -164,54 +179,15 @@ class Level3 extends Phaser.Scene {
       x = Phaser.Math.RoundAwayFromZero(pointer.worldX);
       y = Phaser.Math.RoundAwayFromZero(pointer.worldY);
       console.log("[Level1] pointerInput() x,y: "+ x +","+y);
-      //check if we were selecting a game object, not doing pointer Input
-      //basically setting the input for gameObjectDown also calls this input function...even if we don't want it Called
-      //so this is a check to ignore this function if gameObject is really what we were calling
-      if(gameObjectClicked){
-        gameObjectClicked = false;
-      }
-
-      else{
-      if(selectedUnit){
-        //if there is a build signa; and a unit selected is villager, build the structure
-        if(build_signal > 0 && selectedUnit.type === "Villager"){
-
-          if (build_signal === 1) {
-            structureInfo = "Archery Range";
-            build_signal = 0;
-          }
-          else if (build_signal === 2) {
-            structureInfo = "Barracks";
-            build_signal = 0;
-          }
-          else if (build_signal === 3) {
-            structureInfo = "Castle";
-            build_signal = 0;
-          }
-          else if (build_signal === 4) {
-            structureInfo = "Machinery";
-            build_signal = 0;
-          }
-          else if (build_signal === 5) {
-            structureInfo = "Mine";
-            build_signal = 0;
-          }
-          else if (build_signal === 6) {
-            structureInfo = "Temple";
-            build_signal = 0;
-          }
-          else if (build_signal === 7) {
-            structureInfo = "Town Center";
-            build_signal = 0;
-          }
-          selectedUnit.startBuildStructure(structureInfo, player, this);
-        }
-        /*//move the unit to the location
-        else if (build_signal <= 0){
-            selectedUnit.move(x, y, this);
-        }*/
-      }
-    }
   },this);
   }
+
+  test() {
+  console.log("I'm in test! I heard 'pause' and paused the game");
+  }
+
+  test2() {
+  console.log("I'm in test2! I heard 'resume' and resumed the game");
+  }
+
 }
