@@ -452,7 +452,9 @@ class Unit extends Phaser.GameObjects.Sprite{
             this.unitAnimations("Attack");
           }
           //catapult needs special frames
-          else if (this.getType() === "Catapult"){}
+          else if (this.getType() === "Catapult"){
+            this.unitAnimations("Shoot");
+          }
           else{
             this.unitAnimations("Action");
           }

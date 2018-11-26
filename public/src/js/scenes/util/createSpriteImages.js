@@ -74,8 +74,7 @@ const revWalkDirectionList = ["W", "NW", "SW"];
 const actionsList = [ "Action", "Die"];
 const archerActions = ["Shoot", "Melee", "Die"];
 const swordsmanActions = ["Attack", "Die"];
-
-const catapultActions = ["Shoot"]
+const catapultActions = ["Shoot", "Die"]
 
 
 function createHealthBarSprites(scene){
@@ -203,17 +202,17 @@ function createWalkAnims(scene, type){
   if(type.includes("rev") && type.includes("catapult")) {
   	for(var i =0; i < revWalkDirectionList.length; i++){
   		createAnim(type+"Walk"+revWalkDirectionList[i],
-  			type, "move"+revWalkDirectionList[i]+"Frames", scene);
+  			type, type+"Move"+revWalkDirectionList[i]+"Frames", scene);
   	}
   }
 
   else if(type.includes("catapult")) {
   	for(var i = 0; i < walkDirectionList.length; i++){
       createAnim(type+"Walk"+walkDirectionList[i],
-         type, "move"+walkDirectionList[i]+"Frames", scene);
+         type, type+"Move"+walkDirectionList[i]+"Frames", scene);
   	}
    }
-  
+
   else if(type.includes("rev")){
     for(var i = 0; i < revWalkDirectionList.length; i++){
       createAnim(type+"Walk"+revWalkDirectionList[i],

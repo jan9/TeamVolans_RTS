@@ -289,7 +289,16 @@ class AIKingdom extends Kingdom{
 
     this.closestEnemyUtilityObj = this.findEnemyUtility(playersKingdom);
 
-    console.log(this.closestEnemyAttackUnit);
+    //if there are no more utility objects, attack the castle
+    if(!this.closestEnemyUtilityObj){
+      this.closestEnemyUtilityObj = this.enemyCastle;
+    }
+    //If there is no closestEnemyAttack unit, set it to be the closest utility object
+    if(!this.closestEnemyAttackUnit){
+      this.closestEnemyAttackUnit = this.closestEnemyUtilityObj;
+    }
+
+
 /*
     console.log("Attack group:");
     console.log(this.closestTargetAttackGroup);

@@ -396,8 +396,11 @@ getStructureInfo(buildingType){
       }
     }
     for(var i = 0; i < this.buildings.length; i++){
-      if(this.buildings[i].isDead()){
-        this.buildings[i].destroy();
+      let building = this.buildings[i];
+      if(building.isDead()){
+        building.destroy();
+        building.bar.destroy();
+
         this.buildings.splice(i,1);
         this.buildingsAmount--;
       }
