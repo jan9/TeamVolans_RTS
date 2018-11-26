@@ -15,7 +15,7 @@ class Level2 extends Phaser.Scene {
   create() {
     /*createUnitAnims(this);*/
 
-    this.scene.sendToBack('Level1');
+    //this.scene.sendToBack('Level1');
     this.map = this.add.tilemap('map2');
     var tileset =[this.map.addTilesetImage('BackgroundComplete', 'tiles')];
     this.map.createDynamicLayer("Layer1", tileset);
@@ -32,8 +32,7 @@ class Level2 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     // the parameter values hold true only for level 2 map
-    //_width*-0.125, _height*0.395
-    getMiniMap(this, _width*-0.125, _height*0.395, 375, 375, 0.085);
+    getMiniMap(this, _width*-0.125, _height*0.365, 375, 375, 0.085);
     //getMiniMap(this, -160, 260, 375, 375, 0.085);
 
     var cursors = this.input.keyboard.createCursorKeys();

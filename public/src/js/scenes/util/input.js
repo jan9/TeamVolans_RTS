@@ -5,7 +5,7 @@ var playerUnitSelected = [];
 function onObjectClicked(pointer,gameObject)
 {
   if(gameObject.isPlayerObj()){
-    
+
     //if a user is double click it is the new specific player selected (mainly used for heal)
     if(gameObject === selectedUnit && selectedUnit){
 
@@ -163,6 +163,15 @@ function dragSelect(scene, kingdom) {
   });
 }
 
+function homeButton(scene) {
+  // button for going back to the main menu
+  var homeButton = scene.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40).setDepth(25);
+  homeButton.setInteractive({useHandCursor:true});
+  homeButton.on('pointerdown', function() {
+    backToMainMenu = 1;
+    //scene.scene.start('Title');
+  }, scene);
+}
 
 function signalToStructName(signal){
 

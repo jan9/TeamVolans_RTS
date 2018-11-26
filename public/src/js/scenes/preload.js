@@ -1,3 +1,4 @@
+// Reference: https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/?a=13
 class Preload extends Phaser.Scene {
     constructor() {
         super({ key: 'Preload' });
@@ -103,18 +104,14 @@ class Preload extends Phaser.Scene {
       createHealthBarSprites(this);
 
       this.load.on('progress', function (value) {
-          console.log(value);
+          //console.log(value);
           progressBar.clear();
           progressBar.fillStyle(0x89AD81, 1);
           progressBar.fillRect(_width*0.375, _height*0.5, 300 * value, 30);
       });
 
-      this.load.on('fileprogress', function (file) {
-          console.log(file.src);
-      });
-
       this.load.on('complete', function () {
-          console.log('complete');
+          //console.log('complete');
           progressBar.destroy();
           progressBox.destroy();
           loadingText.destroy();

@@ -18,7 +18,7 @@ class Selection extends Phaser.Scene {
   }
 
   preload() {
-    
+
   }
 
   create() {
@@ -28,7 +28,7 @@ class Selection extends Phaser.Scene {
     // 0. load the background and button to go back to the main menu
     this.scene.setVisible(false,'gameHUD');
     this.add.image(400,300,'title_g');
-    this.homeButton();
+    homeButton(this);
     var box1 = this.add.image(_width*0.05, _height*0.05,'box').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
 
 
@@ -74,6 +74,11 @@ class Selection extends Phaser.Scene {
     }
 
   update() {
+    if (backToMainMenu === 1) {
+      backToMainMenu = 0;
+      this.scene.start('Title');
+    }
+
     currentLevel = 0;
     check_gameover = 0;
     currentData = "";
@@ -184,10 +189,5 @@ class Selection extends Phaser.Scene {
     }
   }
 
-  homeButton() {
-    // button for going back to the main menu
-    var homeButton = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
-    homeButton.setInteractive({useHandCursor:true});
-    homeButton.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
-  }
+
 }

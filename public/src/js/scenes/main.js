@@ -12,7 +12,7 @@ const config = {
   physics: {
     default: 'arcade'
   },
-  scene:[Preload, Title,Selection,Load,Instructions,Level1,Level2,Level3,Gameover,TestAI,gameHUD]
+  scene:[Preload,Title,Selection,Load,Level1,Level2,Level3,Gameover,Instructions,TestAI,gameHUD]
 }
 
 // create a game

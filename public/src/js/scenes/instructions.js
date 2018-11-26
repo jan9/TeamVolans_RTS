@@ -9,7 +9,7 @@ class Instructions extends Phaser.Scene {
 
   create() {
     this.add.image(_width/2.7,_height/2,'title_bg').setAlpha(0.8);
-    this.buttons();
+    homeButton(this);
     this.instruction_guide();
     console.log('[Instructions] create() complete');
   }
@@ -17,11 +17,10 @@ class Instructions extends Phaser.Scene {
   update() {
       currentLevel = 0;
       check_gameover = 0;
-  }
-  buttons() {
-    var button1 = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
-    button1.setInteractive({useHandCursor:true});
-    button1.on('pointerdown', function(pointer) {this.scene.start('Title');}, this);
+      if (backToMainMenu === 1) {
+        backToMainMenu = 0;
+        this.scene.start('Title');
+      }
   }
 
   instruction_guide() {

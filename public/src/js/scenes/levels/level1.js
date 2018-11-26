@@ -33,7 +33,7 @@ class Level1 extends Phaser.Scene {
 
   create() {
 
-    this.scene.sendToBack('Load');
+    //this.scene.sendToBack('Load');
     this.map = this.add.tilemap('map');
     var tileset =[this.map.addTilesetImage('Background1', 'tiles1'),
     this.map.addTilesetImage('Background2', 'tiles2'),
@@ -55,7 +55,7 @@ class Level1 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     // the parameter values hold true only for level 1 map
-    getMiniMap(this, _width*-0.125, _height*0.395, 400, 400, 0.125);
+    getMiniMap(this, _width*-0.125, _height*0.365, 400, 400, 0.125);
     //getMiniMap(this, -160, 260, 400, 400, 0.125);
 
     var cursors = this.input.keyboard.createCursorKeys();
@@ -208,13 +208,5 @@ class Level1 extends Phaser.Scene {
       console.log("[Level1] pointerInput() x,y: "+ x +","+y);
   },this);
   }
-
-  test() {
-  console.log("I'm in test! I heard 'pause' and paused the game");
-}
-
-test2() {
-  console.log("I'm in test2! I heard 'resume' and resumed the game");
-}
 
 }

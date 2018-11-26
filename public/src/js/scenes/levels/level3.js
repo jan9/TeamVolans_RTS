@@ -15,7 +15,7 @@ class Level3 extends Phaser.Scene {
     /*createUnitAnims(this);*/
 
 
-    this.scene.sendToBack('Level2');
+    //this.scene.sendToBack('Level2');
     this.map = this.add.tilemap('map3');
     var tileset =[this.map.addTilesetImage('BackgroundComplete', 'tiles')];
     this.map.createDynamicLayer("Tile Layer 1", tileset);
@@ -33,8 +33,7 @@ class Level3 extends Phaser.Scene {
     this.scene.bringToTop('gameHUD');
 
     // the parameter values hold true only for level 3 map
-    //_width*-0.125, _height*0.395
-    getMiniMap(this, _width*-0.125, _height*0.392, 375, 375, 0.065);
+    getMiniMap(this, _width*-0.125, _height*0.36, 375, 375, 0.065);
     //getMiniMap(this, -160, 260, 375, 375, 0.065);
 
     var cursors = this.input.keyboard.createCursorKeys();
@@ -176,14 +175,6 @@ class Level3 extends Phaser.Scene {
       y = Phaser.Math.RoundAwayFromZero(pointer.worldY);
       console.log("[Level1] pointerInput() x,y: "+ x +","+y);
   },this);
-  }
-
-  test() {
-  console.log("I'm in test! I heard 'pause' and paused the game");
-  }
-
-  test2() {
-  console.log("I'm in test2! I heard 'resume' and resumed the game");
   }
 
 }
