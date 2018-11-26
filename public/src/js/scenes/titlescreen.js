@@ -4,7 +4,7 @@ class Title extends Phaser.Scene {
   }
 
   preload() {
-    
+
   }
 
   create() {

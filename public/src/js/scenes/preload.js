@@ -6,7 +6,20 @@ class Preload extends Phaser.Scene {
 
     preload() {
       // "Preload" assets
-      this.load.image('loadingScreen','Graphics/screens/start_screen/loading.png');
+      var progressBar = this.add.graphics().setDepth(1);
+      var progressBox = this.add.graphics();
+      progressBox.fillStyle(0x89AD81, 0.4);
+      progressBox.fillRect(_width*0.375-10, _height*0.5-10, 320, 50);
+      var loadingText = this.make.text({
+          x: _width*0.5,
+          y: _height*0.5 - 50,
+          text: 'Loading...',
+          style: {
+              font: '35px Georgia',
+              fill: '#ffffff'
+          }
+      });
+      loadingText.setOrigin(0.5, 0.5);
 
       //common assets that appear multiple times
       this.load.image('mainmenuButton', 'Graphics/screens/start_screen/buttons/Button_MainMenu.png');
@@ -89,10 +102,27 @@ class Preload extends Phaser.Scene {
       createStructureSprites(this); // found in scenes/util/createSpriteImages.js
       createHealthBarSprites(this);
 
+      this.load.on('progress', function (value) {
+          console.log(value);
+          progressBar.clear();
+          progressBar.fillStyle(0x89AD81, 1);
+          progressBar.fillRect(_width*0.375, _height*0.5, 300 * value, 30);
+      });
+
+      this.load.on('fileprogress', function (file) {
+          console.log(file.src);
+      });
+
+      this.load.on('complete', function () {
+          console.log('complete');
+          progressBar.destroy();
+          progressBox.destroy();
+          loadingText.destroy();
+      });
+
     }
 
     create() {
-      this.add.image(0,0,'loadingScreen').setOrigin(0,0).setDisplaySize(_width,_height);
       createUnitAnims(this);
       this.scene.start('Title');
       console.log("[Preload] Finished Loading Game Assets");
