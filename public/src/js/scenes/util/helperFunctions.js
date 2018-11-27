@@ -1,4 +1,9 @@
-
+function onTenMinutesUp() {
+    // stop the timer and set time to 0
+    console.log("Time is up!");
+    readableTime = 0;
+    timeElapsed = 0;
+}
 //calculates the time
 function calculateTime(seconds){
 
@@ -13,6 +18,7 @@ function calculateTime(seconds){
 
   //takes the seconds leftover from getting minutes and this is how many seconds elapsed
   var secondsUpdated = Math.round(timeLeft % 60);
+  if(secondsUpdated === 60) {minutes++; secondsUpdated = "00";};
 
   //creates the string to display the time
   var timeString = minutes+"M:"+secondsUpdated+"S";
@@ -118,11 +124,6 @@ function overlapOccurred(unit1, unit2){
 
 function getMiniMap(scene, camX, camY, width, height, zoom) {
   scene.minimap = scene.cameras.add(camX, camY, width, height).setZoom(zoom).setName('minimap');
-}
-
-function getTime() {
-  var time = Math.round((pauseStartTime - gameStartTime)/1000);
-  return time;
 }
 
 function timeStamp() {

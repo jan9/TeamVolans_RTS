@@ -9,12 +9,9 @@ class Level2 extends Phaser.Scene {
   }
 
   preload() {
-
   }
 
   create() {
-    /*createUnitAnims(this);*/
-
     //this.scene.sendToBack('Level1');
     this.map = this.add.tilemap('map2');
     var tileset =[this.map.addTilesetImage('BackgroundComplete', 'tiles')];
@@ -55,6 +52,7 @@ class Level2 extends Phaser.Scene {
         maxSpeed: 0.6
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+
     currentData = "";
     if (loadingSavedGame === true) {
       switch(loadinglevel) {
@@ -123,7 +121,6 @@ class Level2 extends Phaser.Scene {
     playerWon = false;
     currentLevel = 2;
     goto = 'Level3';
-    gameStartTime = Date.now();
     if (loadingSavedGame === true) {
       player.gold = currentData.gold;
       player.unitAmount = currentData.unitAmount;
@@ -135,12 +132,18 @@ class Level2 extends Phaser.Scene {
     this.pointerInput();
 
     this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
+
+    // set up a 10 minute timer
+    timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp, [], this);
+    timeElapsed = timer.getElapsedSeconds();
+
     console.log('[Level2] create() complete');
   }
 
 
   update(delta) {
       controls.update(delta);
+
     // randomly assign different AI?
     if (backToMainMenu === 1 && currentLevel === 2) {
       backToMainMenu = 0;
@@ -148,6 +151,10 @@ class Level2 extends Phaser.Scene {
     } else if (check_gameover === 1) {
       check_gameover = 0;
       this.scene.start('Gameover');
+    }
+
+    if (timeElapsed === _timeLimit_s) {
+      this.scene.pause();
     }
 
     ai.updateAIKingdom(player);
@@ -160,23 +167,19 @@ class Level2 extends Phaser.Scene {
   }
 
   pauseGame() {
-  pauseStartTime = Date.now();
-  if (gamePaused === true) {
-    this.resume();
-    console.log("game resumed");
-  }
-  else {
     gamePaused = true;
+    timer.paused = true;
     this.pause();
     console.log("game paused");
+    pauseStartTime = timer.getElapsedSeconds();
   }
-}
+
 pointerInput() {
   this.input.on('pointerdown', function(pointer) {
     var structureInfo;
     x = Phaser.Math.RoundAwayFromZero(pointer.worldX);
     y = Phaser.Math.RoundAwayFromZero(pointer.worldY);
-    console.log("[Level1] pointerInput() x,y: "+ x +","+y);
-},this);
-}
+    console.log("[Level2] pointerInput() x,y: "+ x +","+y);
+  },this);
+  }
 }

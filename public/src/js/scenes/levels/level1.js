@@ -27,12 +27,9 @@ class Level1 extends Phaser.Scene {
   }
 
   preload() {
-
-
   }
 
   create() {
-
     //this.scene.sendToBack('Load');
     this.map = this.add.tilemap('map');
     var tileset =[this.map.addTilesetImage('Background1', 'tiles1'),
@@ -78,6 +75,7 @@ class Level1 extends Phaser.Scene {
         maxSpeed: 0.6
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+
     currentData = "";
     if (loadingSavedGame === true) {
       switch(loadinglevel) {
@@ -108,8 +106,7 @@ class Level1 extends Phaser.Scene {
     if (loadingSavedGame === true) {
       startingObjects = currentData.objects;
     }
-    //localStorage.setItem('level1Data', JSON.stringify(data));
-    //console.log(startingObjects);
+
     // set up the player kingdom
     console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
@@ -145,7 +142,6 @@ class Level1 extends Phaser.Scene {
     playerWon = false;
     currentLevel = 1;
     goto = 'Level2';
-    gameStartTime = Date.now();
     if (loadingSavedGame === true) {
       player.gold = currentData.gold;
       player.unitAmount = currentData.unitAmount;
@@ -157,14 +153,17 @@ class Level1 extends Phaser.Scene {
     this.pointerInput();
 
     this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
+
+    // set up a 10 minute timer
+    timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp, [], this);
+    timeElapsed = timer.getElapsedSeconds();
+
     console.log('[Level1] create() complete');
   }
 
 
-
   update(delta) {
     controls.update(delta);
-
 
     if (backToMainMenu === 1 && currentLevel === 1) {
       backToMainMenu = 0;
@@ -174,31 +173,26 @@ class Level1 extends Phaser.Scene {
       this.scene.start('Gameover');
     }
 
-
+    if (timeElapsed === _timeLimit_s) {
+      this.scene.pause();
+    }
 
     ai.updateAIKingdom(player);
     player.updatePlayerKingdom(player);
-
   }
 
-    //updates the target list of the ai (done every 10 seconds)
-    aiUpdate(){
-      ai.updateCurrentTargetList(player);
-    }
+  //updates the target list of the ai (done every 10 seconds)
+  aiUpdate(){
+    ai.updateCurrentTargetList(player);
+  }
 
   pauseGame() {
-  pauseStartTime = Date.now();
-  if (gamePaused === true) {
-    this.resume();
-    console.log("game resumed");
-  }
-  else {
     gamePaused = true;
+    timer.paused = true;
     this.pause();
     console.log("game paused");
+    pauseStartTime = timer.getElapsedSeconds();
   }
-}
-
 
   pointerInput() {
     this.input.on('pointerdown', function(pointer) {
@@ -208,5 +202,4 @@ class Level1 extends Phaser.Scene {
       console.log("[Level1] pointerInput() x,y: "+ x +","+y);
   },this);
   }
-
 }

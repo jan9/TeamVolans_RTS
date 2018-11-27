@@ -12,9 +12,6 @@ class Level3 extends Phaser.Scene {
   }
 
   create() {
-    /*createUnitAnims(this);*/
-
-
     //this.scene.sendToBack('Level2');
     this.map = this.add.tilemap('map3');
     var tileset =[this.map.addTilesetImage('BackgroundComplete', 'tiles')];
@@ -122,7 +119,6 @@ class Level3 extends Phaser.Scene {
 
     playerWon = false;
     currentLevel = 3;
-    gameStartTime = Date.now();
     if (loadingSavedGame === true) {
       player.gold = currentData.gold;
       player.unitAmount = currentData.unitAmount;
@@ -132,12 +128,19 @@ class Level3 extends Phaser.Scene {
 
     dragSelect(this, player);
     this.pointerInput();
+
     this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
+
+    // set up a 10 minute timer
+    timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp(this), [], this);
+    timeElapsed = timer.getElapsedSeconds();
+
     console.log('[Level3] create() complete');
   }
 
   update(delta) {
-      controls.update(delta);
+    controls.update(delta);
+
     // randomly assign different AI?
     if (backToMainMenu === 1 && currentLevel === 3) {
       backToMainMenu = 0;
@@ -147,25 +150,25 @@ class Level3 extends Phaser.Scene {
       this.scene.start('Gameover');
     }
 
-      ai.updateAIKingdom(player);
-      player.updatePlayerKingdom(player);
+    if (timeElapsed === _timeLimit_s) {
+      this.scene.pause();
+    }
+
+    ai.updateAIKingdom(player);
+    player.updatePlayerKingdom(player);
   }
+
   //updates the target list of the ai (done every 10 seconds)
   aiUpdate(){
     ai.updateCurrentTargetList(player);
   }
 
   pauseGame() {
-  pauseStartTime = Date.now();
-  if (gamePaused === true) {
-    this.resume();
-    console.log("game resumed");
-  }
-  else {
     gamePaused = true;
+    timer.paused = true;
     this.pause();
     console.log("game paused");
-    }
+    pauseStartTime = timer.getElapsedSeconds();
   }
 
   pointerInput() {
@@ -173,7 +176,7 @@ class Level3 extends Phaser.Scene {
       var structureInfo;
       x = Phaser.Math.RoundAwayFromZero(pointer.worldX);
       y = Phaser.Math.RoundAwayFromZero(pointer.worldY);
-      console.log("[Level1] pointerInput() x,y: "+ x +","+y);
+      console.log("[Level3] pointerInput() x,y: "+ x +","+y);
   },this);
   }
 

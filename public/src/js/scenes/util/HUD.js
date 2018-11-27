@@ -1,6 +1,5 @@
 var currentTime,
     currentLevel;
-var gameStartTime;
 var playerWon;
 var textLevelX;
 var goto;
@@ -15,6 +14,7 @@ var buttons = [];
 var optionClicked = "none";
 var gamePaused, pauseStartTime, pauseEndTime;
 var pauseButton, pauseMenuBox, pauseCloseButton, yesButton, noButton;
+var timer, timeElapsed;
 
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
@@ -24,7 +24,6 @@ class gameHUD extends Phaser.Scene {
   }
 
   preload() {
-    
   }
 
   create() {
@@ -49,17 +48,20 @@ class gameHUD extends Phaser.Scene {
    displayGold = this.add.text(600,17,'CURRENT GOLD: ');
 
    displayPop = this.add.text(850,17,'POPULATION: ');
+
    gameMessage = this.add.text(3, 53, '');
   // gameMessage.setText('');
-  this.pauseBox();
-     }
+
+    this.pauseBox();
+  }
 
   update() {
-    var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
+    // set up a 10 minute timer
+    timeElapsed = timer.getElapsedSeconds();
+    //var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
     var readableTime = calculateTime(timeElapsed);
+    //console.log("[HUD] readableTime", timeElapsed);
     if (gamePaused === true) {
-      pauseStartTime;
-      //console.log(pauseStartTime);
       this.pauseBox_shown();
     } else if (gamePaused === false) {
       this.pauseBox_notShown();
@@ -69,40 +71,43 @@ class gameHUD extends Phaser.Scene {
       currentTime.setText('CURRENT TIME: ' + readableTime);
     }
 
+    this.checkGameState();
+
     // current gold and population
     displayGold.setText('CURRENT GOLD: ' + player.gold);
     displayPop.setText('POPULATION: ' + getPopulation(currentPopulation, player));
+  }
 
-
-    //build_signal = 0;
-/* TODO: 'not enough gold' message
-    image1 = this.add.image(_width*0.5, _height*0.2,'lackOfGold').setAlpha(0);
-    if (build_signal === -1 && image1.alpha === 0) {
-      timedEvent = this.time.delayedCall(3000, this.onEvent(), [], this);
+  checkGameState() {
+    // 1. If game has reached time limit
+    if(timeElapsed === _timeLimit_s){ //600 = 10 minute
+      playerWon = calculateWinner(player, ai);
+      if (playerWon === true) {
+        var image2 = this.add.sprite(_width*0.5, _height*0.5,'win');
+      }
+      if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
+        this.button_goToLevelX(goto);
+      } else if (playerWon === false) {
+        check_gameover = 1;
+      }
     }
-    if (build_signal === 0 && image1.alpha != 0) {
-      image1.setAlpha(0);
-    }
-*/
-    // stop the 10 minute timer
-    //if(gameOver(timeElapsed)){
-    if(timeElapsed === 600){ //600 = 10 minute
-      currentTime = 0;
-      readableTime = 0;
-      timeElapsed = 0;
-
-    playerWon = calculateWinner(player, ai);
-    if (playerWon === true) {
-      var image2 = this.add.sprite(_width*0.5, _height*0.5,'win');
-    }
-
-    if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
-      this.button_goToLevelX(goto);
-    } else if (playerWon === false) {
-      check_gameover = 1;
+    // 2. If game hasn't reached time limit
+    else {
+      var castleCount;
+      for(var i = 0; i < player.buildings.length; i++){
+        if(player.buildings[i].type === "Castle"){
+          castleCount++;
+        }
+      }
+      if (getPopulation(currentPopulation, player) === 0 ) {  // if num of units is 0
+        playerWon = false; check_gameover = 1;
+      } else if (player.buildings.length === 0) { // if num of buildings is 0
+        playerWon = false; check_gameover = 1;
+      } else if (castleCount === 0){  // if num of castles is 0
+        playerWon = false; check_gameover = 1;
+      }
     }
   }
-}
 
   pauseBox_shown() {
     pauseMenuBox.setVisible(true);
@@ -132,7 +137,8 @@ class gameHUD extends Phaser.Scene {
   pauseCloseButton.on('pointerdown', function(pointer) {
     pauseBoxText.setText("");
     gamePaused = false;
-    pauseEndTime = Date.now();
+    timer.paused = false;
+    pauseEndTime = timer.getElapsedSeconds();
     this.scene.resume('Level1');
     this.scene.resume('Level2');
     this.scene.resume('Level3');
@@ -142,7 +148,8 @@ class gameHUD extends Phaser.Scene {
   noButton.on('pointerdown', function(pointer) {
     pauseBoxText.setText("");
     gamePaused = false;
-    pauseEndTime = Date.now();
+    timer.paused = false;
+    pauseEndTime = timer.getElapsedSeconds();
     this.scene.resume('Level1');
     this.scene.resume('Level2');
     this.scene.resume('Level3');
@@ -341,7 +348,10 @@ class gameHUD extends Phaser.Scene {
 
     buttonToLevelX.setInteractive({useHandCursor:true});
     if(goto != ""){
-    buttonToLevelX.on('pointerdown', function(pointer) {this.scene.start(goto);}, this);
+      buttonToLevelX.on('pointerdown', function(pointer) {
+        this.scene.remove('Level'+currentLevel.toString());
+        this.scene.start(goto);
+      }, this);
     }
   }
 
