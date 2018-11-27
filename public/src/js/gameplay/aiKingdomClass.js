@@ -140,27 +140,21 @@ class AIKingdom extends Kingdom{
     var coordinateChange = this.attackArea(attackUnit);
 
     if(attackUnit.getType() !== "Priest"){
-      if((attackUnit.getType() === "Archer" || attackUnit.getType() === "Catapult" ) &&
+    /*  if((attackUnit.getType() === "Archer" || attackUnit.getType() === "Catapult" ) &&
       distance(currentTarget.x, currentTarget.y, attackUnit.x, attackUnit.y) <= _attackRangeTwo){
-          attackUnit.attackEnemy(currentTarget);
+        attackUnit.playerStopMovement();
+        attackUnit.attackEnemy(currentTarget);
       }
       else if(attackUnit.getType() === "Swordsman" && distance(currentTarget.x, currentTarget.y, attackUnit.x, attackUnit.y) <= _attackRangeOne){
+          attackUnit.playerStopMovement();
           attackUnit.attackEnemy(currentTarget);
-      }
-      else{
+      }*/
         attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Attack", "target": currentTarget});
-      }
     }
     else{
-      if(distance(currentTarget.x, currentTarget.y, attackUnit.x, attackUnit.y) < _attackRangeTwo){
-        let injuredUnit = attackUnit.closestInjured(this.units);
-        attackUnit.healUnit(injuredUnit);
-      }
-      else{
         attackUnit.move(currentTarget.x+coordinateChange.x, currentTarget.y+coordinateChange.y, this.game, {"name": "Heal", "kingdom": this});
-      }
-    }
   }
+}
 
 
   //checks whether or not th especified unit is in a group

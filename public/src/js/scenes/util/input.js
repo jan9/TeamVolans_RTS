@@ -49,6 +49,7 @@ function onObjectClicked(pointer,gameObject)
     if(aiObjectSelected){
     aiObjectSelected.tint = 0xFFFFFF;
     }
+    console.log(gameObject);
     //update which unit is selected and the tint
     aiObjectSelected = gameObject;
     aiObjectSelected.tint = 0xFF0000;

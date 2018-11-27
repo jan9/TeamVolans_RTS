@@ -64,7 +64,9 @@ var catapultShootSFrames = [9, 14, 19];
 
 var unitSprites = ['archer', 'archer_rev', 'catapult', 'catapult_rev', 'priest', 'priest_rev',
 'villager', 'villager_rev', 'royalty', 'royalty_rev',
-'swordsman', 'swordsman_rev', 'miner', 'miner_rev'];
+'swordsman', 'swordsman_rev', 'miner', 'miner_rev', 'archer_enemy', 'archer_rev_enemy', 'catapult_enemy', 'catapult_rev_enemy', 'priest_enemy', 'priest_rev_enemy',
+'villager_enemy', 'villager_rev_enemy', 'royalty_enemy', 'royalty_rev_enemy',
+'swordsman_enemy', 'swordsman_rev_enemy', 'miner_enemy', 'miner_rev_enemy'];
 const directionsList = ["N", "NE", "E", "SE"];
 const revDirections = ["SW", "W", "NW", "S"];
 
@@ -145,6 +147,12 @@ function createStructureSprites(scene){
 
 //factory method to easily create the unit animations
 function createAnim(newKeyName, originalKey, framesArr, scene){
+
+  //remove enemy from the framesarr (enemy has same frames as player)
+  //CITATION: Used following resource to learn about replace:
+  //https://www.w3schools.com/jsref/jsref_replace.asp
+  framesArr = framesArr.replace("_enemy", "");
+
   scene.anims.create(
     {
              key: newKeyName,

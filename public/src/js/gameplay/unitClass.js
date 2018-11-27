@@ -19,10 +19,8 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     this.setInteractive();
 
-    //used for keeping track of the amount of time the unit has been in its state
-    //(to ensure player can't game the system by something like
-    //going mine -> move -> mine -> move, and getting multiple mine events for 1 miner within 30 seconds)
-    this.stateLength;
+    //Used for keeping track of which state this is -> each time the state changes this number increments
+    this.stateNum = 0;
 
     //used to have the unit be in front of buildings
     this.depth = 1;
@@ -52,7 +50,15 @@ class Unit extends Phaser.GameObjects.Sprite{
     //add the unit to the game scene (so it will actually show up on the screen)
     this.scene.add.existing(this);
 
+    this.updateTexture();
+
 }
+
+  updateTexture(){
+    if(!this.isPlayerObj()){
+      this.setTexture(this.type.toLowerCase()+"_enemy");
+    }
+  }
   isPlayerObj(){
     return this.isPlayerObject;
   }
@@ -115,7 +121,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   //lets the state be set
   setState(state){
-    this.stateLength = Date.now();
+    this.stateNum++;
     this.state = state;
   }
 
@@ -130,25 +136,28 @@ class Unit extends Phaser.GameObjects.Sprite{
           this.setState("Heal");
           this.unitAnimations("Action");
           var healEvent = this.scene.time.addEvent({ delay: 3*1000, callback: this.endHealUnit,
-            callbackScope: this, loop: false, args: [unitToHeal] });
+            callbackScope: this, loop: false, args: [unitToHeal, this.stateNum] });
         }
       }
   }
 }
 
-    endHealUnit(unitToHeal){
+    endHealUnit(unitToHeal, originalStateNum){
 
-      if(this && unitToHeal){
-        //if unit  to heal is already dead then set state to idle
-        if(this.getState() === "Heal" && unitToHeal.isDead()){
-          this.setState("Idle");
-          this.anims.stop();
-        }
-        //otherwise if the healing unit isn't dead and the state is still heal, then heal the unit
-        else if (this.getState() === "Heal" && !this.isDead()){
-          unitToHeal.updateHealth(this.getAttack());
-          this.setState("Idle");
-          this.anims.stop();
+
+        if(this && unitToHeal){
+          if(this.stateNum == originalStateNum){
+            //if unit  to heal is already dead then set state to idle
+            if(this.getState() === "Heal" && unitToHeal.isDead()){
+              this.setState("Idle");
+              this.anims.stop();
+            }
+            //otherwise if the healing unit isn't dead and the state is still heal, then heal the unit
+            else if (this.getState() === "Heal" && !this.isDead()){
+              unitToHeal.updateHealth(this.getAttack());
+              this.setState("Idle");
+              this.anims.stop();
+            }
         }
       }
     }
@@ -175,10 +184,16 @@ class Unit extends Phaser.GameObjects.Sprite{
         game.physics.moveTo(this.bar, xLocation, yLocation-25, 1, (unitDistanceToMove*10));
 
         var moveEvent = game.time.addEvent({ delay: (unitDistanceToMove*10), callback: this.stopMovement,
-          callbackScope: this, loop: false, args: [xLocation, yLocation, action] });
+          callbackScope: this, loop: false, args: [xLocation, yLocation, action, this.stateNum] });
       }
   }
   unitAnimations(typeOfAnim){
+
+    let enemy = "";
+
+    if(!this.isPlayerObj()){
+      enemy = "_enemy";
+    }
 
     var direction = "";
 
@@ -198,17 +213,17 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
 
     if(direction === "S" && typeOfAnim === "Walk"){
-      this.setTexture(this.type.toLowerCase());
-      this.anims.play(this.type.toLowerCase()+typeOfAnim+direction);
+      this.setTexture(this.type.toLowerCase()+enemy);
+      this.anims.play(this.type.toLowerCase()+enemy+typeOfAnim+direction);
     }
     else if(direction === "SW" || direction === "W" || direction === "NW"
     || direction === "S"){
-      this.setTexture(this.type.toLowerCase()+"_rev");
-      this.anims.play(this.type.toLowerCase()+"_rev"+typeOfAnim+direction);
+      this.setTexture(this.type.toLowerCase()+"_rev"+enemy);
+      this.anims.play(this.type.toLowerCase()+"_rev"+enemy+typeOfAnim+direction);
     }
     else{
-      this.setTexture(this.type.toLowerCase());
-      this.anims.play(this.type.toLowerCase()+typeOfAnim+direction);
+      this.setTexture(this.type.toLowerCase()+enemy);
+      this.anims.play(this.type.toLowerCase()+enemy+typeOfAnim+direction);
     }
   }
 
@@ -229,20 +244,28 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
   }
   //stops the unit's movement and sets the state to idle
-  stopMovement(destinationX, destinationY, action){
+  stopMovement(destinationX, destinationY, action, originalStateNum){
 
     let radius = 16;
-    if((this.x-radius < this.destinationX && this.x+radius > this.destinationX) && (this.y-radius < this.destinationY && this.y+radius > this.destinationY)){
-      this.body.velocity.x = 0;
-      this.body.velocity.y = 0;
-      this.bar.body.velocity.x=0;
-      this.bar.body.velocity.y=0;
+    if(this.stateNum == originalStateNum){
 
-      this.setState("Idle");
-      this.anims.stop();
+      //if the unit is within a certain radius/variance, stop the unit
+      if((this.x-radius < this.destinationX && this.x+radius > this.destinationX) && (this.y-radius < this.destinationY && this.y+radius > this.destinationY)){
 
-      if(action){
-        this.takeAction(action);
+        //sets the velocity for both the unit and the healthbar to 0
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        this.bar.body.velocity.x=0;
+        this.bar.body.velocity.y=0;
+
+        //set the unit state to idle and stop the walk animation
+        this.setState("Idle");
+        this.anims.stop();
+
+        //if an action was listed, take that action
+        if(action){
+          this.takeAction(action);
+        }
       }
     }
   }
@@ -287,17 +310,17 @@ class Unit extends Phaser.GameObjects.Sprite{
 
         //builds the structure in 30 seconds
       var buildingEvent = game.time.addEvent({ delay: 30000, callback: this.finishBuildStructure,
-        callbackScope: this, loop: false, args: [buildingInfo, kingdom, game] });
+        callbackScope: this, loop: false, args: [buildingInfo, kingdom, game, this.stateNum] });
       }
     }
   }
 
 
   //finished building the structure. occurs 30 seconds after start
-  finishBuildStructure(buildingInfo, kingdom, game){
+  finishBuildStructure(buildingInfo, kingdom, game, originalStateNum){
 
     //if unit is still alive and still has their state set to build and the building they are building hasn't changed, build the building
-    if(this.getState() === "Build" && !this.isDead()){
+    if(this.getState() === "Build" && !this.isDead() && this.stateNum == originalStateNum){
 
       let coordinates;
 
@@ -309,7 +332,7 @@ class Unit extends Phaser.GameObjects.Sprite{
      }
 
 
-      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, kingdom.isPlayer());
+      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, this.isPlayerObj());
 
       //add the structure to the Group
       kingdom.add(structure);
@@ -373,16 +396,16 @@ class Unit extends Phaser.GameObjects.Sprite{
       //TIMER INFO
       //https://phaser.io/phaser3/devlog/87
       var miningEvent = game.time.addEvent({ delay: 30000, callback: this.mineGold,
-        callbackScope: this, loop: false, args: [kingdom]});
+        callbackScope: this, loop: false, args: [kingdom, this.stateNum]});
     }
   }
 }
 
   //callback function after 30 seconds elapses to give the kingdom the mined gold
-  mineGold(kingdom){
+  mineGold(kingdom, originalStateNum){
 
-    //check to make sure the unit is still alive
-    if(!this.isDead()){
+    //check to make sure the unit is still alive and the state is the same
+    if(!this.isDead() && this.stateNum == originalStateNum){
 
       //check to make sure the unit is still meant to be mining and still in the mine
       if(this.getState() === "Mine" && this.isInMine(kingdom)){
@@ -398,12 +421,6 @@ class Unit extends Phaser.GameObjects.Sprite{
         }
       }
     }
-  }
-
-
-  basicAttack(enemyKingdom){
-    var enemy = findClosestUnit(enemyKingdom.units);
-    this.move(enemy.x-32, enemy.y-32, this.scene, {"name": "Attack", "target": enemy});
   }
 
 
@@ -461,32 +478,37 @@ class Unit extends Phaser.GameObjects.Sprite{
 
           //the actual attack takes 3 seconds to account for the animation playing
           var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
-            callbackScope: this, loop: false, args: [attackedUnit] });
+            callbackScope: this, loop: false, args: [attackedUnit, this.stateNum] });
         }
       }
     }
   }
 
   //attack the enemy
-  //heal the ally
-  attackEnemyEnd(attackedUnit){
+  attackEnemyEnd(attackedUnit, originalStateNum){
 
-    //set state to idle and stop the attack animation
-    this.setState("Idle");
-    this.anims.stop();
+    if(this.stateNum == originalStateNum){
+      //set state to idle and stop the attack animation
+      this.setState("Idle");
+      this.anims.stop();
 
-    if(attackedUnit){
-    if(!this.isDead() && !attackedUnit.isDead()){
+      if(attackedUnit){
+        if(!this.isDead() && !attackedUnit.isDead()){
 
-      //unit has 50% chance of attack landing a hit
-      var chance = Math.floor(Math.random() * 2) + 1;
+          //unit has 50% chance of attack landing a hit
+          var chance = Math.floor(Math.random() * 2) + 1;
 
-      if(chance % 2 == 0 ){
-        attackedUnit.updateHealth(this.getAttack());
+          if(chance % 2 == 0 ){
+            attackedUnit.updateHealth(this.getAttack());
+          }
+
+          //if the unit is not dead, attack it again
+          if(!attackedUnit.isDead()){
+            this.attackEnemy(attackedUnit);
+          }
+        }
       }
     }
-}
-
   }
 
 
@@ -572,13 +594,13 @@ class Unit extends Phaser.GameObjects.Sprite{
       this.unitAnimations("Action");
       //every 30 seconds the royal adds to the health of the castle
       var royalEvent = kingdom.game.time.addEvent({ delay: 30*1000, callback: this.endRoyalBonus,
-        callbackScope: this, loop: true, args: [castle, kingdom] });
+        callbackScope: this, loop: true, args: [castle, kingdom, this.stateNum] });
       }
   }
 
-  endRoyalBonus(castle, kingdom){
+  endRoyalBonus(castle, kingdom, originalStateNum){
 
-    if(this.isInCastle(kingdom) === castle && this.getState() === "Train"){
+    if(this.isInCastle(kingdom) === castle && this.getState() === "Train" && this.stateNum == originalStateNum){
       castle.updateHealth(5);
     }
   }
