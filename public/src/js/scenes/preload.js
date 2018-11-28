@@ -2,7 +2,6 @@
 class Preload extends Phaser.Scene {
     constructor() {
         super({ key: 'Preload' });
-
     }
 
     preload() {
@@ -32,6 +31,7 @@ class Preload extends Phaser.Scene {
       this.load.image('startButton','Graphics/screens/start_screen/buttons/StartScreen_Start.png');
       this.load.image('howtoplayButton','Graphics/screens/start_screen/buttons/Button_HowtoPlay.png');
       this.load.image('loadButton', 'Graphics/screens/start_screen/buttons/StartScreen_Load.png');
+      this.load.image('quitButton', 'Graphics/screens/start_screen/buttons/StartScreen_Quit.png');
       this.load.image('button', 'Graphics/UI/button/button1.png');  // for AI testing
 
       // "Selection" assets
@@ -51,8 +51,11 @@ class Preload extends Phaser.Scene {
       this.load.image('title_bg','Graphics/screens/start_screen/StartScreen_NoBox.png');
 
       // "gameHUD" assets
-      this.load.image('win','Graphics/UI/WIN.png');
+      this.load.image('win','Graphics/UI/You-won.png');
+      this.load.image('levelComplete','Graphics/UI/Level-Complete.png');
+      this.load.image('victory','Graphics/UI/victory.png');
       this.load.image('lackOfGold','Graphics/UI/Not-Enough-Gold.png');
+
       this.load.image('button_mine','Graphics/UI/buildButtons/1.png');
       this.load.image('button_archeryRange','Graphics/UI/buildButtons/2.png');
       this.load.image('button_townCenter','Graphics/UI/buildButtons/3.png');
@@ -116,7 +119,6 @@ class Preload extends Phaser.Scene {
           progressBox.destroy();
           loadingText.destroy();
       });
-
     }
 
     create() {

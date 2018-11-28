@@ -22,8 +22,11 @@ class Level2 extends Phaser.Scene {
     // sets a boundary for main camera
     this.cameras.main.setBounds(-100, -100, this.map.widthInPixels+200, this.map.heightInPixels+200);
     this.cameras.main.centerOn(_width*1.2, _height*2.75);
-    this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
+    //Set y to -24 to account for the healthbar (it's atop every unit so they all can't get further than it)
+    this.physics.world.setBounds(0, -24, this.map.widthInPixels, this.map.heightInPixels);
+
+    currentLevel = 2;
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
@@ -53,6 +56,10 @@ class Level2 extends Phaser.Scene {
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+    // Random assignment of the AI kingdom
+    value = Phaser.Math.Between(0, 4);  // Phaser's random number generator
+    opponentKingdom = kingdomPool[value];
+
     currentData = "";
     if (loadingSavedGame === true) {
       switch(loadinglevel) {
@@ -69,12 +76,11 @@ class Level2 extends Phaser.Scene {
       gameMode.name = currentData.gameMode;
       kingdomSelection.name = currentData.kingdomName;
       opponentKingdom = currentData.enemyKingdomName;
-
     }
 
 
     // checking to have received correct data
-    console.log(gameMode.name);
+    //console.log(gameMode.name);
     let hardMode = false;
     if(gameMode.name === "hard"){
       hardMode = true;
@@ -86,7 +92,7 @@ class Level2 extends Phaser.Scene {
     }
 
     // set up the player kingdom
-    console.log(kingdomSelection.name);
+    //console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
       player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     } else if (kingdomSelection.name === "Equal Empire") {
@@ -101,7 +107,7 @@ class Level2 extends Phaser.Scene {
 
 
     // set up the ai kingdom
-    console.log(opponentKingdom);
+    //console.log(opponentKingdom);
     if (opponentKingdom === "Dueling Dominion") {
       ai = new AIKingdom(duelingDominionInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Equal Empire") {
@@ -119,7 +125,6 @@ class Level2 extends Phaser.Scene {
     callbackScope: this, loop: true, args: [] });
 
     playerWon = false;
-    currentLevel = 2;
     goto = 'Level3';
     if (loadingSavedGame === true) {
       player.gold = currentData.gold;
@@ -133,9 +138,13 @@ class Level2 extends Phaser.Scene {
 
     this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
 
+    if (loadingSavedGame === true) {
+      _timeLimit_s -= currentData.currentGameTime;
+      _timeLimit_ms = _timeLimit_s*1000;
+      //console.log(_timeLimit_s, _timeLimit_ms);
+    }
     // set up a 10 minute timer
     timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp, [], this);
-    timeElapsed = timer.getElapsedSeconds();
 
     console.log('[Level2] create() complete');
   }
@@ -157,6 +166,14 @@ class Level2 extends Phaser.Scene {
       this.scene.pause();
     }
 
+    if (pausedBeforeQuit === 1) {
+      gamePaused = true;
+      pauseStartTime = timer.getElapsedSeconds();
+      timer.paused = true;
+      this.scene.pause();
+      console.log("game paused");
+    }
+
     ai.updateAIKingdom(player);
     player.updatePlayerKingdom(ai);
   }
@@ -168,10 +185,10 @@ class Level2 extends Phaser.Scene {
 
   pauseGame() {
     gamePaused = true;
+    pauseStartTime = timer.getElapsedSeconds();
     timer.paused = true;
     this.pause();
     console.log("game paused");
-    pauseStartTime = timer.getElapsedSeconds();
   }
 
 pointerInput() {

@@ -686,11 +686,6 @@
     <property name="isMine" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="8" name="Gold_3" x="1055" y="641" width="96" height="96">
-   <properties>
-    <property name="isMine" type="bool" value="false"/>
-   </properties>
-  </object>
   <object id="9" name="Player_Gold_1" x="226" y="1343" width="96" height="96">
    <properties>
     <property name="isMine" type="bool" value="false"/>

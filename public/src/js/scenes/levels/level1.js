@@ -2,15 +2,6 @@
     Level 1
 */
 // global variables
-
-/*
-Use below code to disable menu coming up on right-click
-CITATION: Code from the following stack overflow answer: https://stackoverflow.com/questions/737022/how-do-i-disable-right-click-on-my-web-page
-document.addEventListener("contextmenu", function(e){
-    e.preventDefault();
-}, false);
-*/
-
 var x;
 var y;
 var pointer;
@@ -50,6 +41,7 @@ class Level1 extends Phaser.Scene {
     //Set y to -24 to account for the healthbar (it's atop every unit so they all can't get further than it)
     this.physics.world.setBounds(0, -24, this.map.widthInPixels, this.map.heightInPixels);
 
+    currentLevel = 1;
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
     this.scene.bringToTop('gameHUD');
@@ -98,7 +90,7 @@ class Level1 extends Phaser.Scene {
     }
 
     // checking to have received correct data
-    console.log(gameMode.name);
+    //console.log(gameMode.name);
     let hardMode = false;
     if(gameMode.name === "hard"){
       hardMode = true;
@@ -111,7 +103,7 @@ class Level1 extends Phaser.Scene {
     }
 
     // set up the player kingdom
-    console.log(kingdomSelection.name);
+    //console.log(kingdomSelection.name);
     if (kingdomSelection.name === "Dueling Dominion") {
       player = new Kingdom(duelingDominionInfo, _width*0.9, _height*0.9, true, this, startingObjects);
     } else if (kingdomSelection.name === "Equal Empire") {
@@ -125,7 +117,7 @@ class Level1 extends Phaser.Scene {
     };
 
     // set up the ai kingdom
-    console.log(opponentKingdom);
+    //console.log(opponentKingdom);
     if (opponentKingdom === "Dueling Dominion") {
       ai = new AIKingdom(duelingDominionInfo, 50, 50, this, startingObjects, hardMode);
     } else if (opponentKingdom === "Equal Empire") {
@@ -143,7 +135,6 @@ class Level1 extends Phaser.Scene {
     callbackScope: this, loop: true, args: [] });
 
     playerWon = false;
-    currentLevel = 1;
     goto = 'Level2';
     if (loadingSavedGame === true) {
       player.gold = currentData.gold;
@@ -157,9 +148,14 @@ class Level1 extends Phaser.Scene {
 
     this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
 
+    if (loadingSavedGame === true) {
+      _timeLimit_s -= currentData.currentGameTime;
+      _timeLimit_ms = _timeLimit_s*1000;
+      //console.log(_timeLimit_s, _timeLimit_ms);
+    }
     // set up a 10 minute timer
     timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp, [], this);
-    timeElapsed = timer.getElapsedSeconds();
+
 
     console.log('[Level1] create() complete');
   }
@@ -169,8 +165,8 @@ class Level1 extends Phaser.Scene {
     controls.update(delta);
 
     if (backToMainMenu === 1 && currentLevel === 1) {
-      backToMainMenu = 0;
       this.scene.start('Title');
+      currentLevel = 0;
     } else if (check_gameover === 1) {
       check_gameover = 0;
       this.scene.start('Gameover');
@@ -191,10 +187,10 @@ class Level1 extends Phaser.Scene {
 
   pauseGame() {
     gamePaused = true;
+    pauseStartTime = timer.getElapsedSeconds();
     timer.paused = true;
     this.pause();
     console.log("game paused");
-    pauseStartTime = timer.getElapsedSeconds();
   }
 
   pointerInput() {

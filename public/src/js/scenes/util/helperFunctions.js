@@ -4,6 +4,7 @@ function onTenMinutesUp() {
     readableTime = 0;
     timeElapsed = 0;
 }
+
 //calculates the time
 function calculateTime(seconds){
 

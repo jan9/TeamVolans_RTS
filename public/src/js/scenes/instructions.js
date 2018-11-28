@@ -9,18 +9,20 @@ class Instructions extends Phaser.Scene {
 
   create() {
     this.add.image(_width/2.7,_height/2,'title_bg').setAlpha(0.8);
+    currentLevel = 0;
     homeButton(this);
     this.instruction_guide();
+
+    check_gameover = 0;
     console.log('[Instructions] create() complete');
   }
 
   update() {
-      currentLevel = 0;
-      check_gameover = 0;
       if (backToMainMenu === 1) {
         backToMainMenu = 0;
         this.scene.start('Title');
       }
+      homeButton(this);
   }
 
   instruction_guide() {

@@ -165,13 +165,35 @@ function dragSelect(scene, kingdom) {
 }
 
 function homeButton(scene) {
+  var returnButton, quitButton
   // button for going back to the main menu
-  var homeButton = scene.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40).setDepth(25);
-  homeButton.setInteractive({useHandCursor:true});
-  homeButton.on('pointerdown', function() {
-    backToMainMenu = 1;
-    //scene.scene.start('Title');
-  }, scene);
+  if (currentLevel === 1 || currentLevel === 2 || currentLevel === 3) {
+    quitButton = scene.add.sprite(10,3,'quitButton').setOrigin(0,0).setDisplaySize(120,40).setDepth(25);
+    quitButton.setInteractive({useHandCursor:true});
+    quitButton.on('pointerdown', function () {
+      pausedBeforeQuit = 1;//backToMainMenu = 1;
+      if(pausedBeforeQuit === 1 && backToMainMenu === 0 && currentLevel != 0) {
+        pausedBeforeQuit = 2;
+        gamePaused = true;
+        pauseStartTime = timer.getElapsedSeconds();
+        timer.paused = true;
+        this.scene.pause('Level1');
+        this.scene.pause('Level2');
+        this.scene.pause('Level3');
+        quitButton.destroy();
+      }
+    }, scene);
+  } else if (currentLevel === 0) {
+    returnButton = scene.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40).setDepth(25);
+    returnButton.setInteractive({useHandCursor:true});
+    returnButton.on('pointerdown', function() {
+      pausedBeforeQuit = 0;
+      if(pausedBeforeQuit === 0 && backToMainMenu === 0 && currentLevel === 0) {
+        backToMainMenu = 1;
+      }
+    }, scene);
+  }
+
 }
 
 function signalToStructName(signal){
