@@ -1,6 +1,6 @@
 class Unit extends Phaser.GameObjects.Sprite{
 
-  constructor(unitInformation, xCoord, yCoord, scene, playerCheck) {
+  constructor(unitInformation, xCoord, yCoord, scene, playerCheck, kingdom) {
     super(scene, xCoord, yCoord, unitInformation.texture);
     this.type = unitInformation.type;
     this.health = unitInformation.health;
@@ -16,6 +16,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.directionX = xCoord+1;
     this.directionY = yCoord+1;
     this.isPlayerObject = playerCheck;
+    this.kingdom = kingdom;
 
     this.setInteractive();
 
@@ -297,7 +298,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   takeAction(action){
     if(action.name === "Attack"){
-      this.attackEnemy(action.target, this.scene);
+        this.attackEnemy(action.target, this.scene);
     }
     else if(action.name === "Mine"){
       this.mine(action.kingdom, this.scene);
@@ -357,7 +358,7 @@ class Unit extends Phaser.GameObjects.Sprite{
      }
 
 
-      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, this.isPlayerObj());
+      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, this.isPlayerObj(), this);
 
       //add the structure to the Group
       kingdom.add(structure);
@@ -467,15 +468,36 @@ class Unit extends Phaser.GameObjects.Sprite{
     return withinRange;
   }
 
+/*  attackNextUnitInRange(enemyUnits){
+
+    console.log(enemyUnits);
+
+
+    let enemyUnit = this.findClosestUnit(enemyUnits);
+    if(enemyUnit){
+      if(distance(this.x, this.y, enemyUnit.x, enemyUnit.y) < 150){
+        if(this.checkWithinRange(enemyUnit)){
+          this.attackEnemy(enemyUnit);
+        }
+        else{
+          this.move(enemyUnit.x, enemyUnit.y, this.scene, {"name": "Attack", "target": enemyUnit});
+        }
+      }
+    }
+  }
+  */
 
   //attacks an enemy
   //also used for the priest to heal allies
   attackEnemy(attackedUnit){
 
+
+
     if(attackedUnit && this.getType() !== "Priest"){
 
       //only attack if the unit is within range and not already attacking something
       if(this.checkWithinRange(attackedUnit) && this.getState() !== "Attack" && this.getState() !== "Move"){
+
         let game = this.scene;
         this.directionX = attackedUnit.x;
         this.directionY = attackedUnit.y;
@@ -503,14 +525,14 @@ class Unit extends Phaser.GameObjects.Sprite{
 
           //the actual attack takes 3 seconds to account for the animation playing
           var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
-            callbackScope: this, loop: false, args: [attackedUnit, this.stateNum] });
+            callbackScope: this, loop: false, args: [attackedUnit, this.stateNum, attackedUnit.kingdom.units] });
         }
       }
     }
   }
 
   //attack the enemy
-  attackEnemyEnd(attackedUnit, originalStateNum){
+  attackEnemyEnd(attackedUnit, originalStateNum, enemyKingdomUnits){
 
     if(this.stateNum == originalStateNum){
       //set state to idle and stop the attack animation
@@ -533,6 +555,20 @@ class Unit extends Phaser.GameObjects.Sprite{
           }
         }
       }
+      /*
+      if(attackedUnit.isDead() && this.isPlayerObj()){
+        this.attackNextUnitInRange(enemyKingdomUnits);
+      }*/
+    }
+  }
+
+  playerAttack(game, enemyObj, i){
+    if(this.checkWithinRange(enemyObj)){
+      this.attackEnemy(enemyObj);
+    }
+    else{
+      let coordinates = spiralLocation(i);
+      this.move(enemyObj.x, enemyObj.y, game, {"name": "Attack", "target": enemyObj});
     }
   }
 
@@ -540,20 +576,25 @@ class Unit extends Phaser.GameObjects.Sprite{
   //returns the closest unit in the given unitArray near the currentUnit
   //expensive to run a lot so...need to figure out a way to "cache" the results
   findClosestUnit(unitArray){
-    //set the base unit and distance to the first unit in the array
-    var closestUnit = unitArray[0];
-    var closestDistance = distance(this.x, this.y, unitArray[0].x, unitArray[0].y);
 
-  //goes through each of the units and checks to see if they are closest to our unit to check against
-    for(let unit of unitArray){
-      var currentDistance = distance(this.x, this.y, unit.x, unit.y);
+    if(unitArray){
+      if(unitArray[0]){
+      //set the base unit and distance to the first unit in the array
+      var closestUnit = unitArray[0];
+      var closestDistance = distance(this.x, this.y, unitArray[0].x, unitArray[0].y);
 
-      //if the current distance is closer than the closest distance then set the closest distance to the current distance
-      if(currentDistance < closestDistance){
-        closestUnit = unit;
-        closestDistance = currentDistance;
+    //goes through each of the units and checks to see if they are closest to our unit to check against
+      for(let unit of unitArray){
+        var currentDistance = distance(this.x, this.y, unit.x, unit.y);
+
+        //if the current distance is closer than the closest distance then set the closest distance to the current distance
+        if(currentDistance < closestDistance){
+          closestUnit = unit;
+          closestDistance = currentDistance;
+        }
       }
     }
+  }
 
     return closestUnit;
   }
@@ -571,7 +612,7 @@ class Unit extends Phaser.GameObjects.Sprite{
       }
 
       else if(unit.health < unit.maxHealth
-        && distance(this.x, this.y, closestInjured.x, closestInjured.y)
+        && distance(this.x, this.y, closestInjuredUnit.x, closestInjuredUnit.y)
         > distance(this.x, this.y, unit.x, unit.y)){
         closestInjuredUnit = unit;
       }

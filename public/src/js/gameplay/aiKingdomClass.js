@@ -379,7 +379,7 @@ class AIKingdom extends Kingdom{
 
       if(action == 0){
         if(member.getType() === "Priest"){
-        member.move(this.startingX, this.startingY, this.game, {"action": "Heal", "kingdom": this});
+        member.move(this.startingX, this.startingY, this.game, {"name": "Heal", "kingdom": this});
         }
         else{
           member.move(this.startingX, this.startingY, this.game);

@@ -213,7 +213,7 @@ getStructureInfo(buildingType){
                  y: keys[i].y
                }
 
-            var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
+            var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this);
 
              //set the statting x and y to the castle's position
              if(structure.type === "Castle"){
@@ -241,7 +241,7 @@ getStructureInfo(buildingType){
                x: keys[i].x,
                y: keys[i].y
             }
-             var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
+             var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this);
 
            //set the statting x and y to the castle's position
            if(structure.type === "Castle"){
@@ -268,7 +268,7 @@ getStructureInfo(buildingType){
            this.buildingsAmount++;
 
           structureCoords = this.findStartingPosition(buildingInfo, this.buildingsAmount, startingObjectsList);
-           var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer());
+           var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this);
 
            //add the structure to the group
           // this.add(structure);
@@ -313,7 +313,7 @@ getStructureInfo(buildingType){
                   y: keys[i].y
                 }
 
-              var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
+              var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this);
               this.units.push(unit);
             }
           }
@@ -337,7 +337,7 @@ getStructureInfo(buildingType){
                 y: keys[i].y
               }
 
-            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
+            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this);
             this.units.push(unit);
           }
         }
@@ -359,7 +359,7 @@ getStructureInfo(buildingType){
 
             this.unitAmount++;
             var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
-            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer());
+            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this);
 
 
             this.units.push(unit);
@@ -429,7 +429,8 @@ getStructureInfo(buildingType){
     return this.playerKingdom;
   }
 
-  updatePlayerKingdom(){
+  updatePlayerKingdom(aiKingdom){
+
     //this.unitAmount = this.units.length;
     for(var i = 0; i < playerUnitSelected.length; i++){
 
@@ -457,15 +458,19 @@ getStructureInfo(buildingType){
           unit.startRoyalBonus(castle, this);
         }
       }
-      else if(unit.player_selected && optionClicked === "fight" && aiObjectSelected){
-        if(unit.getType() !== "Priest"){
-          if(unit.checkWithinRange(aiObjectSelected)){
-            unit.attackEnemy(aiObjectSelected);
-          }
-          else{
-            let coordinates = spiralLocation(i);
-            unit.move(aiObjectSelected.x, aiObjectSelected.y, this.game, {"name": "Attack", "target": aiObjectSelected});
-          }
+      else if(unit.player_selected && optionClicked === "fight"){
+        if(aiObjectSelected && unit.getType() !== "Priest"){
+            unit.playerAttack(this.game, aiObjectSelected, i)
+        }
+        else if ((!aiObjectSelected) && unit.getType() !== "Priest"){
+            let closestEnemyUnit = unit.findClosestUnit(aiKingdom.units);
+            if(closestEnemyUnit){
+              unit.playerAttack(this.game, closestEnemyUnit, i)
+            }
+            else{
+              let closestEnemyStructure = unit.findClosestUnit(aiKingdom.buildings);
+              unit.playerAttack(this.game, closestEnemyStructure, i)
+            }
         }
       }
       else if(unit.player_selected && optionClicked === "heal" && specificPlayerSelected){
@@ -482,10 +487,5 @@ getStructureInfo(buildingType){
       }
 
     }
-
-      // if unit type is attack
-
-        //updateHealth(points);
-
   }
 }

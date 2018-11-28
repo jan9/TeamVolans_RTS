@@ -1,6 +1,4 @@
 var style = { fontSize: '15px', fontFamily: 'Georgia', color: 'white'};
-var ai;
-var player;
 var backToMainMenu = 0;
 var kingdomSelection = {name: '', chosen:'no'};
 var gameMode = {name:''}; // default mode is easy;
