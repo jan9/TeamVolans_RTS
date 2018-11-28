@@ -159,7 +159,11 @@ class Level1 extends Phaser.Scene {
     // set up a 10 minute timer
     timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp, [], this);
     timeElapsed = timer.getElapsedSeconds();
-
+    if (loadingSavedGame === true) {
+      _timeLimit_s -= currentData.currentGameTime;
+      _timeLimit_ms = _timeLimit_s*1000;
+      console.log(_timeLimit_s, _timeLimit_ms);
+    }
     console.log('[Level1] create() complete');
   }
 
@@ -190,10 +194,10 @@ class Level1 extends Phaser.Scene {
 
   pauseGame() {
     gamePaused = true;
+    pauseStartTime = timer.getElapsedSeconds();
     timer.paused = true;
     this.pause();
     console.log("game paused");
-    pauseStartTime = timer.getElapsedSeconds();
   }
 
   pointerInput() {

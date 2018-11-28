@@ -22,7 +22,9 @@ class Level2 extends Phaser.Scene {
     // sets a boundary for main camera
     this.cameras.main.setBounds(-100, -100, this.map.widthInPixels+200, this.map.heightInPixels+200);
     this.cameras.main.centerOn(_width*1.2, _height*2.75);
-    this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+    //Set y to -24 to account for the healthbar (it's atop every unit so they all can't get further than it)
+    this.physics.world.setBounds(0, -24, this.map.widthInPixels, this.map.heightInPixels);
 
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');
@@ -69,7 +71,6 @@ class Level2 extends Phaser.Scene {
       gameMode.name = currentData.gameMode;
       kingdomSelection.name = currentData.kingdomName;
       opponentKingdom = currentData.enemyKingdomName;
-
     }
 
 
@@ -136,6 +137,11 @@ class Level2 extends Phaser.Scene {
     // set up a 10 minute timer
     timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp, [], this);
     timeElapsed = timer.getElapsedSeconds();
+    if (loadingSavedGame === true) {
+      _timeLimit_s -= currentData.currentGameTime;
+      _timeLimit_ms = _timeLimit_s*1000;
+      console.log(_timeLimit_s, _timeLimit_ms);
+    }
 
     console.log('[Level2] create() complete');
   }
@@ -168,10 +174,10 @@ class Level2 extends Phaser.Scene {
 
   pauseGame() {
     gamePaused = true;
+    pauseStartTime = timer.getElapsedSeconds();
     timer.paused = true;
     this.pause();
     console.log("game paused");
-    pauseStartTime = timer.getElapsedSeconds();
   }
 
 pointerInput() {

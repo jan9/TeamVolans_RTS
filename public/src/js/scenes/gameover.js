@@ -4,7 +4,6 @@ class Gameover extends Phaser.Scene {
   }
 
   preload() {
-
   }
 
   create() {

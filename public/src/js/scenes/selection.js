@@ -18,7 +18,6 @@ class Selection extends Phaser.Scene {
   }
 
   preload() {
-
   }
 
   create() {
@@ -30,7 +29,6 @@ class Selection extends Phaser.Scene {
     this.add.image(400,300,'title_g');
     homeButton(this);
     var box1 = this.add.image(_width*0.05, _height*0.05,'box').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
-
 
     // 1. Player selects a kingdom
     // choose from Dueling Dominion, Equal Empire, Fortune Federation, Legendary League, Remote Realm, Security Syndicate
@@ -61,14 +59,10 @@ class Selection extends Phaser.Scene {
     //3. Random assignment of the AI kingdom
     value = Phaser.Math.Between(0, 4);  // Phaser's random number generator
     opponentKingdom = kingdomPool[value];
-    //opponentKingdom = kingdomPool[2]; // Fortune Federation
 
     // 4. Start the Game
     warningMessage = this.add.text(_width*0.11, _height*0.75, "Please select a kingdom and game mode!",{font: "32px Georgia", color: "red"}).setPadding(1,1);
     aiMessage = aiMessage = this.add.text(_width*0.11, _height*0.75, '' ,{font: "32px Georgia", color: "black"}).setPadding(1,1);
-
-    // optional: player provides a kingdom name (to be used when saving/loading a game)? Nope
-
 
     console.log('[Selection] create() complete');
     }
@@ -108,31 +102,31 @@ class Selection extends Phaser.Scene {
 
   // emblem and emblem text setup functions
   emblemsetup(x, y, name) {
-  var emblem = this.add.sprite(x, y, name).setDisplaySize(150,150).setOrigin(0,0);
-  emblem.alpha = 1;
-  return emblem;
+    var emblem = this.add.sprite(x, y, name).setDisplaySize(150,150).setOrigin(0,0);
+    emblem.alpha = 1;
+    return emblem;
   }
 
   emblem_textSetup(x, y, name, emblem) {
-  var emblem_text = this.add.text(x,y+150,name,{font: "25px Georgia Black", color: "black", backgroundColor: "white"}).setDisplaySize(150,30).setPadding(1,1);
-  emblem.setInteractive({useHandCursor:true});
-  emblem.on('pointerdown', function(pointer) {
-    if (kingdomSelection.chosen === 'yes' && kingdomSelection.name === name) {
-    emblem.alpha = 1;
-    emblem_text.setBackgroundColor('#ffffff');
-    kingdomSelection.chosen = 'no'
-    kingdomSelection.name = '';
-  } else if (kingdomSelection.chosen === 'yes' && kingdomSelection.name != name) {
-    emblem.alpha = 1;
-    emblem_text.setBackgroundColor('#ffffff');
-    kingdomSelection.chosen = 'yes'
-  } else {
-    kingdomSelection.name = name;
-    emblem.alpha = 0.5;
-    emblem_text.setBackgroundColor('#99e699');
-    kingdomSelection.chosen = 'yes';
-  }
-    //console.log(kingdomSelection);
+    var emblem_text = this.add.text(x,y+150,name,{font: "25px Georgia Black", color: "black", backgroundColor: "white"}).setDisplaySize(150,30).setPadding(1,1);
+    emblem.setInteractive({useHandCursor:true});
+    emblem.on('pointerdown', function(pointer) {
+      if (kingdomSelection.chosen === 'yes' && kingdomSelection.name === name) {
+        emblem.alpha = 1;
+        emblem_text.setBackgroundColor('#ffffff');
+        kingdomSelection.chosen = 'no'
+        kingdomSelection.name = '';
+      } else if (kingdomSelection.chosen === 'yes' && kingdomSelection.name != name) {
+        emblem.alpha = 1;
+        emblem_text.setBackgroundColor('#ffffff');
+        kingdomSelection.chosen = 'yes'
+      } else {
+        kingdomSelection.name = name;
+        emblem.alpha = 0.5;
+        emblem_text.setBackgroundColor('#99e699');
+        kingdomSelection.chosen = 'yes';
+      }
+      //console.log(kingdomSelection);
     }, this);
     return emblem_text;
   }
@@ -188,6 +182,5 @@ class Selection extends Phaser.Scene {
       hardMode.style.setBackgroundColor('#ffffff');
     }
   }
-
 
 }

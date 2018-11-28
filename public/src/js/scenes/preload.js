@@ -2,7 +2,6 @@
 class Preload extends Phaser.Scene {
     constructor() {
         super({ key: 'Preload' });
-
     }
 
     preload() {
@@ -116,7 +115,6 @@ class Preload extends Phaser.Scene {
           progressBox.destroy();
           loadingText.destroy();
       });
-
     }
 
     create() {

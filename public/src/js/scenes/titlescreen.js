@@ -4,7 +4,6 @@ class Title extends Phaser.Scene {
   }
 
   preload() {
-
   }
 
   create() {
@@ -23,7 +22,6 @@ class Title extends Phaser.Scene {
   }
 
   update() {
-
   }
 
   /* Helper functions  */
@@ -52,7 +50,7 @@ class Title extends Phaser.Scene {
     button4.setInteractive({useHandCursor:true});
     button4.on('pointerdown', function(pointer) {this.scene.start('TestAI');}, this);
 
-    //console.log("[Title] Buttons made");
+    //console.log("[Title] scene created");
   }
 
 }

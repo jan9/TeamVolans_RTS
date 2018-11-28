@@ -7,7 +7,7 @@ var build_signal = 0; // 1 is build
 var check_gameover = 0; // if game is over, then 1
 var currentGold;
 var currentPopulation;
-var displayGold,displayPop;
+var displayGold,displayPop,displayMessage;;
 var image1, timedEvent;
 var gameMessage;
 var buttons = [];
@@ -58,7 +58,10 @@ class gameHUD extends Phaser.Scene {
   update() {
     // set up a 10 minute timer
     timeElapsed = timer.getElapsedSeconds();
-    //var timeElapsed = Math.round((Date.now() - gameStartTime)/1000);
+    if (loadingSavedGame === true) {
+      timeElapsed = timer.getElapsedSeconds() + currentData.currentGameTime;
+    }
+
     var readableTime = calculateTime(timeElapsed);
     //console.log("[HUD] readableTime", timeElapsed);
     if (gamePaused === true) {
@@ -93,10 +96,15 @@ class gameHUD extends Phaser.Scene {
     }
     // 2. If game hasn't reached time limit
     else {
-      var castleCount;
+      var castleCount = 0, aiCastleCount = 0;
       for(var i = 0; i < player.buildings.length; i++){
         if(player.buildings[i].type === "Castle"){
           castleCount++;
+        }
+      }
+      for(var i = 0; i < ai.buildings.length; i++){
+        if(ai.buildings[i].type === "Castle"){
+          aiCastleCount++;
         }
       }
       if (getPopulation(currentPopulation, player) === 0 ) {  // if num of units is 0
@@ -105,6 +113,12 @@ class gameHUD extends Phaser.Scene {
         playerWon = false; check_gameover = 1;
       } else if (castleCount === 0){  // if num of castles is 0
         playerWon = false; check_gameover = 1;
+      } else if (aiCastleCount === 0) {
+          playerWon = true;
+          var image2 = this.add.sprite(_width*0.5, _height*0.5,'win');
+          if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
+          this.button_goToLevelX(goto);
+          }
       }
     }
   }
@@ -126,220 +140,221 @@ class gameHUD extends Phaser.Scene {
   }
 
   pauseBox() {
-  pauseMenuBox = this.add.sprite(_width/2, _height/2, 'pauseMenuBox').setDepth(12).setScrollFactor(0).setVisible(false);
-  pauseCloseButton = this.add.sprite(_width*0.69, _height*0.32, 'pauseCloseButton').setDisplaySize(25,25).setDepth(13).setScrollFactor(0).setVisible(false);
-  pauseButton = this.add.sprite(_width*0.5, _height*0.275, 'pauseButton').setDepth(13).setVisible(false);
-  yesButton = this.add.sprite(_width*0.4, _height*0.55, 'yesButton').setDisplaySize(120, 60).setDepth(13).setVisible(false);
-  noButton = this.add.sprite(_width*0.6, _height*0.55, 'noButton').setDisplaySize(120, 60).setDepth(13).setVisible(false);
-  var pauseBoxText = this.add.text(_width*0.43, _height*0.65,"", {fontSize: '15px', fontFamily: 'Georgia', color: 'black'}).setDepth(16);
+    pauseMenuBox = this.add.sprite(_width/2, _height/2, 'pauseMenuBox').setDepth(12).setScrollFactor(0).setVisible(false);
+    pauseCloseButton = this.add.sprite(_width*0.69, _height*0.32, 'pauseCloseButton').setDisplaySize(25,25).setDepth(13).setScrollFactor(0).setVisible(false);
+    pauseButton = this.add.sprite(_width*0.5, _height*0.275, 'pauseButton').setDepth(13).setVisible(false);
+    yesButton = this.add.sprite(_width*0.4, _height*0.55, 'yesButton').setDisplaySize(120, 60).setDepth(13).setVisible(false);
+    noButton = this.add.sprite(_width*0.6, _height*0.55, 'noButton').setDisplaySize(120, 60).setDepth(13).setVisible(false);
+    var pauseBoxText = this.add.text(_width*0.43, _height*0.65,"", {fontSize: '15px', fontFamily: 'Georgia', color: 'black'}).setDepth(16);
 
-  pauseCloseButton.setInteractive({useHandCursor:true});
-  pauseCloseButton.on('pointerdown', function(pointer) {
-    pauseBoxText.setText("");
-    gamePaused = false;
-    timer.paused = false;
-    pauseEndTime = timer.getElapsedSeconds();
-    this.scene.resume('Level1');
-    this.scene.resume('Level2');
-    this.scene.resume('Level3');
-    }, this);
+    pauseCloseButton.setInteractive({useHandCursor:true});
+    pauseCloseButton.on('pointerdown', function(pointer) {
+      pauseBoxText.setText("");
+      gamePaused = false;
+      timer.paused = false;
+      pauseEndTime = timer.getElapsedSeconds();
+      this.scene.resume('Level1');
+      this.scene.resume('Level2');
+      this.scene.resume('Level3');
+      }, this);
 
-  noButton.setInteractive({useHandCursor:true});
-  noButton.on('pointerdown', function(pointer) {
-    pauseBoxText.setText("");
-    gamePaused = false;
-    timer.paused = false;
-    pauseEndTime = timer.getElapsedSeconds();
-    this.scene.resume('Level1');
-    this.scene.resume('Level2');
-    this.scene.resume('Level3');
-    }, this);
+    noButton.setInteractive({useHandCursor:true});
+    noButton.on('pointerdown', function(pointer) {
+      pauseBoxText.setText("");
+      gamePaused = false;
+      timer.paused = false;
+      pauseEndTime = timer.getElapsedSeconds();
+      this.scene.resume('Level1');
+      this.scene.resume('Level2');
+      this.scene.resume('Level3');
+      }, this);
 
-  yesButton.setInteractive({useHandCursor:true});
-  yesButton.on('pointerdown', function(pointer) {
-    console.log("save current player and ai data");
-    var temp = [], temp2 = [];
-    for (var i = 0; i < player.buildings.length; i++) {
-      if (player.buildings[i] === "") {
-        continue;
-      } else {
-        var type ="";
-        if (player.buildings[i].type === "Castle") {
-          type = "Player_Castle";
+    yesButton.setInteractive({useHandCursor:true});
+    yesButton.on('pointerdown', function(pointer) {
+      console.log("save current player and ai data");
+      var temp = [], temp2 = [];
+      for (var i = 0; i < player.buildings.length; i++) {
+        if (player.buildings[i] === "") {
+          continue;
         } else {
-          type = "Player_Building";
+          var type ="";
+          if (player.buildings[i].type === "Castle") {
+            type = "Player_Castle";
+          } else {
+            type = "Player_Building";
+          }
+          temp[i] = {
+            height: player.buildings[i].height,
+            id: i,
+            rotation: player.buildings[i].rotation,
+            name: type,
+            baseType: player.buildings[i].baseType,
+            type: player.buildings[i].type,
+            visible: player.buildings[i].visible,
+            width: player.buildings[i].width,
+            x: player.buildings[i].x,
+            y: player.buildings[i].y
+          }
         }
-        temp[i] = {
-          height: player.buildings[i].height,
+      }
+
+      for (var i = 0; i < player.units.length; i++) {
+        if (player.units[i] === "") {
+          continue;
+        } else {
+          temp2[i] = {
+            height: player.units[i].height,
+            id: i,
+            rotation: player.units[i].rotation,
+            name: "Player_Unit"+(i+1).toString(),
+            type: player.units[i].type,
+            visible: player.units[i].visible,
+            width: player.units[i].width,
+            x: player.units[i].x,
+            y: player.units[i].y
+        }
+      }
+    }
+    var buildingsInfo = temp;
+    var unitsInfo = temp2;
+    var info_player = temp.concat(temp2);
+
+      var temp_ai = [], temp_ai2 = [];
+      for (var i = 0; i < ai.buildings.length; i++) {
+        var type ="";
+        if (ai.buildings[i].type === "Castle") {
+          type = "Enemy_Castle";
+        } else {
+          type = "Enemy_Building";
+        }
+        temp_ai[i] = {
+          height: ai.buildings[i].height,
           id: i,
-          rotation: player.buildings[i].rotation,
+          rotation: ai.buildings[i].rotation,
           name: type,
-          baseType: player.buildings[i].baseType,
-          type: player.buildings[i].type,
-          visible: player.buildings[i].visible,
-          width: player.buildings[i].width,
-          x: player.buildings[i].x,
-          y: player.buildings[i].y
+          baseType: ai.buildings[i].baseType,
+          type: ai.buildings[i].type,
+          visible: ai.buildings[i].visible,
+          width: ai.buildings[i].width,
+          x: ai.buildings[i].x,
+          y: ai.buildings[i].y
         }
       }
-    }
 
-    for (var i = 0; i < player.units.length; i++) {
-      if (player.units[i] === "") {
-        continue;
-      } else {
-        temp2[i] = {
-          height: player.units[i].height,
+      for (var i = 0; i < ai.units.length; i++) {
+        temp_ai2[i] = {
+          height: ai.units[i].height,
           id: i,
-          rotation: player.units[i].rotation,
-          name: "Player_Unit"+(i+1).toString(),
-          type: player.units[i].type,
-          visible: player.units[i].visible,
-          width: player.units[i].width,
-          x: player.units[i].x,
-          y: player.units[i].y
-      }
-    }
-  }
-  var buildingsInfo = temp;
-  var unitsInfo = temp2;
-  var info_player = temp.concat(temp2);
-
-    var temp_ai = [], temp_ai2 = [];
-    for (var i = 0; i < ai.buildings.length; i++) {
-      var type ="";
-      if (ai.buildings[i].type === "Castle") {
-        type = "Enemy_Castle";
-      } else {
-        type = "Enemy_Building";
-      }
-      temp_ai[i] = {
-        height: ai.buildings[i].height,
-        id: i,
-        rotation: ai.buildings[i].rotation,
-        name: type,
-        baseType: ai.buildings[i].baseType,
-        type: ai.buildings[i].type,
-        visible: ai.buildings[i].visible,
-        width: ai.buildings[i].width,
-        x: ai.buildings[i].x,
-        y: ai.buildings[i].y
-      }
-    }
-
-    for (var i = 0; i < ai.units.length; i++) {
-      temp_ai2[i] = {
-        height: ai.units[i].height,
-        id: i,
-        rotation: ai.units[i].rotation,
-        name: "Enemy_Unit"+(i+1).toString(),
-        type: ai.units[i].type,
-        visible: ai.units[i].visible,
-        width: ai.units[i].width,
-        x: ai.units[i].x,
-        y: ai.units[i].y
-      }
-    }
-    var ai_buildingsInfo = temp_ai;
-    var ai_unitsInfo = temp_ai2;
-    var info_ai = temp_ai.concat(temp_ai2);
-
-    var gold_player = [], gold_ai = [];
-    for (var i = 0; i < player.goldDeposits.length; i++) {
-      gold_player[i] = {
-        height: player.goldDeposits[i].height,
-        id: i,
-        rotation: player.goldDeposits[i].rotation,
-        name: "Player_Gold_"+(i+1).toString(),
-        type: player.goldDeposits[i].type,
-        visible: player.goldDeposits[i].visible,
-        width: player.goldDeposits[i].width,
-        x: player.goldDeposits[i].x,
-        y: player.goldDeposits[i].y,
-        properties: {name: "isMine", type: "bool", value: false}
-      }
-    }
-    for (var i = 0; i < ai.goldDeposits.length; i++) {
-      gold_ai[i] = {
-        height: ai.goldDeposits[i].height,
-        id: i,
-        rotation: ai.goldDeposits[i].rotation,
-        name: "Enemy_Gold_"+(i+1).toString(),
-        type: ai.goldDeposits[i].type,
-        visible: ai.goldDeposits[i].visible,
-        width: ai.goldDeposits[i].width,
-        x: ai.goldDeposits[i].x,
-        y: ai.goldDeposits[i].y,
-        properties: {name: "isMine", type: "bool", value: false}
-      }
-    }
-    var gold = gold_player.concat(gold_ai);
-    var info_all = info_player.concat(info_ai);
-    var objects = info_all.concat(gold);
-
-    // building and unit info
-    var player_buildingList =  [];
-    for (var i = 0; i < player.buildings.length; i++) {
-        var temp = player.buildings[i].type;
-        player_buildingList.push(temp);
-    }
-
-    var ai_buildingList =  [];
-    for (var i = 0; i < ai.buildings.length; i++) {
-        var temp = ai.buildings[i].type;
-
-        ai_buildingList.push(temp);
-    }
-
-
-    var data = {
-      dateSaved: timeStamp(),
-      gameMode: gameMode.name,
-      kingdomName: kingdomSelection.name,
-      enemyKingdomName: opponentKingdom,
-      objects: objects,
-
-      // player data
-      gold: player.gold,
-      population:player.units.legnth,
-      buildings:  buildingsInfo,
-      units: unitsInfo,
-      buildingList: player_buildingList,
-
-      // ai data
-      ai_gold: ai.gold,
-      ai_population: ai.units.legnth,
-      ai_buildings:  ai_buildingsInfo,
-      ai_units: ai_unitsInfo,
-      ai_buildingList: ai_buildingList
-    }
-    if (currentLevel === 1 ) {
-        localStorage.removeItem('level1Data');
-        localStorage.setItem('level1Data', JSON.stringify(data));
-        if (localStorage.hasOwnProperty('level1Data') === true) {
-          pauseBoxText.setText("Current data has been saved");
+          rotation: ai.units[i].rotation,
+          name: "Enemy_Unit"+(i+1).toString(),
+          type: ai.units[i].type,
+          visible: ai.units[i].visible,
+          width: ai.units[i].width,
+          x: ai.units[i].x,
+          y: ai.units[i].y
         }
-      } else if (currentLevel === 2) {
-        localStorage.removeItem('level2Data');
-        localStorage.setItem('level2Data', JSON.stringify(data));
-        if (localStorage.hasOwnProperty('level2Data') === true) {
-          pauseBoxText.setText("Current data has been saved");
+      }
+      var ai_buildingsInfo = temp_ai;
+      var ai_unitsInfo = temp_ai2;
+      var info_ai = temp_ai.concat(temp_ai2);
+
+      var gold_player = [], gold_ai = [];
+      for (var i = 0; i < player.goldDeposits.length; i++) {
+        gold_player[i] = {
+          height: player.goldDeposits[i].height,
+          id: i,
+          rotation: player.goldDeposits[i].rotation,
+          name: "Player_Gold_"+(i+1).toString(),
+          type: player.goldDeposits[i].type,
+          visible: player.goldDeposits[i].visible,
+          width: player.goldDeposits[i].width,
+          x: player.goldDeposits[i].x,
+          y: player.goldDeposits[i].y,
+          properties: {name: "isMine", type: "bool", value: false}
         }
-      } else if(currentLevel === 3) {
-        localStorage.removeItem('level3Data');
-          localStorage.setItem('level3Data', JSON.stringify(data));
-          if (localStorage.hasOwnProperty('level3Data') === true) {
+      }
+      for (var i = 0; i < ai.goldDeposits.length; i++) {
+        gold_ai[i] = {
+          height: ai.goldDeposits[i].height,
+          id: i,
+          rotation: ai.goldDeposits[i].rotation,
+          name: "Enemy_Gold_"+(i+1).toString(),
+          type: ai.goldDeposits[i].type,
+          visible: ai.goldDeposits[i].visible,
+          width: ai.goldDeposits[i].width,
+          x: ai.goldDeposits[i].x,
+          y: ai.goldDeposits[i].y,
+          properties: {name: "isMine", type: "bool", value: false}
+        }
+      }
+      var gold = gold_player.concat(gold_ai);
+      var info_all = info_player.concat(info_ai);
+      var objects = info_all.concat(gold);
+
+      // building and unit info
+      var player_buildingList =  [];
+      for (var i = 0; i < player.buildings.length; i++) {
+          var temp = player.buildings[i].type;
+          player_buildingList.push(temp);
+      }
+
+      var ai_buildingList =  [];
+      for (var i = 0; i < ai.buildings.length; i++) {
+          var temp = ai.buildings[i].type;
+
+          ai_buildingList.push(temp);
+      }
+
+
+      var data = {
+        dateSaved: timeStamp(),
+        gameMode: gameMode.name,
+        kingdomName: kingdomSelection.name,
+        enemyKingdomName: opponentKingdom,
+        objects: objects,
+        currentGameTime: pauseStartTime, // saves current game time
+
+        // player data
+        gold: player.gold,
+        population:player.units.legnth,
+        buildings:  buildingsInfo,
+        units: unitsInfo,
+        buildingList: player_buildingList,
+
+        // ai data
+        ai_gold: ai.gold,
+        ai_population: ai.units.legnth,
+        ai_buildings:  ai_buildingsInfo,
+        ai_units: ai_unitsInfo,
+        ai_buildingList: ai_buildingList
+      }
+      if (currentLevel === 1 ) {
+          localStorage.removeItem('level1Data');
+          localStorage.setItem('level1Data', JSON.stringify(data));
+          if (localStorage.hasOwnProperty('level1Data') === true) {
             pauseBoxText.setText("Current data has been saved");
           }
-      }
-    }, this);
+        } else if (currentLevel === 2) {
+          localStorage.removeItem('level2Data');
+          localStorage.setItem('level2Data', JSON.stringify(data));
+          if (localStorage.hasOwnProperty('level2Data') === true) {
+            pauseBoxText.setText("Current data has been saved");
+          }
+        } else if(currentLevel === 3) {
+          localStorage.removeItem('level3Data');
+            localStorage.setItem('level3Data', JSON.stringify(data));
+            if (localStorage.hasOwnProperty('level3Data') === true) {
+              pauseBoxText.setText("Current data has been saved");
+            }
+        }
+      }, this);
   }
 
   button_Title() {
-  // button for going back to the main menu
-  var titlebuttonHUD = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
-  titlebuttonHUD.setInteractive({useHandCursor:true});
-  titlebuttonHUD.on('pointerdown', function(pointer) {backToMainMenu = 1;},this);
+    // button for going back to the main menu
+    var titlebuttonHUD = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
+    titlebuttonHUD.setInteractive({useHandCursor:true});
+    titlebuttonHUD.on('pointerdown', function(pointer) {backToMainMenu = 1;},this);
   }
 
   button_goToLevelX(goto) {

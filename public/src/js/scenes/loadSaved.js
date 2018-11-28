@@ -9,7 +9,6 @@ class Load extends Phaser.Scene {
   }
 
   preload() {
-
   }
 
   create() {
@@ -19,12 +18,13 @@ class Load extends Phaser.Scene {
     this.add.image(400,300,'title_l');
     var box1 = this.add.image(_width*0.05, _height*0.05,'box').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
     homeButton(this);
+
     currentLevel = 0;
     check_gameover = 0;
     loadinglevel = 0;
     currentData = "";
-    var loadMenuText = this.add.text(_width*0.38, _height*0.15, "Load Game", {font: "60px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
 
+    var loadMenuText = this.add.text(_width*0.38, _height*0.15, "Load Game", {font: "60px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
 
     level1Saved = JSON.parse(localStorage.getItem('level1Data'));
     level2Saved = JSON.parse(localStorage.getItem('level2Data'));
