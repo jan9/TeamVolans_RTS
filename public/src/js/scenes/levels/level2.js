@@ -158,7 +158,7 @@ class Level2 extends Phaser.Scene {
     }
 
     ai.updateAIKingdom(player);
-    player.updatePlayerKingdom(player);
+    player.updatePlayerKingdom(ai);
   }
 
   //updates the target list of the ai (done every 10 seconds)

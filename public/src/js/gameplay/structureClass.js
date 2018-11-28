@@ -1,6 +1,6 @@
 class Structure extends Phaser.GameObjects.Sprite{
 
-  constructor(structureInformation, xCoord, yCoord, scene, playerCheck) {
+  constructor(structureInformation, xCoord, yCoord, scene, playerCheck, kingdom) {
     super(scene, xCoord, yCoord, structureInformation.texture);
     this.type = structureInformation.type;
     this.baseType = structureInformation.baseType;
@@ -9,7 +9,7 @@ class Structure extends Phaser.GameObjects.Sprite{
     this.unitProduced = structureInformation.unitProduced;
     this.state = "Idle";
     this.isPlayerObject = playerCheck;
-
+    this.kingdom = kingdom;
     this.setInteractive();
 
       // set up a health bar
@@ -123,7 +123,7 @@ class Structure extends Phaser.GameObjects.Sprite{
 
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && this.health > 0){
-      var unit = new Unit(unitInfo, this.x+75, this.y, game, kingdom.isPlayer());
+      var unit = new Unit(unitInfo, this.x+75, this.y, game, kingdom.isPlayer(), kingdom);
         //once the unit has been built, add it to the kingdom and increase the unitamount
 
         kingdom.units.push(unit);

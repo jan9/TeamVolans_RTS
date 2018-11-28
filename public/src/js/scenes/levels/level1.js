@@ -14,7 +14,8 @@ document.addEventListener("contextmenu", function(e){
 var x;
 var y;
 var pointer;
-var playerKingdom, aiKingdom;
+var ai;
+var player;
 var controls;
 var selectedUnit;
 var aiObjectSelected;
@@ -180,7 +181,7 @@ class Level1 extends Phaser.Scene {
     }
 
     ai.updateAIKingdom(player);
-    player.updatePlayerKingdom(player);
+    player.updatePlayerKingdom(ai);
   }
 
   //updates the target list of the ai (done every 10 seconds)
