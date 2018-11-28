@@ -23,15 +23,16 @@ class Unit extends Phaser.GameObjects.Sprite{
     //Used for keeping track of which state this is -> each time the state changes this number increments
     this.stateNum = 0;
 
-    //used to have the unit be in front of buildings
-    this.depth = 1;
-
     this.player_selected = false;  // for player kingdom
     // set up a health bar
 
     this.maxHealth = unitInformation.health; // store max health of a unit
 
     this.bar = new Phaser.GameObjects.Sprite(scene, xCoord, yCoord-30, 'healthBar100');
+
+    //used to have the unit be in front of buildings
+    if (playerCheck === true) { this.depth = 20; this.bar.depth = 20;}
+    else { this.depth = 19; this.bar.depth = 20;}
 
     scene.add.existing(this.bar);
 
