@@ -45,7 +45,9 @@ class Level1 extends Phaser.Scene {
     // sets a boundary for main camera
     this.cameras.main.setBounds(-100, -100, this.map.widthInPixels+200, this.map.heightInPixels+200);
     this.cameras.main.centerOn(_width*0.5, _height*2.5);
-    this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
+    //Set y to -24 to account for the healthbar (it's atop every unit so they all can't get further than it)
+    this.physics.world.setBounds(0, -24, this.map.widthInPixels, this.map.heightInPixels);
 
     this.scene.launch('gameHUD');
     this.scene.setVisible(true,'gameHUD');

@@ -30,7 +30,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     this.maxHealth = unitInformation.health; // store max health of a unit
 
-    this.bar = new Phaser.GameObjects.Sprite(scene, xCoord+3, yCoord-30, 'healthBar100');
+    this.bar = new Phaser.GameObjects.Sprite(scene, xCoord, yCoord-30, 'healthBar100');
 
     scene.add.existing(this.bar);
 
@@ -162,8 +162,32 @@ class Unit extends Phaser.GameObjects.Sprite{
       }
     }
 
+    //If a unit is trying to move out of bounds, make it so they cannot
+    //returns an object holding x, y values
+    fixOutOfBoundsLocation(xLocation, yLocation, game){
+      if(xLocation > game.map.widthInPixels){
+        xLocation = game.map.widthInPixels;
+      }
+      else if(xLocation < 22){
+        xLocation = 22;
+      }
+
+      if(yLocation > game.map.heightInPixels-8){
+        yLocation = game.map.heightInPixels-8;
+      }
+      else if (yLocation < 0){
+        yLocation = 0;
+      }
+
+      return({"x": xLocation, "y": yLocation});
+    }
+
     //moves the unit to the desired location
    move(xLocation, yLocation, game, action){
+
+     let checkedLocations = this.fixOutOfBoundsLocation(xLocation, yLocation, game);
+     xLocation = checkedLocations.x
+     yLocation = checkedLocations.y;
 
      if(!this.isDead() && (this.destinationX != xLocation || this.destinationY != yLocation)){
 
@@ -450,7 +474,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     if(attackedUnit && this.getType() !== "Priest"){
 
       //only attack if the unit is within range and not already attacking something
-      if(this.checkWithinRange(attackedUnit) && this.getState() !== "Attack"){
+      if(this.checkWithinRange(attackedUnit) && this.getState() !== "Attack" && this.getState() !== "Move"){
         let game = this.scene;
         this.directionX = attackedUnit.x;
         this.directionY = attackedUnit.y;

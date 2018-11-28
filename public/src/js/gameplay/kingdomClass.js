@@ -457,8 +457,14 @@ isPlayer(){
         }
       }
       else if(unit.player_selected && optionClicked === "fight" && aiObjectSelected){
-        if(unit.type !== "priest"){
-          unit.attackEnemy(aiObjectSelected);
+        if(unit.getType() !== "Priest"){
+          if(unit.checkWithinRange(aiObjectSelected)){
+            unit.attackEnemy(aiObjectSelected);
+          }
+          else{
+            let coordinates = spiralLocation(i);
+            unit.move(aiObjectSelected.x, aiObjectSelected.y, this.game, {"name": "Attack", "target": aiObjectSelected});
+          }
         }
       }
       else if(unit.player_selected && optionClicked === "heal" && specificPlayerSelected){

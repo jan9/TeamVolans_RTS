@@ -138,6 +138,12 @@ class AIKingdom extends Kingdom{
   aiAttackTarget(attackUnit, currentTarget){
 
     var coordinateChange = this.attackArea(attackUnit);
+    if((coordinateChange.x + currentTarget.x) > this.game.map.widthInPixels || (coordinateChange.x + currentTarget.x) < 24){
+      coordinateChange.x = 0;
+    }
+    if((coordinateChange.y + currentTarget.y) > (this.game.map.heightInPixels-8) || (coordinateChange.y + currentTarget.y) < 0){
+      coordinateChange.y = 0;
+    }
 
     if(attackUnit.getType() !== "Priest"){
     /*  if((attackUnit.getType() === "Archer" || attackUnit.getType() === "Catapult" ) &&
