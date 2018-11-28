@@ -389,7 +389,7 @@ class gameHUD extends Phaser.Scene {
       buttonToMainMenu.on('pointerdown', function(pointer) {
         this.scene.stop('Level'+ currentLevel.toString());
         loadingSavedGame = false;
-        _timeLimit_ms = 15000, _timeLimit_s = 15;
+        _timeLimit_ms = 600000, _timeLimit_s = 600;
         backToMainMenu = 1;
         this.scene.start('Title');
       }, this);
