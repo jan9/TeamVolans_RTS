@@ -467,24 +467,6 @@ class Unit extends Phaser.GameObjects.Sprite{
     return withinRange;
   }
 
-/*  attackNextUnitInRange(enemyUnits){
-
-    console.log(enemyUnits);
-
-
-    let enemyUnit = this.findClosestUnit(enemyUnits);
-    if(enemyUnit){
-      if(distance(this.x, this.y, enemyUnit.x, enemyUnit.y) < 150){
-        if(this.checkWithinRange(enemyUnit)){
-          this.attackEnemy(enemyUnit);
-        }
-        else{
-          this.move(enemyUnit.x, enemyUnit.y, this.scene, {"name": "Attack", "target": enemyUnit});
-        }
-      }
-    }
-  }
-  */
 
   //attacks an enemy
   //also used for the priest to heal allies
@@ -524,14 +506,14 @@ class Unit extends Phaser.GameObjects.Sprite{
 
           //the actual attack takes 3 seconds to account for the animation playing
           var attackEvent = game.time.addEvent({ delay: 3000, callback: this.attackEnemyEnd,
-            callbackScope: this, loop: false, args: [attackedUnit, this.stateNum, attackedUnit.kingdom.units] });
+            callbackScope: this, loop: false, args: [attackedUnit, this.stateNum] });
         }
       }
     }
   }
 
   //attack the enemy
-  attackEnemyEnd(attackedUnit, originalStateNum, enemyKingdomUnits){
+  attackEnemyEnd(attackedUnit, originalStateNum){
 
     if(this.stateNum == originalStateNum){
       //set state to idle and stop the attack animation
@@ -554,10 +536,6 @@ class Unit extends Phaser.GameObjects.Sprite{
           }
         }
       }
-      /*
-      if(attackedUnit.isDead() && this.isPlayerObj()){
-        this.attackNextUnitInRange(enemyKingdomUnits);
-      }*/
     }
   }
 
