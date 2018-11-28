@@ -1,3 +1,4 @@
+var refresh;
 var level1Saved, level2Saved, level3Saved;
 var loadingSavedGame = false;
 var loadinglevel = 0;
@@ -17,9 +18,10 @@ class Load extends Phaser.Scene {
     this.scene.setVisible(false,'gameHUD');
     this.add.image(400,300,'title_l');
     var box1 = this.add.image(_width*0.05, _height*0.05,'box').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
+    currentLevel = 0;
     homeButton(this);
 
-    currentLevel = 0;
+
     check_gameover = 0;
     loadinglevel = 0;
     currentData = "";
@@ -49,9 +51,9 @@ class Load extends Phaser.Scene {
 
   update() {
     if (backToMainMenu === 1) {
-      backToMainMenu = 0;
       this.scene.start('Title');
     }
+    homeButton(this);
   }
 
   getLevel1Data(savedDateInfo) {

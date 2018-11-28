@@ -233,7 +233,7 @@
                 {
                  "height":96,
                  "id":20,
-                 "name":"Gold_1",
+                 "name":"Player_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -250,7 +250,7 @@
                 {
                  "height":96,
                  "id":22,
-                 "name":"Gold_2",
+                 "name":"Player_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -261,13 +261,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":35,
-                 "y":2495
+                 "x":129,
+                 "y":2505
                 }, 
                 {
                  "height":96,
                  "id":23,
-                 "name":"Gold_3",
+                 "name":"Enemy_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -284,7 +284,7 @@
                 {
                  "height":96,
                  "id":25,
-                 "name":"Gold_4",
+                 "name":"Enemy_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -297,23 +297,6 @@
                  "width":96,
                  "x":2532,
                  "y":64
-                }, 
-                {
-                 "height":96,
-                 "id":26,
-                 "name":"Gold_5",
-                 "properties":[
-                        {
-                         "name":"isMine",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":2369,
-                 "y":1054
                 }, 
                 {
                  "height":160,

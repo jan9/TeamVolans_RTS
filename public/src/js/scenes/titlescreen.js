@@ -14,10 +14,12 @@ class Title extends Phaser.Scene {
     this.add.image(_width*0.5, _height*0.78,'box').setDisplaySize(_width/2,_height/2.5);
     // add the buttons
     this.buttons();
-    currentLevel = 0;
     check_gameover = 0;
     loadingSavedGame = false;
     loadinglevel = 0;
+    backToMainMenu = 0;
+    currentLevel = 0;
+    pausedBeforeQuit = 0;
     console.log("[Title] create() complete");
   }
 
@@ -41,6 +43,7 @@ class Title extends Phaser.Scene {
     button3.setInteractive({useHandCursor:true});
     button3.on('pointerdown', function(pointer) {this.scene.start('Instructions');}, this);
 
+    /*
     // button for starting a test game
     var shadow4 = this.add.sprite(100,200,'button');
     shadow4.tint = 0x000000;
@@ -49,6 +52,7 @@ class Title extends Phaser.Scene {
     var text4 = this.add.text(95, 195, "(For dev purpose)\nTest AI", style).setOrigin(0.5,0.5);
     button4.setInteractive({useHandCursor:true});
     button4.on('pointerdown', function(pointer) {this.scene.start('TestAI');}, this);
+    */
 
     //console.log("[Title] scene created");
   }

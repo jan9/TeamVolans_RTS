@@ -180,8 +180,10 @@ getStructureInfo(buildingType){
 
 
   createGoldDeposits(startingObjectsList){
-    for(var i = 0; i< _goldDepositsNum; i++){
-      var depositCoords = this.findStartingPosition({"type": "Deposit", "baseType": "Deposit"}, i+1, startingObjectsList);
+    for(var i=0; i<_goldDepositsNum; i++){
+      //type: "Deposit", "baseType": "Deposit
+      var depositCoords = this.findStartingPosition({type: "Deposit", baseType: "Deposit"}, i+1, startingObjectsList);
+      //console.log(depositCoords);
       let goldDeposit = new Phaser.GameObjects.Sprite(this.scene, depositCoords.x, depositCoords.y, 'deposit');
       this.scene.add.existing(goldDeposit);
       this.goldDeposits.push(goldDeposit);

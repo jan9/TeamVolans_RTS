@@ -1,18 +1,17 @@
 var currentTime,
     currentLevel;
 var playerWon;
-var textLevelX;
 var goto;
 var build_signal = 0; // 1 is build
 var check_gameover = 0; // if game is over, then 1
 var currentGold;
 var currentPopulation;
-var displayGold,displayPop,displayMessage;;
+var displayGold,displayPop,displayMessage,displayTime;
 var image1, timedEvent;
-var gameMessage;
+var displayMessage;
 var buttons = [];
 var optionClicked = "none";
-var gamePaused, pauseStartTime, pauseEndTime;
+var gamePaused, pauseStartTime, pauseEndTime, pausedBeforeQuit;
 var pauseButton, pauseMenuBox, pauseCloseButton, yesButton, noButton;
 var timer, timeElapsed;
 
@@ -30,7 +29,8 @@ class gameHUD extends Phaser.Scene {
     // where the info is displayed
     var topHUD = this.add.rectangle(0, 0, _width-32, 50, 0x161616).setStrokeStyle(4, 0xefc53f).setOrigin(0,0);
     topHUD.alpha = 0.5;
-    this.button_Title();
+    homeButton(this);
+    //this.button_Quit();
     this.buildButtons();
     this.optionButton();
 
@@ -41,7 +41,7 @@ class gameHUD extends Phaser.Scene {
     // have a message box?
     var displayLevel = this.add.text(150,17,'CURRENT LEVEL: ' + currentLevel);
 
-    currentTime = this.add.text(350, 17, 'CURRENT TIME: ');
+    displayTime = this.add.text(350, 17, 'CURRENT TIME: ');
 
   // cheat: start with 1000 GOLD
 
@@ -49,48 +49,54 @@ class gameHUD extends Phaser.Scene {
 
    displayPop = this.add.text(850,17,'POPULATION: ');
 
-   gameMessage = this.add.text(3, 53, '');
-  // gameMessage.setText('');
+   displayMessage = this.add.text(4, 53, gameMode.name+ ' mode | '+opponentKingdom +'(AI) vs '+kingdomSelection.name);
+  // displayMessage.setText('');
 
     this.pauseBox();
+
   }
 
   update() {
+
     // set up a 10 minute timer
     timeElapsed = timer.getElapsedSeconds();
     if (loadingSavedGame === true) {
       timeElapsed = timer.getElapsedSeconds() + currentData.currentGameTime;
     }
 
-    var readableTime = calculateTime(timeElapsed);
+    var currentTime = calculateTime(timeElapsed);
     //console.log("[HUD] readableTime", timeElapsed);
     if (gamePaused === true) {
       this.pauseBox_shown();
     } else if (gamePaused === false) {
       this.pauseBox_notShown();
     }
-    //currentTime variable is in HUD so...need to check if it exists first
-    if(currentTime){
-      currentTime.setText('CURRENT TIME: ' + readableTime);
-    }
 
-    this.checkGameState();
+    displayTime.setText('CURRENT TIME: ' + currentTime);
 
     // current gold and population
     displayGold.setText('CURRENT GOLD: ' + player.gold);
+
     displayPop.setText('POPULATION: ' + getPopulation(currentPopulation, player));
+
+    this.checkGameState();
   }
+
 
   checkGameState() {
     // 1. If game has reached time limit
+    if (loadingSavedGame === true) {
+      timeElapsed -= currentData.currentGameTime;
+    }
     if(timeElapsed === _timeLimit_s){ //600 = 10 minute
       playerWon = calculateWinner(player, ai);
       if (playerWon === true) {
-        var image2 = this.add.sprite(_width*0.5, _height*0.5,'win');
-      }
-      if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
-        this.button_goToLevelX(goto);
-      } else if (playerWon === false) {
+        if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
+          this.button_goToLevelX(goto);
+        } else if (currentLevel === 3 && playerWon === true) {
+          this.button_endReached();
+        }
+      } else {
         check_gameover = 1;
       }
     }
@@ -115,9 +121,10 @@ class gameHUD extends Phaser.Scene {
         playerWon = false; check_gameover = 1;
       } else if (aiCastleCount === 0) {
           playerWon = true;
-          var image2 = this.add.sprite(_width*0.5, _height*0.5,'win');
           if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
-          this.button_goToLevelX(goto);
+            this.button_goToLevelX(goto);
+          } else if (currentLevel === 3 && playerWon === true) {
+            this.button_endReached();
           }
       }
     }
@@ -139,6 +146,7 @@ class gameHUD extends Phaser.Scene {
     pauseCloseButton.setVisible(false);
   }
 
+
   pauseBox() {
     pauseMenuBox = this.add.sprite(_width/2, _height/2, 'pauseMenuBox').setDepth(12).setScrollFactor(0).setVisible(false);
     pauseCloseButton = this.add.sprite(_width*0.69, _height*0.32, 'pauseCloseButton').setDisplaySize(25,25).setDepth(13).setScrollFactor(0).setVisible(false);
@@ -156,7 +164,25 @@ class gameHUD extends Phaser.Scene {
       this.scene.resume('Level1');
       this.scene.resume('Level2');
       this.scene.resume('Level3');
-      }, this);
+      if (currentLevel === 1 || currentLevel === 2 || currentLevel === 3) {
+        var quitButton = this.add.sprite(10,3,'quitButton').setOrigin(0,0).setDisplaySize(120,40).setDepth(25);
+        quitButton.setInteractive({useHandCursor:true});
+        quitButton.on('pointerdown', function () {
+          pausedBeforeQuit = 1;//backToMainMenu = 1;
+          if(pausedBeforeQuit === 1 && backToMainMenu === 0 && currentLevel != 0) {
+            pausedBeforeQuit = 2;
+            gamePaused = true;
+            pauseStartTime = timer.getElapsedSeconds();
+            timer.paused = true;
+            this.scene.pause('Level1');
+            this.scene.pause('Level2');
+            this.scene.pause('Level3');
+            quitButton.destroy();
+          }
+          console.log("[HUD] quitButton");
+        }, this); // for quitButton
+      }
+    }, this); // for pauseCloseButton
 
     noButton.setInteractive({useHandCursor:true});
     noButton.on('pointerdown', function(pointer) {
@@ -167,6 +193,7 @@ class gameHUD extends Phaser.Scene {
       this.scene.resume('Level1');
       this.scene.resume('Level2');
       this.scene.resume('Level3');
+      if (pausedBeforeQuit === 2) { pausedBeforeQuit = 0; backToMainMenu = 1; }
       }, this);
 
     yesButton.setInteractive({useHandCursor:true});
@@ -350,21 +377,37 @@ class gameHUD extends Phaser.Scene {
       }, this);
   }
 
-  button_Title() {
-    // button for going back to the main menu
-    var titlebuttonHUD = this.add.sprite(10,3,'mainmenuButton').setOrigin(0,0).setDisplaySize(120,40);
-    titlebuttonHUD.setInteractive({useHandCursor:true});
-    titlebuttonHUD.on('pointerdown', function(pointer) {backToMainMenu = 1;},this);
+
+
+  button_endReached() {
+    var youWin_logo = this.add.sprite(_width*0.5, _height*0.5,'win');
+    var buttonToReturn = this.add.sprite(_width*0.9,26,'button');
+
+    var buttonToMainMenu= this.add.sprite(_width*0.821,0,'mainmenuButton').setOrigin(0,0).setDisplaySize(200,50);
+    buttonToMainMenu.setInteractive({useHandCursor:true});
+    if(goto != ""){
+      buttonToMainMenu.on('pointerdown', function(pointer) {
+        this.scene.stop('Level'+ currentLevel.toString());
+        loadingSavedGame = false;
+        _timeLimit_ms = 15000, _timeLimit_s = 15;
+        backToMainMenu = 1;
+        this.scene.start('Title');
+      }, this);
+    }
   }
 
   button_goToLevelX(goto) {
-    var buttonToLevelX = this.add.sprite(_width*0.9,25,'button');
-    textLevelX = this.add.text(_width*0.9,25, "Next Level", {fontSize: '25px'}).setOrigin(0.5,0.5);
+    var lvlComplete_logo = this.add.sprite(_width*0.5, _height*0.5,'levelComplete');
+
+    var buttonToLevelX = this.add.sprite(_width*0.9,26,'button');
+    var textLevelX = this.add.text(_width*0.9,25, "Next Level", {fontSize: '25px'}).setOrigin(0.5,0.5);
 
     buttonToLevelX.setInteractive({useHandCursor:true});
     if(goto != ""){
       buttonToLevelX.on('pointerdown', function(pointer) {
-        this.scene.remove('Level'+currentLevel.toString());
+        this.scene.stop('Level'+ currentLevel.toString());
+        loadingSavedGame = false;
+        _timeLimit_ms = 15000, _timeLimit_s = 15;
         this.scene.start(goto);
       }, this);
     }
