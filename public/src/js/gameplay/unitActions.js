@@ -1,5 +1,5 @@
 function spiralLocation(i){
-
+  
   let coordinates = {"x": 0, "y": 0};
 
   if(i % 3 == 0){

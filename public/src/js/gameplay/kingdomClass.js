@@ -425,20 +425,19 @@ getStructureInfo(buildingType){
 
 
 
-isPlayer(){
-  return this.playerKingdom;
-}
+  isPlayer(){
+    return this.playerKingdom;
+  }
 
   updatePlayerKingdom(){
     //this.unitAmount = this.units.length;
-      //TO DO
     for(var i = 0; i < playerUnitSelected.length; i++){
 
       var unit = playerUnitSelected[i];
       // if the unit selected, move it to a new position
 
       if(unit.player_selected === true && optionClicked === "mine"){
-          unit.mine(this, this.game);
+        unit.mine(this, this.game);
       }
       else if(unit.player_selected === true && optionClicked === "build"){
         if(build_signal > 0){
