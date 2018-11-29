@@ -190,6 +190,17 @@ class Unit extends Phaser.GameObjects.Sprite{
       return({"x": xLocation, "y": yLocation});
     }
 
+    radiusCheck(xLocation, yLocation){
+      let inRadius = false;
+
+      //if the destination x is close enough to the new xLocation, and same for y coordinates, then we're in the radius
+      if((this.destinationX > (xLocation - _radiusVariance)) && (this.destinationX < (xLocation + _radiusVariance))
+      &&(this.destinationY > (yLocation - _radiusVariance)) && (this.destinationY < (yLocation + _radiusVariance))){
+        inRadius = true;
+      }
+
+      return inRadius;
+    }
     //moves the unit to the desired location
    move(xLocation, yLocation, game, action){
 
@@ -197,9 +208,9 @@ class Unit extends Phaser.GameObjects.Sprite{
      xLocation = checkedLocations.x
      yLocation = checkedLocations.y;
 
-     if(!this.isDead() && (this.destinationX != xLocation || this.destinationY != yLocation)){
+     if(!this.isDead() && (this.destinationX !== xLocation || this.destinationY !== yLocation)){
 
-       this.playerStopMovement();
+       this.playerStopMovement(true);
 
        //sets what the unit's destination is and gives it the Move state
       this.directionX = this.destinationX = xLocation;
@@ -245,22 +256,36 @@ class Unit extends Phaser.GameObjects.Sprite{
     }
 
     if(direction === "S" && typeOfAnim === "Walk"){
-      this.setTexture(this.type.toLowerCase()+enemy);
-      this.anims.play(this.type.toLowerCase()+enemy+typeOfAnim+direction);
+      if((this.texture.key !== this.type.toLowerCase()+enemy )|| (this.anims.getCurrentKey() !== this.type.toLowerCase()+enemy+typeOfAnim+direction)){
+        this.setTexture(this.type.toLowerCase()+enemy);
+        this.anims.play(this.type.toLowerCase()+enemy+typeOfAnim+direction);
+      }
     }
     else if(direction === "SW" || direction === "W" || direction === "NW"
     || direction === "S"){
-      this.setTexture(this.type.toLowerCase()+"_rev"+enemy);
-      this.anims.play(this.type.toLowerCase()+"_rev"+enemy+typeOfAnim+direction);
+      if(typeOfAnim !== "Walk"){
+        this.setTexture(this.type.toLowerCase()+"_rev"+enemy);
+        this.anims.play(this.type.toLowerCase()+"_rev"+enemy+typeOfAnim+direction);
+      }
+      else if((this.texture.key !== this.type.toLowerCase()+"_rev"+enemy) || (this.anims.getCurrentKey() !== this.type.toLowerCase()+"_rev"+enemy+typeOfAnim+direction)){
+        this.setTexture(this.type.toLowerCase()+"_rev"+enemy);
+        this.anims.play(this.type.toLowerCase()+"_rev"+enemy+typeOfAnim+direction);
+      }
     }
     else{
-      this.setTexture(this.type.toLowerCase()+enemy);
-      this.anims.play(this.type.toLowerCase()+enemy+typeOfAnim+direction);
+      if(typeOfAnim !== "Walk"){
+        this.setTexture(this.type.toLowerCase()+enemy);
+        this.anims.play(this.type.toLowerCase()+enemy+typeOfAnim+direction);
+      }
+      else if((this.texture.key !== this.type.toLowerCase()+enemy) || (this.anims.getCurrentKey() !== this.type.toLowerCase()+enemy+typeOfAnim+direction)){
+        this.setTexture(this.type.toLowerCase()+enemy);
+        this.anims.play(this.type.toLowerCase()+enemy+typeOfAnim+direction);
+      }
     }
   }
 
 
-  playerStopMovement(){
+  playerStopMovement(isComingFromMove){
 
     //put it in an if statement in case unit is dead
     if(this){
@@ -270,8 +295,11 @@ class Unit extends Phaser.GameObjects.Sprite{
       this.bar.body.velocity.x=0;
       this.bar.body.velocity.y=0;
 
-      this.setState("Idle");
-      this.anims.stop();
+      if(!isComingFromMove){
+        this.setState("Idle");
+        this.anims.stop();
+      }
+
       }
     }
   }

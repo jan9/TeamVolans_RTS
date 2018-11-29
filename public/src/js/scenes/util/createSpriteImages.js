@@ -153,6 +153,15 @@ function createAnim(newKeyName, originalKey, framesArr, scene){
   //https://www.w3schools.com/jsref/jsref_replace.asp
   framesArr = framesArr.replace("_enemy", "");
 
+  //speed the frames up to 3 frames/second
+  let frameRate = 3;
+
+  //if the animation is a "Die" animation, have it only be 1 frame per second
+  if(framesArr.includes("Die")){
+    frameRate = 1;
+  }
+
+
   scene.anims.create(
     {
              key: newKeyName,
@@ -160,7 +169,7 @@ function createAnim(newKeyName, originalKey, framesArr, scene){
                  frames: window[framesArr]
              }),
              repeat: -1,
-             frameRate: 1
+             frameRate: frameRate
   });
 }
 

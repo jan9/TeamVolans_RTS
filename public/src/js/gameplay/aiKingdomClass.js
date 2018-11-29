@@ -5,6 +5,7 @@ class AIKingdom extends Kingdom{
       this.buildOrder = kingdomInformation.buildOrder;
       this.currentBuild = 0;
       this.isHardMode = isHardMode;
+      this.receivedStartingBonus = false;
 
       //attack group which attacks whoever is closest to the castle
       this.closestTargetAttackGroup = [];
@@ -30,8 +31,6 @@ class AIKingdom extends Kingdom{
       //keeps track of the closest enemy utility object (villager/miner, structure)
       this.closestEnemyUtilityObj;
 
-
-      this.hardModeBonus();
       this.addStartingUnitsToGroup();
     }
 
@@ -64,6 +63,7 @@ class AIKingdom extends Kingdom{
 
   hardModeBonus(){
     if(this.isHardMode){
+      console.log("IS HARD MODE");
 
       //ai has starting bonus if game is hardmode
       this.hardModeStartingBonus();
@@ -87,7 +87,7 @@ class AIKingdom extends Kingdom{
         this.unitAmount++;
       }
       else{
-        let structCoords = this.findOpenArea();
+        let structCoords = this.findOpenArea(this.startingX, this.startingY);
         let structure = new Structure(this.getStructureInfo(currentBuildOrder), structCoords.x, structCoords.y, this.game);
         this.buildings.push(structure);
         this.buildingsAmount++;
@@ -99,11 +99,15 @@ class AIKingdom extends Kingdom{
 
   hardModeMiddleBonus(){
 
+    console.log("MIDDLE BONUS RECEIVED");
+
     //gets a bonus of one of each unit type
-    for(var i = 0; i < _unitList; i++){
-      let unit = new Unit(this.getUnitInfo(currentBuildOrder), this.startingX+10, this.startingY-10, this.game);
+    for(let unitName of _unitList){
+      let unit = new Unit(this.getUnitInfo(unitName), this.startingX+10, this.startingY-10, this.game);
       this.units.push(unit);
       this.unitAmount++;
+      console.log("UNIT CREATED");
+      console.log(unit);
     }
 
       this.gold+=100;
@@ -344,13 +348,21 @@ class AIKingdom extends Kingdom{
     let closestUtilityUnit = this.findClosest(utilityUnitList);
     let closestUtilityStructure = this.findClosest(playersKingdom.buildings);
 
-    //set the closest (unit or structure) to be the closest utility
-    if(distance(this.startingX, this.startingY, closestUtilityUnit.x, closestUtilityUnit.y) <
-    distance(this.startingX, this.startingY, closestUtilityStructure.x, closestUtilityStructure.y)){
+    if(!closestUtilityUnit && closestUtilityStructure){
+        closestUtility = closestUtilityStructure;
+    }
+    else if(!closestUtilityStructure && closestUtilityUnit){
       closestUtility = closestUtilityUnit;
     }
-    else{
-      closestUtility = closestUtilityStructure;
+    else if(closestUtilityUnit && closestUtilityStructure){
+      //set the closest (unit or structure) to be the closest utility
+      if(distance(this.startingX, this.startingY, closestUtilityUnit.x, closestUtilityUnit.y) <
+      distance(this.startingX, this.startingY, closestUtilityStructure.x, closestUtilityStructure.y)){
+        closestUtility = closestUtilityUnit;
+      }
+      else{
+        closestUtility = closestUtilityStructure;
+      }
     }
     return closestUtility;
   }
@@ -397,8 +409,11 @@ class AIKingdom extends Kingdom{
   enemyNearCastle(enemyUnit){
     let closeToCastle = false;
 
-    if(distance(enemyUnit.x, enemyUnit.y, this.startingX, this.startingY) < 200){
-      closeToCastle = true;
+    if(enemyUnit){
+
+      if(distance(enemyUnit.x, enemyUnit.y, this.startingX, this.startingY) < 200){
+        closeToCastle = true;
+      }
     }
 
     return closeToCastle;
@@ -491,6 +506,11 @@ class AIKingdom extends Kingdom{
 
   //updates the ai kingdom
     updateAIKingdom(enemyKingdom){
+
+      if((!this.receivedStartingBonus) && this.isHardMode){
+        this.receivedStartingBonus = true;
+        this.hardModeBonus();
+      }
 
       //resets the buildOrder when the end is reached
       if(this.currentBuild >= this.buildOrder.length){

@@ -9,6 +9,8 @@ const _attackRangeOne = 36;
 const _attackRangeTwo = 70;
 const _attackRangeThree = 102;
 
+const _radiusVariance = 16;
+
 const _options = [{"key": "T", "name": "travel"}, {"key": "B", "name": "build"},
                   {"key": "F", "name": "fight"}, {"key": "C", "name": "create"},
                   {"key": "M", "name": "mine"}, {"key": "R", "name": "royalty"},
