@@ -133,7 +133,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     if(unitToHeal){
 
       //can only heal if a priest, not already healing, and the object to heal is not a structure
-      if(this.getType() === "Priest" && this.getState() !== "Heal" && unitToHeal.baseType !== "Structure"){
+      if(this.getType() === "Priest" && this.getState() !== "Heal" && this.getState() !== "Move" && unitToHeal.baseType !== "Structure"){
         if(distance(this.x, this.y, unitToHeal.x, unitToHeal.y) < _attackRangeTwo){
           this.setState("Heal");
           this.unitAnimations("Action");
@@ -159,6 +159,10 @@ class Unit extends Phaser.GameObjects.Sprite{
               unitToHeal.updateHealth(this.getAttack());
               this.setState("Idle");
               this.anims.stop();
+            }
+
+            if(this.isPlayerObj()){
+              this.playerHeal(this.kingdom.units, this.scene);
             }
         }
       }
@@ -542,6 +546,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   playerAttack(game, enemyObj, i){
     if(this.checkWithinRange(enemyObj)){
+      this.playerStopMovement();
       this.attackEnemy(enemyObj);
     }
     else{
@@ -577,6 +582,22 @@ class Unit extends Phaser.GameObjects.Sprite{
     return closestUnit;
   }
 
+
+  playerHeal(unitsList, game){
+    let radius = 200;
+    let closestInjuredUnit = this.closestInjured(unitsList);
+    if(closestInjuredUnit){
+      if(distance(closestInjuredUnit.x, closestInjuredUnit.y, this.x, this.y) < radius){
+        if(this.checkWithinRange(closestInjuredUnit)){
+          this.playerStopMovement();
+          this.healUnit(closestInjuredUnit);
+        }
+        else{
+          this.move(closestInjuredUnit.x, closestInjuredUnit.y, game, {"name": "Heal", "kingdom": this.kingdom});
+        }
+      }
+    }
+  }
 
   //finds the closest injured unit
   closestInjured(unitsList){

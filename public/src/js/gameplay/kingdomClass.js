@@ -473,8 +473,8 @@ getStructureInfo(buildingType){
             }
         }
       }
-      else if(unit.player_selected && optionClicked === "heal" && specificPlayerSelected){
-        unit.healUnit(specificPlayerSelected);
+      else if(unit.player_selected && optionClicked === "heal" && unit.getType() === "Priest"){
+        unit.playerHeal(this.units, this.game);
       }
       else if(unit.player_selected  === true && optionClicked === "travel"){
         let coordinates = spiralLocation(i);
