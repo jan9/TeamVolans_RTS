@@ -157,7 +157,7 @@ function createAnim(newKeyName, originalKey, framesArr, scene){
   let frameRate = 3;
 
   //if the animation is a "Die" animation, have it only be 1 frame per second
-  if(framesArr.includes("Die")){
+  if(framesArr.includes("Die") || framesArr.includes("die")){
     frameRate = 1;
   }
 

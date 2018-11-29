@@ -660,7 +660,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     let castle = undefined;
     for(let building of kingdom.buildings){
       if(building.type === "Castle"){
-        if(distance(this.x, this.y, building.x, building.y) < _maxStructH){
+        if(distance(this.x, this.y, building.x, building.y) < _maxStructH-20){
           castle = building;
         }
       }

@@ -39,9 +39,14 @@ function royaltyAI(royal, kingdom){
         kingdom.incrementBuildOrder();
       }
   }
+  //if not in a castle, find a castle and start the bonus
   else if(!castle){
     let foundCastle = royal.findCastle(kingdom);
     royal.royalBonus(foundCastle, kingdom);
+  }
+  //if in a castle, start the bonus
+  else if(castle){
+    royal.royalBonus(castle, kingdom);
   }
 }
 
