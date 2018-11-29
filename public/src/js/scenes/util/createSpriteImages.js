@@ -50,16 +50,16 @@ var swordsmanDieEFrames = swordsmanDieSEFrames = swordsman_revDieWFrames = sword
 
 //catapult movement frames
 var catapultMoveNFrames = [0, 5];
-var catapultMoveNEFrames = catapultMoveSWFrames = [1, 6];
-var catapultMoveEFrames = catapultMoveWFrames = [2, 7];
-var catapultMoveSEFrames = catapultMoveNWFrames = [3, 8];
+var catapultMoveNEFrames = catapult_revMoveSWFrames = [1, 6];
+var catapultMoveEFrames = catapult_revMoveWFrames = [2, 7];
+var catapultMoveSEFrames = catapult_revMoveNWFrames = [3, 8];
 var catapultMoveSFrames = [4, 9];
 
 //catapult action frames
 var catapultShootNFrames = [5, 10, 15];
-var catapultShootNEFrames = catapultShootSWFrames = [6, 11, 16];
-var catapultShootEFrames = catapultShootWFrames = [7, 12, 17];
-var catapultShootSEFrames = catapultNWFrames = [8, 13, 18];
+var catapultShootNEFrames = catapult_revShootSWFrames = [6, 11, 16];
+var catapultShootEFrames = catapult_revShootWFrames = [7, 12, 17];
+var catapultShootSEFrames = catapult_revShootNWFrames = [8, 13, 18];
 var catapultShootSFrames = [9, 14, 19];
 
 var unitSprites = ['archer', 'archer_rev', 'catapult', 'catapult_rev', 'priest', 'priest_rev',
