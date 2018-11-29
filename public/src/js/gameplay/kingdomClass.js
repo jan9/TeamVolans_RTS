@@ -455,6 +455,7 @@ getStructureInfo(buildingType){
       else if(unit.player_selected && unit.type==="Royalty" && optionClicked === "royalty"){
         let castle = unit.isInCastle(this);
         if(castle){
+          unit.playerStopMovement();
           unit.startRoyalBonus(castle, this);
         }
       }

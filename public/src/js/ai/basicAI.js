@@ -69,7 +69,7 @@ function villagerAI(villager, kingdom){
 
     }
     //if nothing to build and not already mining, then mine
-    else if (villager.isIdle()){
+    if (villager.isIdle()){
       //randomly chooses which mine to go to
       let randMine = Math.floor(Math.random() * 2);
       villager.move(kingdom.goldDeposits[randMine].x, kingdom.goldDeposits[randMine].y, kingdom.scene, {"name": "Mine", "kingdom": kingdom});

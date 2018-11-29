@@ -422,6 +422,7 @@ class AIKingdom extends Kingdom{
       if(this.enemyNearCastle(this.closestEnemyAttackUnit)){
         this.attackGroupAction(this.supportAttackGroup, this.closestEnemyAttackUnit, 1);
       }
+      //otherwise, go back and wait at the castle
       else{
         this.attackGroupAction(this.supportAttackGroup, this.closestEnemyAttackUnit, 0);
       }
@@ -431,14 +432,24 @@ class AIKingdom extends Kingdom{
     if(this.closestEnemyUtilityObj && this.utilityTargetsAttackGroup.length >= 3){
       this.attackGroupAction(this.utilityTargetsAttackGroup, this.closestEnemyUtilityObj, 1);
     }
+    //otherwise if there is an enemy near the ai castle, move to attack it
+    else if(this.enemyNearCastle(this.closestEnemyAttackUnit)){
+      this.attackGroupAction(this.utilityTargetsAttackGroup, this.closestEnemyAttackUnit, 1);
+    }
+    //otherwise head back and wait at the castle
     else{
       this.attackGroupAction(this.utilityTargetsAttackGroup, this.closestEnemyUtilityObj, 0);
     }
 
-    //if there is an enemy castle and the group size is 5 or greater, move to attack it. Otherwise, go back to the starting position
+    //if there is an enemy castle and the group size is 5 or greater, move to attack it.
     if(this.enemyCastle && this.castleAttackGroup.length >= 5){
       this.attackGroupAction(this.castleAttackGroup, this.enemyCastle, 1);
     }
+    //otherwise, if there is an enemy near the ai castle, move to attack it
+    else if(this.enemyNearCastle(this.closestEnemyAttackUnit)){
+      this.attackGroupAction(this.castleAttackGroup, this.closestEnemyAttackUnit, 1);
+    }
+    //otherwise head back and wait at the castle
     else{
       this.attackGroupAction(this.castleAttackGroup, this.enemyCastle, 0);
     }
