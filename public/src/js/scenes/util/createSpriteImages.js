@@ -121,7 +121,7 @@ function createStructureSprites(scene){
        { frameWidth: 160, frameHeight: 160}
    );
   scene.load.spritesheet('machinery',
-      'Graphics/buildings/gold_mine.png',
+      'Graphics/buildings/machinery.png',
       { frameWidth: 128, frameHeight: 128}
   );
 

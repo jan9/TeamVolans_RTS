@@ -29,7 +29,7 @@ class Title extends Phaser.Scene {
   /* Helper functions  */
   buttons() {
     // button for starting a new game
-    var button1 = this.add.sprite(_width*0.5, _height*0.675, 'startButton');
+    var button1 = this.add.sprite(_width*0.5, _height*0.67, 'startButton');
     button1.setInteractive({useHandCursor:true});
     button1.on('pointerdown', function(pointer) {this.scene.start('Selection');}, this);
 

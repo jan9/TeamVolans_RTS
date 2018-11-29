@@ -144,3 +144,17 @@ function timeStamp() {
   today = mm + '/' + dd + '/' + yyyy + '  ' + hours + ':' + minutes + ':' + seconds;
   return today;
 }
+
+function announcement(scene, gameMessage) {
+  displayMessage.setText("");
+  displayMessage = scene.add.text(4,80,gameMessage);
+     scene.tweens.add({
+       targets: displayMessage,
+       x: _width+50,
+       y: displayMessage.y,
+       ease: 'linear',
+       duration: 9000,
+       repeat: 0,
+       yoyo: false
+     });
+   }

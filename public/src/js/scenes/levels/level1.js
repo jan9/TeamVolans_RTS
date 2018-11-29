@@ -142,6 +142,7 @@ class Level1 extends Phaser.Scene {
     }
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
+    notEnoughGold = 0;
 
     dragSelect(this, player);
     this.pointerInput();

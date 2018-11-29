@@ -27,12 +27,12 @@ class Selection extends Phaser.Scene {
     this.add.image(400,300,'title_g');
     currentLevel = 0;
     homeButton(this);
-    var box1 = this.add.image(_width*0.05, _height*0.05,'box').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
+    var box1 = this.add.image(_width*0.05, _height*0.05,'selectionBox').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
 
     // 1. Player selects a kingdom
     // choose from Dueling Dominion, Equal Empire, Fortune Federation, Legendary League, Remote Realm, Security Syndicate
     // enblem generator: http://nailek.net/gw2/emblemeditor/#
-    var selection_text1 = this.add.text(_width*0.11, _height*0.15, "Select a kingdom: ", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+    //var selection_text1 = this.add.text(_width*0.11, _height*0.15, "Select a kingdom: ", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
 
     dd_emblem = this.emblemsetup(_width*0.13,_height*0.225,"Dueling Dominion");
     dd_text = this.emblem_textSetup(_width*0.13,_height*0.225,"Dueling Dominion", dd_emblem);
@@ -51,9 +51,9 @@ class Selection extends Phaser.Scene {
     //var ll_emblem = this.emblemsetup(1200,180,"Legendary League");
 
     // 2. Player selects the game level
-    var selection_text2 = this.add.text(_width*0.11, _height*0.55, "Select a game difficulty: ",{font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
-    easyMode = this.modeSetup(_width*0.6, _height*0.57, "easy");
-    hardMode = this.modeSetup(_width*0.8, _height*0.57, "hard");
+    //var selection_text2 = this.add.text(_width*0.11, _height*0.55, "Select a game difficulty: ",{font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+    easyMode = this.modeSetup(_width*0.45, _height*0.65, "easy");
+    hardMode = this.modeSetup(_width*0.65, _height*0.65, "hard");
 
     //3. Random assignment of the AI kingdom
     value = Phaser.Math.Between(0, 4);  // Phaser's random number generator

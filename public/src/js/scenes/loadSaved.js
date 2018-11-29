@@ -17,7 +17,7 @@ class Load extends Phaser.Scene {
     this.scene.sendToBack('Selection');
     this.scene.setVisible(false,'gameHUD');
     this.add.image(400,300,'title_l');
-    var box1 = this.add.image(_width*0.05, _height*0.05,'box').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9).setAlpha(1);
+    var box1 = this.add.image(_width*0.05, _height*0.05,'loadBox').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9);
     currentLevel = 0;
     homeButton(this);
 
@@ -26,7 +26,7 @@ class Load extends Phaser.Scene {
     loadinglevel = 0;
     currentData = "";
 
-    var loadMenuText = this.add.text(_width*0.38, _height*0.15, "Load Game", {font: "60px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+    //var loadMenuText = this.add.text(_width*0.38, _height*0.15, "Load Game", {font: "60px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
 
     level1Saved = JSON.parse(localStorage.getItem('level1Data'));
     level2Saved = JSON.parse(localStorage.getItem('level2Data'));
@@ -57,8 +57,8 @@ class Load extends Phaser.Scene {
   }
 
   getLevel1Data(savedDateInfo) {
-    var lv1_text = this.add.text(_width*0.2, _height*0.31, "Level 1", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
-    var lv1_info = this.add.text(_width*0.35, _height*0.33, savedDateInfo.level1Saved, {font: "20px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+  //  var lv1_text = this.add.text(_width*0.2, _height*0.31, "Level 1", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+    var lv1_info = this.add.text(_width*0.35, _height*0.325, savedDateInfo.level1Saved, {font: "24px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
     var lv1_erase = this.add.sprite(_width*0.6, _height* 0.35, 'eraseButton').setDisplaySize(100, 50);
     var lv1_load = this.add.sprite(_width*0.75, _height* 0.35, 'loadDataButton').setDisplaySize(100, 50);
 
@@ -81,10 +81,10 @@ class Load extends Phaser.Scene {
   }
 
  getLevel2Data(savedDateInfo) {
-   var lv2_text = this.add.text(_width*0.2, _height*0.46, "Level 2", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
-   var lv2_info = this.add.text(_width*0.35, _height*0.48, savedDateInfo.level2Saved, {font: "20px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
-   var lv2_erase = this.add.sprite(_width*0.6, _height* 0.5, 'eraseButton').setDisplaySize(100, 50);
-   var lv2_load = this.add.sprite(_width*0.75, _height* 0.5, 'loadDataButton').setDisplaySize(100, 50);
+   //var lv2_text = this.add.text(_width*0.2, _height*0.46, "Level 2", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+   var lv2_info = this.add.text(_width*0.35, _height*0.49, savedDateInfo.level2Saved, {font: "24px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+   var lv2_erase = this.add.sprite(_width*0.6, _height* 0.51, 'eraseButton').setDisplaySize(100, 50);
+   var lv2_load = this.add.sprite(_width*0.75, _height* 0.51, 'loadDataButton').setDisplaySize(100, 50);
 
    lv2_erase.setInteractive({useHandCursor:true});
    lv2_erase.on('pointerdown', function(pointer) {
@@ -105,10 +105,10 @@ class Load extends Phaser.Scene {
  }
 
  getLevel3Data(savedDateInfo) {
-   var lv3_text = this.add.text(_width*0.2, _height*0.61, "Level 3", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
-   var lv3_info = this.add.text(_width*0.35, _height*0.63, savedDateInfo.level3Saved, {font: "20px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
-   var lv3_erase = this.add.sprite(_width*0.6, _height* 0.65, 'eraseButton').setDisplaySize(100, 50);
-   var lv3_load = this.add.sprite(_width*0.75, _height* 0.65, 'loadDataButton').setDisplaySize(100, 50);
+  // var lv3_text = this.add.text(_width*0.2, _height*0.61, "Level 3", {font: "40px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+   var lv3_info = this.add.text(_width*0.35, _height*0.67, savedDateInfo.level3Saved, {font: "24px Georgia", color: "black"}).setOrigin(0,0).setPadding(1,1);
+   var lv3_erase = this.add.sprite(_width*0.6, _height* 0.69, 'eraseButton').setDisplaySize(100, 50);
+   var lv3_load = this.add.sprite(_width*0.75, _height* 0.69, 'loadDataButton').setDisplaySize(100, 50);
 
    lv3_erase.setInteractive({useHandCursor:true});
    lv3_erase.on('pointerdown', function(pointer) {

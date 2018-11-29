@@ -132,7 +132,8 @@ class Level3 extends Phaser.Scene {
     }
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
-
+    notEnoughGold = 0;
+    
     dragSelect(this, player);
     this.pointerInput();
 
@@ -163,14 +164,6 @@ class Level3 extends Phaser.Scene {
 
     if (timeElapsed === _timeLimit_s) {
       this.scene.pause();
-    }
-
-    if (pausedBeforeQuit === 1) {
-      gamePaused = true;
-      pauseStartTime = timer.getElapsedSeconds();
-      timer.paused = true;
-      this.scene.pause();
-      console.log("game paused");
     }
 
     ai.updateAIKingdom(player);

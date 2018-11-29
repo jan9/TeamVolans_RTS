@@ -1,3 +1,4 @@
+var howTo_nextPage, howToBox;
 class Instructions extends Phaser.Scene {
 
   constructor() {
@@ -8,35 +9,29 @@ class Instructions extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(_width/2.7,_height/2,'title_bg').setAlpha(0.8);
-    currentLevel = 0;
+    this.add.image(400,300,'instructions_bg');
+    howToBox = this.add.image(_width*0.05, _height*0.05,'howToPlay1').setOrigin(0,0).setDisplaySize(_width*0.9,_height*0.9);
     homeButton(this);
-    this.instruction_guide();
-
+    this.nextPage();
     check_gameover = 0;
     console.log('[Instructions] create() complete');
   }
 
   update() {
-      if (backToMainMenu === 1) {
-        backToMainMenu = 0;
-        this.scene.start('Title');
-      }
-      homeButton(this);
+    if (backToMainMenu === 1) { backToMainMenu = 0; this.scene.start('Title'); }
+    homeButton(this);
+    if (howTo_nextPage === 1 && howToBox.texture.key === 'howToPlay1') {
+      howTo_nextPage =0; howToBox.setTexture('howToPlay2'); }
+    else if(howTo_nextPage === 1 && howToBox.texture.key === 'howToPlay2') {
+      howTo_nextPage=0; howToBox.setTexture('howToPlay1'); }
   }
 
-  instruction_guide() {
-    // TODO add what keys and mouse controls needed to play the game
-    var content = [
-      'Welcome! Here is how you play the game:\n',
-      '  1. Select a kingdom and difficulty setting of your AI opponent\n',
-      '  2. Destroy all the enemy castles to win\n',
-      '  3. If the amount of castles are the same,\n',
-      '     then the kingdom with most number of gold wins'
-    ];
-    this.add.text(_width*0.25, _height*0.5, content, { font: '20px Georgia', align: 'left', linespacing: 10});
-    this.add.text(_width*0.10, _height*0.9, 'Use the left mouse button to create your buildings and units, and the WASD keys to move aroud the map.', { font: '20px Georgia', align: 'center', linespacing: 10});
-
-  }
+  nextPage(){
+    var arrowButton = this.add.sprite(_width*0.85,_height*0.15,'arrowButton').setOrigin(0,0).setDisplaySize(50,50);
+    arrowButton.setInteractive({useHandCursor:true});
+    arrowButton.on('pointerdown', function () {
+      howTo_nextPage = 1;
+      });
+    }
 
 }

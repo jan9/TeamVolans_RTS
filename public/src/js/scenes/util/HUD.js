@@ -8,12 +8,13 @@ var currentGold;
 var currentPopulation;
 var displayGold,displayPop,displayMessage,displayTime;
 var image1, timedEvent;
-var displayMessage;
+var displayMessage, gameMessage;
 var buttons = [];
 var optionClicked = "none";
 var gamePaused, pauseStartTime, pauseEndTime, pausedBeforeQuit;
 var pauseButton, pauseMenuBox, pauseCloseButton, yesButton, noButton;
 var timer, timeElapsed;
+var notEnoughGold;
 
 // future reference https://labs.phaser.io/edit.html?src=src%5Cscenes%5Cui%20scene%20es6.js
 class gameHUD extends Phaser.Scene {
@@ -49,15 +50,12 @@ class gameHUD extends Phaser.Scene {
 
    displayPop = this.add.text(850,17,'POPULATION: ');
 
-   displayMessage = this.add.text(4, 53, gameMode.name+ ' mode | '+opponentKingdom +'(AI) vs '+kingdomSelection.name);
-  // displayMessage.setText('');
-
-    this.pauseBox();
-
+   displayMessage = this.add.text(4, 80,'');
+   var roundInfo = this.add.text(4, 53, '['+gameMode.name+' mode] '+opponentKingdom +'(AI) vs '+kingdomSelection.name+'(Player)');
+   this.pauseBox();
   }
 
   update() {
-
     // set up a 10 minute timer
     timeElapsed = timer.getElapsedSeconds();
     if (loadingSavedGame === true) {
@@ -80,10 +78,23 @@ class gameHUD extends Phaser.Scene {
     displayPop.setText('POPULATION: ' + getPopulation(currentPopulation, player));
 
     this.checkGameState();
+
   }
 
 
   checkGameState() {
+    // make announcements
+    if (notEnoughGold === 1) {
+      announcement(this, "Not Enough Gold");
+      notEnoughGold = 0;
+    } else if (gameMessage === 1) {
+      announcement(this, "New Player Unit Added");
+      gameMessage = 0;
+    } else if (gameMessage === 2) {
+      announcement(this, "New Player Building Added");
+      gameMessage = 0;
+    }
+
     // 1. If game has reached time limit
     if (loadingSavedGame === true) {
       timeElapsed -= currentData.currentGameTime;
@@ -238,7 +249,8 @@ class gameHUD extends Phaser.Scene {
             visible: player.units[i].visible,
             width: player.units[i].width,
             x: player.units[i].x,
-            y: player.units[i].y
+            y: player.units[i].y,
+            health: player.units[i].getHealth(),
         }
       }
     }
@@ -278,7 +290,8 @@ class gameHUD extends Phaser.Scene {
           visible: ai.units[i].visible,
           width: ai.units[i].width,
           x: ai.units[i].x,
-          y: ai.units[i].y
+          y: ai.units[i].y,
+          health: ai.units[i].getHealth(),
         }
       }
       var ai_buildingsInfo = temp_ai;
@@ -377,8 +390,6 @@ class gameHUD extends Phaser.Scene {
       }, this);
   }
 
-
-
   button_endReached() {
     var youWin_logo = this.add.sprite(_width*0.5, _height*0.5,'win');
     var buttonToReturn = this.add.sprite(_width*0.9,26,'button');
@@ -390,9 +401,16 @@ class gameHUD extends Phaser.Scene {
         this.scene.stop('Level'+ currentLevel.toString());
         loadingSavedGame = false;
         _timeLimit_ms = 600000, _timeLimit_s = 600;
+        //_timeLimit_ms = 15000, _timeLimit_s = 15; // for testing
         backToMainMenu = 1;
         this.scene.start('Title');
       }, this);
+    }
+  }
+
+  removeSelected(){
+    for(let button of buttons){
+      button.setTexture('button'+button.name);
     }
   }
 
@@ -410,12 +428,6 @@ class gameHUD extends Phaser.Scene {
         _timeLimit_ms = 15000, _timeLimit_s = 15;
         this.scene.start(goto);
       }, this);
-    }
-  }
-
-  removeSelected(){
-    for(let button of buttons){
-      button.setTexture('button_'+button.name);
     }
   }
 
@@ -437,112 +449,106 @@ class gameHUD extends Phaser.Scene {
   // TODO: if not enough money -> http://labs.phaser.io/edit.html?src=src/tweens\total%20duration.js
   buildButtons() {
     // archeryRange
-    var buildButton_archeryRange = this.add.sprite(_width-460, _height-25,"button_archeryRange").setOrigin(0.5,0.5);
-    buildButton_archeryRange.name="archeryRange";
-
+    var buildButton_archeryRange = this.add.sprite(_width-460, _height-25,"buttonArcheryRange").setOrigin(0.5,0.5);
+    buildButton_archeryRange.name="ArcheryRange";
     buttons.push(buildButton_archeryRange);
     buildButton_archeryRange.setInteractive({useHandCursor:true});
     buildButton_archeryRange.on('pointerdown', function(pointer) {
       console.log("archery range button");
       if (player.gold >= archeryRangeInfo.cost) {
-        build_signal = 1;
         this.removeSelected();
-        buildButton_archeryRange.setTexture('button_archeryRange_selected');
-      }
+        buildButton_archeryRange.setTexture('buttonArcheryRange_selected');
+      } else if (archeryRangeInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
 
     // barracks
-    var buildButton_barracks = this.add.sprite(_width-400, _height-25,"button_barracks").setOrigin(0.5,0.5);
-    buildButton_barracks.name="barracks";
-
+    var buildButton_barracks = this.add.sprite(_width-400, _height-25,"buttonBarracks").setOrigin(0.5,0.5);
+    buildButton_barracks.name="Barracks";
     buttons.push(buildButton_barracks);
-
     buildButton_barracks.setInteractive({useHandCursor:true});
     buildButton_barracks.on('pointerdown', function(pointer) {
       console.log("barracks button");
       if (player.gold >= barracksInfo.cost) {
-        build_signal = 2;
         this.removeSelected();
-        buildButton_barracks.setTexture('button_barracks_selected');
-          }
+        buildButton_barracks.setTexture('buttonBarracks_selected');
+        build_signal = 2;
+      } else if (barracksInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
 
     // castle
-    var buildButton_castle = this.add.sprite(_width-340, _height-25,"button_castle").setOrigin(0.5,0.5);
-    buildButton_castle.name="castle";
+    var buildButton_castle = this.add.sprite(_width-340, _height-25,"buttonCastle").setOrigin(0.5,0.5);
+    buildButton_castle.name="Castle";
     buttons.push(buildButton_castle);
-
     buildButton_castle.setInteractive({useHandCursor:true});
     buildButton_castle.on('pointerdown', function(pointer) {
       console.log("castle button");
       if (player.gold >= castleInfo.cost) {
         this.removeSelected();
+        buildButton_castle.setTexture('buttonCastle_selected');
         build_signal = 3;
-        buildButton_castle.setTexture('button_castle_selected');
-      }
+      } else if (castleInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
 
     // machinery
-    var buildButton_machinery = this.add.sprite(_width-280, _height-25,"button_machinery").setOrigin(0.5,0.5);
-    buildButton_machinery.name = "machinery";
+    var buildButton_machinery = this.add.sprite(_width-280, _height-25,"buttonMachinery").setOrigin(0.5,0.5);
+    buildButton_machinery.name = "Machinery";
     buttons.push(buildButton_machinery);
-
     buildButton_machinery.setInteractive({useHandCursor:true});
     buildButton_machinery.on('pointerdown', function(pointer) {
       console.log("machinery button");
       if (player.gold >= machineryInfo.cost) {
         this.removeSelected();
+        buildButton_machinery.setTexture('buttonMachinery_selected');
         build_signal = 4;
-        buildButton_machinery.setTexture('button_machinery_selected');
-      }
+      } else if (machineryInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
 
     // mine
-    var buildButton_mine = this.add.sprite(_width-220, _height-25,"button_mine").setOrigin(0.5,0.5);
-    buildButton_mine.name = "mine";
+    var buildButton_mine = this.add.sprite(_width-220, _height-25,"buttonMine").setOrigin(0.5,0.5);
+    buildButton_mine.name = "Mine";
     buttons.push(buildButton_mine);
     buildButton_mine.setInteractive({useHandCursor:true});
     buildButton_mine.on('pointerdown', function(pointer) {
       console.log("mine button");
       if (player.gold >= mineInfo.cost) {
         this.removeSelected();
+        buildButton_mine.setTexture('buttonMine_selected');
         build_signal = 5;
-        buildButton_mine.setTexture('button_mine_selected');
-      }
+      } else if (mineInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
 
     // temple
-    var buildButton_temple = this.add.sprite(_width-160, _height-25,"button_temple").setOrigin(0.5,0.5);
-    buildButton_temple.name = "temple";
+    var buildButton_temple = this.add.sprite(_width-160, _height-25,"buttonTemple").setOrigin(0.5,0.5);
+    buildButton_temple.name = "Temple";
     buttons.push(buildButton_temple);
     buildButton_temple.setInteractive({useHandCursor:true});
     buildButton_temple.on('pointerdown', function(pointer) {
       console.log("temple button");
       if (player.gold >= templeInfo.cost) {
         this.removeSelected();
+        buildButton_temple.setTexture('buttonTemple_selected');
         build_signal = 6;
-        buildButton_temple.setTexture('button_temple_selected');
-      }
+      } else if (templeInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
 
     // towncenter
-    var buildButton_townCenter = this.add.sprite(_width-100, _height-25,"button_townCenter").setOrigin(0.5,0.5);
-    buildButton_townCenter.name = "townCenter";
+    var buildButton_townCenter = this.add.sprite(_width-100, _height-25,"buttonTownCenter").setOrigin(0.5,0.5);
+    buildButton_townCenter.name = "TownCenter";
     buttons.push(buildButton_townCenter);
     buildButton_townCenter.setInteractive({useHandCursor:true});
     buildButton_townCenter.on('pointerdown', function(pointer) {
       console.log("town center button");
       if (player.gold >= townCenterInfo.cost) {
         this.removeSelected();
+        buildButton_townCenter.setTexture('buttonTownCenter_selected');
         build_signal = 7;
-        buildButton_townCenter.setTexture('button_townCenter_selected');
-      }
+      } else if (townCenterInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
   }
 
   onEvent(){
     build_signal = 0;
-    image1.setAlpha(0.5);
+    //image1.setAlpha(0.5);
   }
 
 }

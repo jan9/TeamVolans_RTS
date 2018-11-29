@@ -97,7 +97,7 @@ class Structure extends Phaser.GameObjects.Sprite{
 
     //if the building can create the unit, and has the gold to create it, then creates the unit
     if(this.getUnitProduced() === unitType && this.getState() === "Idle"){
-      if(unitInfo.cost < kingdom.getGold()){
+      if(unitInfo.cost <= kingdom.getGold()){
 
         //if this is the player object tint it to green
         if(this.isPlayerObj()){
@@ -112,7 +112,7 @@ class Structure extends Phaser.GameObjects.Sprite{
         //creates the unit after 10 seconds
       var buildingEvent = game.time.addEvent({ delay: 10000, callback: this.finishBuildUnit,
         callbackScope: this, loop: false, args: [unitInfo, kingdom, game] });
-    }
+    } else if (unitInfo.cost > kingdom.getGold()){ notEnoughGold = 1; }
   }
 
   }
@@ -129,16 +129,17 @@ class Structure extends Phaser.GameObjects.Sprite{
         kingdom.units.push(unit);
         kingdom.unitAmount++;
 
-        if(kingdom === player){
-          currentPopulation++;
-        }
         this.setState("Idle");
 
         //if this is the player object make it normal colored again as build is finished
         if(this.isPlayerObj()){
           this.tint = 0xFFFFFF;
         }
-
+        
+        if(kingdom === player){
+          currentPopulation++;
+          gameMessage = 1;
+        }
     }
     else{
 

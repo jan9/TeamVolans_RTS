@@ -36,6 +36,7 @@ class Preload extends Phaser.Scene {
 
       // "Selection" assets
       this.load.image('title_g','Graphics/UI/sampleSelection.jpg');
+      this.load.image('selectionBox','Graphics/screens/start_screen/boxes/selectionMenu.png');
       this.load.image('Dueling Dominion', 'Graphics/UI/emblem/Dueling Dominion.svg');
       this.load.image('Equal Empire', 'Graphics/UI/emblem/Equal Empire.svg');
       this.load.image('Fortune Federation', 'Graphics/UI/emblem/Fortune Federation.svg');
@@ -48,29 +49,33 @@ class Preload extends Phaser.Scene {
       this.load.image('gameover','Graphics/UI/Game-Over (1).png');
 
       // "Instructions" assets
-      this.load.image('title_bg','Graphics/screens/start_screen/StartScreen_NoBox.png');
+      this.load.image('instructions_bg','Graphics/UI/sampleSelection.jpg');
+      this.load.image('howToPlay1','Graphics/screens/start_screen/boxes/howToPlay1.png');
+      this.load.image('howToPlay2','Graphics/screens/start_screen/boxes/howToPlay2.png');
+      this.load.image('arrowButton','Graphics/UI/arrow.png');
 
       // "gameHUD" assets
       this.load.image('win','Graphics/UI/You-won.png');
       this.load.image('levelComplete','Graphics/UI/Level-Complete.png');
       this.load.image('victory','Graphics/UI/victory.png');
       this.load.image('lackOfGold','Graphics/UI/Not-Enough-Gold.png');
+      this.load.image('pauseBoxMenu','Graphics/screens/start_screen/boxes/pauseBox.png');
 
-      this.load.image('button_mine','Graphics/UI/buildButtons/1.png');
-      this.load.image('button_archeryRange','Graphics/UI/buildButtons/2.png');
-      this.load.image('button_townCenter','Graphics/UI/buildButtons/3.png');
-      this.load.image('button_barracks','Graphics/UI/buildButtons/4.png');
-      this.load.image('button_castle','Graphics/UI/buildButtons/5.png');
-      this.load.image('button_temple','Graphics/UI/buildButtons/6.png');
-      this.load.image('button_machinery','Graphics/UI/buildButtons/7.png');
+      this.load.image('buttonMine','Graphics/UI/buildButtons/1.png');
+      this.load.image('buttonArcheryRange','Graphics/UI/buildButtons/2.png');
+      this.load.image('buttonTownCenter','Graphics/UI/buildButtons/3.png');
+      this.load.image('buttonBarracks','Graphics/UI/buildButtons/4.png');
+      this.load.image('buttonCastle','Graphics/UI/buildButtons/5.png');
+      this.load.image('buttonTemple','Graphics/UI/buildButtons/6.png');
+      this.load.image('buttonMachinery','Graphics/UI/buildButtons/7.png');
 
-      this.load.image('button_mine_selected','Graphics/UI/buildButtons/1_Chosen.png');
-      this.load.image('button_archeryRange_selected','Graphics/UI/buildButtons/2_Chosen.png');
-      this.load.image('button_townCenter_selected','Graphics/UI/buildButtons/3_Chosen.png');
-      this.load.image('button_barracks_selected','Graphics/UI/buildButtons/4_Chosen.png');
-      this.load.image('button_castle_selected','Graphics/UI/buildButtons/5_Chosen.png');
-      this.load.image('button_temple_selected','Graphics/UI/buildButtons/6_Chosen.png');
-      this.load.image('button_machinery_selected','Graphics/UI/buildButtons/7_Chosen.png');
+      this.load.image('buttonMine_selected','Graphics/UI/buildButtons/1_Chosen.png');
+      this.load.image('buttonArcheryRange_selected','Graphics/UI/buildButtons/2_Chosen.png');
+      this.load.image('buttonTownCenter_selected','Graphics/UI/buildButtons/3_Chosen.png');
+      this.load.image('buttonBarracks_selected','Graphics/UI/buildButtons/4_Chosen.png');
+      this.load.image('buttonCastle_selected','Graphics/UI/buildButtons/5_Chosen.png');
+      this.load.image('buttonTemple_selected','Graphics/UI/buildButtons/6_Chosen.png');
+      this.load.image('buttonMachinery_selected','Graphics/UI/buildButtons/7_Chosen.png');
 
       createOptionsSprites(this);
       this.load.image('boxframe', 'Graphics/screens/start_screen/boxes/BoxFrame.png');
@@ -83,6 +88,7 @@ class Preload extends Phaser.Scene {
 
       // "Load" assets
       this.load.image('title_l','Graphics/UI/sampleSelection.jpg');
+      this.load.image('loadBox','Graphics/screens/start_screen/boxes/loadGame.png');
       this.load.image('eraseButton', 'Graphics/screens/start_screen/buttons/erase.png');
       this.load.image('loadDataButton', 'Graphics/screens/start_screen/buttons/load.png');
 

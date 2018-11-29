@@ -1,9 +1,10 @@
 class Unit extends Phaser.GameObjects.Sprite{
 
-  constructor(unitInformation, xCoord, yCoord, scene, playerCheck, kingdom) {
+  constructor(unitInformation, xCoord, yCoord, scene, playerCheck, kingdom, unitHealth) {
     super(scene, xCoord, yCoord, unitInformation.texture);
     this.type = unitInformation.type;
     this.health = unitInformation.health;
+    if(loadingSavedGame === true) { this.health = unitHealth;}
     this.cost = unitInformation.cost;
     this.buildingProduced = unitInformation.buildingProduced;
     this.attack = unitInformation.attack;
@@ -29,6 +30,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     this.maxHealth = unitInformation.health; // store max health of a unit
 
     this.bar = new Phaser.GameObjects.Sprite(scene, xCoord, yCoord-30, 'healthBar100');
+    if(loadingSavedGame === true) { this.updateHealthBar(); }
 
     //used to have the unit be in front of buildings
     if (playerCheck === true) { this.depth = 20; this.bar.depth = 20;}
@@ -329,7 +331,7 @@ class Unit extends Phaser.GameObjects.Sprite{
     if((this.type === "Villager" || this.buildingProduced === buildingType) && this.getState() !== "Build"){
 
     //can only build if the money is there for it
-      if(buildingInfo.cost < kingdom.getGold()){
+      if(buildingInfo.cost <= kingdom.getGold()){
 
         //set the state to build
         this.setState("Build");
@@ -356,10 +358,10 @@ class Unit extends Phaser.GameObjects.Sprite{
 
       if(this.isPlayerObj()){
        coordinates = kingdom.findOpenArea(this.x, this.y);
-     }
-     else{
+      }
+      else{
        coordinates = kingdom.findOpenArea(kingdom.startingX, kingdom.startingY);
-     }
+      }
 
 
       var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, this.isPlayerObj(), this);
@@ -376,8 +378,12 @@ class Unit extends Phaser.GameObjects.Sprite{
 
       this.setState("Idle");
       this.anims.stop();
-    }
 
+      if (kingdom === player) {
+        for(let button of buttons){ button.setTexture('button'+button.name); }
+        gameMessage = 2;
+      }
+    }
     //if the unit has been killed or isn't making the building anymore, give the kingdom back the gold from the buildings
     //not sure if this is the best way to do it. I don't think units/buildings should have
     //invincibility while building but should they get back the money at all from a failed build? Should it come right away?
@@ -476,8 +482,6 @@ class Unit extends Phaser.GameObjects.Sprite{
   //attacks an enemy
   //also used for the priest to heal allies
   attackEnemy(attackedUnit){
-
-
 
     if(attackedUnit && this.getType() !== "Priest"){
 

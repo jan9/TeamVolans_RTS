@@ -16,7 +16,7 @@ function onObjectClicked(pointer,gameObject)
 
         //otherwise give the specific player selected a gold tint
         specificPlayerSelected = selectedUnit;
-        specificPlayerSelected.tint = 0x9400D3;
+        specificPlayerSelected.tint = 0xFFD700; // 0x9400D3;
     }
 
     if(gameObject.baseType === "Structure" && optionClicked === "create"){
@@ -52,7 +52,7 @@ function onObjectClicked(pointer,gameObject)
     console.log(gameObject);
     //update which unit is selected and the tint
     aiObjectSelected = gameObject;
-    aiObjectSelected.tint = 0xFF0000;
+    aiObjectSelected.tint = 0xFF0000; //red
   }
 }
 
@@ -106,7 +106,7 @@ function addUnitsToPlayerUnitsSelected(scene, kingdom, x, y, width, height) {
 
       for(let unitSelected of playerUnitSelected) {
         if(unitSelected !== specificPlayerSelected){
-          unitSelected.tint = 0xf2e98c;
+          unitSelected.tint = 0xf2e98c; //yellow khaki
         }
       }
 
@@ -159,7 +159,6 @@ function dragSelect(scene, kingdom) {
           oldSelectionArea.clear();
           oldSelectionArea = false;
         }
-        //console.log("reset");
       }
   });
 }

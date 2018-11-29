@@ -312,8 +312,8 @@ getStructureInfo(buildingType){
                   x: keys[i].x,
                   y: keys[i].y
                 }
-
-              var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this);
+              var unitHealth = keys[i].health;
+              var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this, unitHealth);
               this.units.push(unit);
             }
           }
@@ -336,8 +336,8 @@ getStructureInfo(buildingType){
                 x: keys[i].x,
                 y: keys[i].y
               }
-
-            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this);
+            var unitHealth = keys[i].health;
+            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this,unitHealth);
             this.units.push(unit);
           }
         }
@@ -359,7 +359,7 @@ getStructureInfo(buildingType){
 
             this.unitAmount++;
             var unitCoords = this.findStartingPosition(unitInfo, this.unitAmount, startingObjectsList);
-            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this);
+            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this, 0);
 
 
             this.units.push(unit);
