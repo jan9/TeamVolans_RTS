@@ -23,10 +23,17 @@ class Instructions extends Phaser.Scene {
     if (howTo_nextPage === 1 && howToBox.texture.key === 'howToPlay1') {
       howTo_nextPage =0; howToBox.setTexture('howToPlay2'); }
     else if(howTo_nextPage === 1 && howToBox.texture.key === 'howToPlay2') {
+      howTo_nextPage=0; howToBox.setTexture('howToPlay3'); }
+    else if(howTo_nextPage === 1 && howToBox.texture.key === 'howToPlay3') {
+      howTo_nextPage=0; howToBox.setTexture('howToPlay4'); }
+    else if(howTo_nextPage === 1 && howToBox.texture.key === 'howToPlay4') {
+      howTo_nextPage=0; howToBox.setTexture('howToPlay5'); }
+    else if(howTo_nextPage === 1 && howToBox.texture.key === 'howToPlay5') {
       howTo_nextPage=0; howToBox.setTexture('howToPlay1'); }
   }
 
   nextPage(){
+    var nextPage = this.add.text(_width*0.85,_height*0.225,'Next',{fontSize: '20px Georgia', color: 'black'});
     var arrowButton = this.add.sprite(_width*0.85,_height*0.15,'arrowButton').setOrigin(0,0).setDisplaySize(50,50);
     arrowButton.setInteractive({useHandCursor:true});
     arrowButton.on('pointerdown', function () {
