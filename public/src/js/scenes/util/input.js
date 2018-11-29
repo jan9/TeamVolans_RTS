@@ -106,7 +106,7 @@ function addUnitsToPlayerUnitsSelected(scene, kingdom, x, y, width, height) {
 
       for(let unitSelected of playerUnitSelected) {
         if(unitSelected !== specificPlayerSelected){
-          unitSelected.tint = 0xf2e98c; //yellow khaki
+          unitSelected.tint = 0xFFD700;
         }
       }
 
@@ -125,7 +125,6 @@ function dragSelect(scene, kingdom) {
     }
     if (pointer.rightButtonDown()){
       mousePointerData = {};
-
     }
   });
   scene.input.on('pointerup', function() {

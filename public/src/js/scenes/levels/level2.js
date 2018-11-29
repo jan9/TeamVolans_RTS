@@ -52,7 +52,7 @@ class Level2 extends Phaser.Scene {
         down: S,
         acceleration: 0.001,
         drag: 0.0005,
-        maxSpeed: 0.6
+        maxSpeed: 0.2
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 

@@ -3,8 +3,9 @@ class Unit extends Phaser.GameObjects.Sprite{
   constructor(unitInformation, xCoord, yCoord, scene, playerCheck, kingdom, unitHealth) {
     super(scene, xCoord, yCoord, unitInformation.texture);
     this.type = unitInformation.type;
+
     this.health = unitInformation.health;
-    if(loadingSavedGame === true) { this.health = unitHealth;}
+    if(unitHealth != 0) { this.health = unitHealth; }
     this.cost = unitInformation.cost;
     this.buildingProduced = unitInformation.buildingProduced;
     this.attack = unitInformation.attack;

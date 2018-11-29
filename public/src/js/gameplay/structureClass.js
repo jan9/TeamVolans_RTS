@@ -123,7 +123,7 @@ class Structure extends Phaser.GameObjects.Sprite{
 
     //if unit is still alive and still has their state set to build, build the building
     if(this.getState() === "Build" && this.health > 0){
-      var unit = new Unit(unitInfo, this.x+75, this.y, game, kingdom.isPlayer(), kingdom);
+      var unit = new Unit(unitInfo, this.x+75, this.y, game, kingdom.isPlayer(), kingdom, 0);
         //once the unit has been built, add it to the kingdom and increase the unitamount
 
         kingdom.units.push(unit);
@@ -135,7 +135,7 @@ class Structure extends Phaser.GameObjects.Sprite{
         if(this.isPlayerObj()){
           this.tint = 0xFFFFFF;
         }
-        
+
         if(kingdom === player){
           currentPopulation++;
           gameMessage = 1;
