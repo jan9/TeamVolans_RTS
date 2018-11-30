@@ -36,7 +36,7 @@ function onObjectClicked(pointer,gameObject)
     if(aiObjectSelected){
     aiObjectSelected.tint = 0xFFFFFF;
     }
-    console.log(gameObject);
+    //console.log(gameObject);
     //update which unit is selected and the tint
     aiObjectSelected = gameObject;
     aiObjectSelected.tint = 0xFF0000; //red
@@ -94,7 +94,7 @@ function addUnitsToPlayerUnitsSelected(scene, kingdom, x, y, width, height) {
         }
       }
 
-      console.log("Selected Units", playerUnitSelected);
+    console.log("Selected Units", playerUnitSelected);
 }
 
 // player can drag select multiple units
@@ -150,6 +150,7 @@ function homeButton(scene) {
   var returnButton, quitButton
   // button for going back to the main menu
   if (currentLevel === 1 || currentLevel === 2 || currentLevel === 3) {
+    scene.add.sprite(10,3,'quitButton').setOrigin(0,0).setDisplaySize(120,40).setDepth(24); // keep
     quitButton = scene.add.sprite(10,3,'quitButton').setOrigin(0,0).setDisplaySize(120,40).setDepth(25);
     quitButton.setInteractive({useHandCursor:true});
     quitButton.on('pointerdown', function () {

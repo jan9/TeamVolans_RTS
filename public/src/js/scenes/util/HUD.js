@@ -51,7 +51,7 @@ class gameHUD extends Phaser.Scene {
    displayPop = this.add.text(850,17,'POPULATION: ');
 
    displayMessage = this.add.text(4, 80,'');
-   var roundInfo = this.add.text(4, 53, '['+gameMode.name+' mode] '+opponentKingdom +'(AI) vs '+kingdomSelection.name+'(Player)');
+   var roundInfo = this.add.text(4, 53, '['+gameMode.name+' mode] '+kingdomSelection.name+'(Player) vs '+opponentKingdom +'(AI)');
    this.pauseBox();
   }
 
@@ -99,21 +99,23 @@ class gameHUD extends Phaser.Scene {
     if (loadingSavedGame === true) {
       timeElapsed -= currentData.currentGameTime;
     }
-    if(timeElapsed === _timeLimit_s){ //600 = 10 minute
+    if(timeElapsed === (_timeLimit_ms/1000)){ //600 = 10 minute
+      timeElapsed = 0;
       controls.stop();
       playerWon = calculateWinner(player, ai);
-      if (playerWon === true) {
-        if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
-          this.button_goToLevelX(goto);
-        } else if (currentLevel === 3 && playerWon === true) {
-          this.button_endReached();
-        }
-      } else {
-        check_gameover = 1;
+      if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
+        this.button_goToLevelX(goto);
+      } else if (currentLevel === 3 && playerWon === true) {
+        this.button_endReached();
+      } else if ((currentLevel === 1 && playerWon === false)||
+                 (currentLevel === 2 && playerWon === false)||
+                 (currentLevel === 3 && playerWon === false))
+                 {
+                   check_gameover = 1;
+                 }
       }
-    }
     // 2. If game hasn't reached time limit
-    else {
+    else if (timeElapsed < _timeLimit_s) {
       var castleCount = 0, aiCastleCount = 0;
       for(var i = 0; i < player.buildings.length; i++){
         if(player.buildings[i].type === "Castle"){
@@ -126,18 +128,18 @@ class gameHUD extends Phaser.Scene {
         }
       }
       if (getPopulation(currentPopulation, player) === 0 ) {  // if num of units is 0
-        playerWon = false; controls.stop(); check_gameover = 1;
+        controls.stop(); check_gameover = 1; //console.log("[HUD] #130");
       } else if (player.buildings.length === 0) { // if num of buildings is 0
-        playerWon = false; controls.stop(); check_gameover = 1;
+        controls.stop(); check_gameover = 1; //console.log("[HUD] #132");
       } else if (castleCount === 0){  // if num of castles is 0
-        playerWon = false; controls.stop(); check_gameover = 1;
+        controls.stop(); check_gameover = 1; //console.log("[HUD] #134");
       } else if (aiCastleCount === 0) {
-          playerWon = true; controls.stop();
-          if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
-            this.button_goToLevelX(goto);
-          } else if (currentLevel === 3 && playerWon === true) {
-            this.button_endReached();
-          }
+        playerWon = true; controls.stop();
+        if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
+          this.button_goToLevelX(goto);
+        } else if (currentLevel === 3 && playerWon === true) {
+          this.button_endReached();
+        }
       }
     }
   }
@@ -191,7 +193,7 @@ class gameHUD extends Phaser.Scene {
             this.scene.pause('Level3');
             quitButton.destroy();
           }
-          console.log("[HUD] quitButton");
+          //console.log("[HUD] quitButton");
         }, this); // for quitButton
       }
     }, this); // for pauseCloseButton
@@ -205,7 +207,11 @@ class gameHUD extends Phaser.Scene {
       this.scene.resume('Level1');
       this.scene.resume('Level2');
       this.scene.resume('Level3');
-      if (pausedBeforeQuit === 2) { pausedBeforeQuit = 0; backToMainMenu = 1; }
+      if (pausedBeforeQuit === 2) {
+        timer.reset({delay: 0, elapsed: 0 });
+        timer.remove(onTenMinutesUp);
+        pausedBeforeQuit = 0;
+        backToMainMenu = 1; }
       }, this);
 
     yesButton.setInteractive({useHandCursor:true});
@@ -401,8 +407,8 @@ class gameHUD extends Phaser.Scene {
       buttonToMainMenu.on('pointerdown', function(pointer) {
         this.scene.stop('Level'+ currentLevel.toString());
         loadingSavedGame = false;
-        _timeLimit_ms = 600000, _timeLimit_s = 600;
-        //_timeLimit_ms = 15000, _timeLimit_s = 15; // for testing
+        _timeLimit_ms=_timeLimit_s*1000; // for testing
+        timer.reset({delay: 0, elapsed: 0 }); timer.remove(onTenMinutesUp);
         backToMainMenu = 1;
         this.scene.start('Title');
       }, this);
@@ -418,15 +424,15 @@ class gameHUD extends Phaser.Scene {
   button_goToLevelX(goto) {
     var lvlComplete_logo = this.add.sprite(_width*0.5, _height*0.5,'levelComplete');
 
-    var buttonToLevelX = this.add.sprite(_width-buttonToLevelX.x,26,'button');
-    var textLevelX = this.add.text(_width*0.9,25, "Next Level", {fontSize: '25px'}).setOrigin(0.5,0.5);
+    var buttonToLevelX = this.add.sprite(_width*0.92,26,'button');
+    var textLevelX = this.add.text(_width*0.92,25, "Next Level", {fontSize: '25px'}).setOrigin(0.5,0.5);
 
     buttonToLevelX.setInteractive({useHandCursor:true});
     if(goto != ""){
       buttonToLevelX.on('pointerdown', function(pointer) {
         this.scene.stop('Level'+ currentLevel.toString());
         loadingSavedGame = false;
-        _timeLimit_ms = 15000, _timeLimit_s = 15;
+        _timeLimit_ms = _timeLimit_s*1000;
         this.scene.start(goto);
       }, this);
     }
@@ -455,7 +461,7 @@ class gameHUD extends Phaser.Scene {
     buttons.push(buildButton_archeryRange);
     buildButton_archeryRange.setInteractive({useHandCursor:true});
     buildButton_archeryRange.on('pointerdown', function(pointer) {
-      console.log("archery range button");
+      //console.log("archery range button");
       if (player.gold >= archeryRangeInfo.cost) {
         this.removeSelected();
         buildButton_archeryRange.setTexture('buttonArcheryRange_selected');
@@ -469,7 +475,7 @@ class gameHUD extends Phaser.Scene {
     buttons.push(buildButton_barracks);
     buildButton_barracks.setInteractive({useHandCursor:true});
     buildButton_barracks.on('pointerdown', function(pointer) {
-      console.log("barracks button");
+      //console.log("barracks button");
       if (player.gold >= barracksInfo.cost) {
         this.removeSelected();
         buildButton_barracks.setTexture('buttonBarracks_selected');
@@ -483,7 +489,7 @@ class gameHUD extends Phaser.Scene {
     buttons.push(buildButton_castle);
     buildButton_castle.setInteractive({useHandCursor:true});
     buildButton_castle.on('pointerdown', function(pointer) {
-      console.log("castle button");
+      //console.log("castle button");
       if (player.gold >= castleInfo.cost) {
         this.removeSelected();
         buildButton_castle.setTexture('buttonCastle_selected');
@@ -497,7 +503,7 @@ class gameHUD extends Phaser.Scene {
     buttons.push(buildButton_machinery);
     buildButton_machinery.setInteractive({useHandCursor:true});
     buildButton_machinery.on('pointerdown', function(pointer) {
-      console.log("machinery button");
+      //console.log("machinery button");
       if (player.gold >= machineryInfo.cost) {
         this.removeSelected();
         buildButton_machinery.setTexture('buttonMachinery_selected');
@@ -511,7 +517,7 @@ class gameHUD extends Phaser.Scene {
     buttons.push(buildButton_mine);
     buildButton_mine.setInteractive({useHandCursor:true});
     buildButton_mine.on('pointerdown', function(pointer) {
-      console.log("mine button");
+      //console.log("mine button");
       if (player.gold >= mineInfo.cost) {
         this.removeSelected();
         buildButton_mine.setTexture('buttonMine_selected');
@@ -525,7 +531,7 @@ class gameHUD extends Phaser.Scene {
     buttons.push(buildButton_temple);
     buildButton_temple.setInteractive({useHandCursor:true});
     buildButton_temple.on('pointerdown', function(pointer) {
-      console.log("temple button");
+      //console.log("temple button");
       if (player.gold >= templeInfo.cost) {
         this.removeSelected();
         buildButton_temple.setTexture('buttonTemple_selected');
@@ -539,7 +545,7 @@ class gameHUD extends Phaser.Scene {
     buttons.push(buildButton_townCenter);
     buildButton_townCenter.setInteractive({useHandCursor:true});
     buildButton_townCenter.on('pointerdown', function(pointer) {
-      console.log("town center button");
+      //console.log("town center button");
       if (player.gold >= townCenterInfo.cost) {
         this.removeSelected();
         buildButton_townCenter.setTexture('buttonTownCenter_selected');

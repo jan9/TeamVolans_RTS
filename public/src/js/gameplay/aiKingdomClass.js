@@ -63,7 +63,7 @@ class AIKingdom extends Kingdom{
 
   hardModeBonus(){
     if(this.isHardMode){
-      
+
       //ai has starting bonus if game is hardmode
       this.hardModeStartingBonus();
 
@@ -104,8 +104,7 @@ class AIKingdom extends Kingdom{
       let unit = new Unit(this.getUnitInfo(unitName), this.startingX+10, this.startingY-10, this.game, this.isPlayer(), this, 0);
       this.units.push(unit);
       this.unitAmount++;
-      console.log("UNIT CREATED");
-      console.log(unit);
+      //console.log("AI UNIT CREATED", unit);
     }
 
       this.gold+=100;

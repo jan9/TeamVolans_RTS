@@ -189,7 +189,7 @@ function overlapOccurred(unit1, unit2){
 
 function getMiniMap(scene, camX, camY, width, height, zoom) {
   scene.minimap = scene.cameras.add(camX, camY, width, height).setZoom(zoom).setName('minimap');
-  scene.minimap.setPosition(-160, 260);
+  scene.minimap.setPosition(-160, 292);
 }
 
 function timeStamp() {
