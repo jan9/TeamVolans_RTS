@@ -20,8 +20,8 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
     this.createStartingBuildings(kingdomInformation.buildings, startingObjects);
     this.createStartingUnits(kingdomInformation.units, startingObjects);
 
-    //get 6 gold every 15 seconds. Continuously loops
-    var getGold = game.time.addEvent({ delay: 10000, callback: this.receiveCastleGold,
+    //get 12 gold every 10 seconds. Continuously loops
+    var getGold = game.time.addEvent({ delay: 10 * 1000, callback: this.receiveCastleGold,
       callbackScope: this, loop: true, args: [] });
 
       //get .5 second remove the dead units...
@@ -410,7 +410,7 @@ getStructureInfo(buildingType){
   }
 
   receiveCastleGold(){
-    this.gold+=6;
+    this.gold+=12;
   }
 
   getGold(){

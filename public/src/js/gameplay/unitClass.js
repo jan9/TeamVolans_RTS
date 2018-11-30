@@ -476,12 +476,12 @@ class Unit extends Phaser.GameObjects.Sprite{
 
         //if the unit is a villager, they mine 3 gold every 30 seconds
         if(this.type === "Villager"){
-          kingdom.addGold(3);
+          kingdom.addGold(6);
         }
 
         //if the unit is a miner they mine 6 gold every 30 seconds
         else if (this.type === "Miner"){
-          kingdom.addGold(6);
+          kingdom.addGold(12);
         }
       }
     }

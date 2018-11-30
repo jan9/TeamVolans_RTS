@@ -6,19 +6,6 @@ function onObjectClicked(pointer,gameObject)
 {
   if(gameObject.isPlayerObj()){
 
-    //if a user is double click it is the new specific player selected (mainly used for heal)
-    if(gameObject === selectedUnit && selectedUnit){
-
-        //if a specific player was already selected turn it back to no tint/white
-        if(specificPlayerSelected){
-          specificPlayerSelected.tint = 0xFFFFFF;
-        }
-
-        //otherwise give the specific player selected a gold tint
-        specificPlayerSelected = selectedUnit;
-        specificPlayerSelected.tint = 0xFFD700; // 0x9400D3;
-    }
-
     if(gameObject.baseType === "Structure" && optionClicked === "create"){
       gameObject.startBuildUnit(gameObject.unitProduced, player, player.game, true);
     }
@@ -95,9 +82,6 @@ function addUnitsToPlayerUnitsSelected(scene, kingdom, x, y, width, height) {
               unit.player_selected = true;
               //console.log("pushing in "+ unit.type);
           }
-          if(unit !== specificPlayerSelected){
-            unit.tint = 0xFFFFFF;
-          }
         }
 
       if (currentSelection.length > 0) {
@@ -105,8 +89,9 @@ function addUnitsToPlayerUnitsSelected(scene, kingdom, x, y, width, height) {
       }
 
       for(let unitSelected of playerUnitSelected) {
-        if(unitSelected !== specificPlayerSelected){
-          unitSelected.tint = 0xf2e98c; //yellow khaki
+        if(unitSelected){
+          unitSelected.tint = 0xB6A225; // slightly darker yellow to see which selected easier
+          //unitSelected.tint = 0xf2e98c; //yellow khaki
         }
       }
 
