@@ -336,8 +336,8 @@ getStructureInfo(buildingType){
                 x: keys[i].x,
                 y: keys[i].y
               }
-            var unitHealth = keys[i].health;
-            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this,unitHealth);
+            var aiUnitHealth = keys[i].health;
+            var unit = new Unit(unitInfo, unitCoords.x, unitCoords.y, this.game, this.isPlayer(), this, aiUnitHealth);
             this.units.push(unit);
           }
         }

@@ -52,6 +52,9 @@ class Preload extends Phaser.Scene {
       this.load.image('instructions_bg','Graphics/UI/sampleSelection.jpg');
       this.load.image('howToPlay1','Graphics/screens/start_screen/boxes/howToPlay1.png');
       this.load.image('howToPlay2','Graphics/screens/start_screen/boxes/howToPlay2.png');
+      this.load.image('howToPlay3','Graphics/screens/start_screen/boxes/kingdoms.png');
+      this.load.image('howToPlay4','Graphics/screens/start_screen/boxes/buildings.png');
+      this.load.image('howToPlay5','Graphics/screens/start_screen/boxes/units.png');
       this.load.image('arrowButton','Graphics/UI/arrow.png');
 
       // "gameHUD" assets

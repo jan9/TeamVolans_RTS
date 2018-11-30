@@ -82,7 +82,7 @@ class AIKingdom extends Kingdom{
     for(var i = 0; i < 3; i++){
         let currentBuildOrder = this.buildOrder[i];
       if(_unitList.includes(currentBuildOrder)){
-        let unit = new Unit(this.getUnitInfo(currentBuildOrder), this.startingX+10, this.startingY-10, this.game);
+        let unit = new Unit(this.getUnitInfo(currentBuildOrder), this.startingX+10, this.startingY-10, this.game, this.isPlayer(), this, 0);
         this.units.push(unit);
         this.unitAmount++;
       }
@@ -96,14 +96,13 @@ class AIKingdom extends Kingdom{
     }
   }
 
-
   hardModeMiddleBonus(){
 
     console.log("MIDDLE BONUS RECEIVED");
 
     //gets a bonus of one of each unit type
     for(let unitName of _unitList){
-      let unit = new Unit(this.getUnitInfo(unitName), this.startingX+10, this.startingY-10, this.game);
+      let unit = new Unit(this.getUnitInfo(unitName), this.startingX+10, this.startingY-10, this.game, this.isPlayer(), this, 0);
       this.units.push(unit);
       this.unitAmount++;
       console.log("UNIT CREATED");

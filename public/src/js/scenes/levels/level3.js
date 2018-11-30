@@ -36,7 +36,7 @@ class Level3 extends Phaser.Scene {
     getMiniMap(this, _width*-0.125, _height*0.36, 375, 375, 0.065);
     //getMiniMap(this, -160, 260, 375, 375, 0.065);
 
-    var cursors = this.input.keyboard.createCursorKeys();
+
 
     this.input.on('gameobjectdown', onObjectClicked, this.scene);
 
@@ -53,7 +53,7 @@ class Level3 extends Phaser.Scene {
         down: S,
         acceleration: 0.001,
         drag: 0.0005,
-        maxSpeed: 0.6
+        maxSpeed: 0.2
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
@@ -133,7 +133,7 @@ class Level3 extends Phaser.Scene {
     currentGold = player.gold;
     currentPopulation = player.unitAmount;
     notEnoughGold = 0;
-    
+
     dragSelect(this, player);
     this.pointerInput();
 
