@@ -141,11 +141,16 @@ class Level3 extends Phaser.Scene {
     this.input.keyboard.on('keydown_' + 'P', this.pauseGame, this.scene);
 
     if (loadingSavedGame === true) {
-      _timeLimit_s -= currentData.currentGameTime;
-      _timeLimit_ms = _timeLimit_s*1000;
+      var temp = _timeLimit_s;
+      temp -= currentData.currentGameTime;
+      _timeLimit_ms = temp*1000;
       //console.log(_timeLimit_s, _timeLimit_ms);
     }
     // set up a 10 minute timer
+    if (timer) {
+      timer.remove(onTenMinutesUp);
+      timer.reset({delay: 0, elapsed: 0 });
+    }
     timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp(this), [], this);
 
     console.log('[Level3] create() complete');
@@ -163,7 +168,7 @@ class Level3 extends Phaser.Scene {
       this.scene.start('Gameover');
     }
 
-    if (timeElapsed === _timeLimit_s) {
+    if (timeElapsed === (_timeLimit_ms/1000)) {
       this.scene.pause();
     }
 

@@ -21,7 +21,6 @@ class Load extends Phaser.Scene {
     currentLevel = 0;
     homeButton(this);
 
-
     check_gameover = 0;
     loadinglevel = 0;
     currentData = "";
@@ -54,6 +53,10 @@ class Load extends Phaser.Scene {
       this.scene.start('Title');
     }
     homeButton(this);
+    if (timer) {
+      timer.remove(onTenMinutesUp);
+      timer.reset({delay: 0, elapsed: 0 });
+    }
   }
 
   getLevel1Data(savedDateInfo) {
