@@ -133,7 +133,7 @@ class gameHUD extends Phaser.Scene {
         controls.stop(); check_gameover = 1; //console.log("[HUD] #132");
       } else if (castleCount === 0){  // if num of castles is 0
         controls.stop(); check_gameover = 1; //console.log("[HUD] #134");
-      } else if (aiCastleCount === 0) {
+      } else if (aiCastleCount === 0 || getPopulation(currentPopulation, ai) === 0) {
         playerWon = true; controls.stop();
         if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
           this.button_goToLevelX(goto);
