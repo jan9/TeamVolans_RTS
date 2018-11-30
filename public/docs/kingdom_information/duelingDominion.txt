@@ -1,4 +1,4 @@
-var duelingDominionInfo = {
+{
   "type" : "Dueling Dominion",
   "gold" : 250,
   "unitAmount": 10,
@@ -23,4 +23,4 @@ var duelingDominionInfo = {
     "machinery": 0,
     "walls": 0
   }
-};
+}

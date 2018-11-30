@@ -1,3 +1,65 @@
+function getObjectInformation(game){
+  duelingDominionInfo = JSON.parse(game.cache.text.get('duelingDominion'));
+  equalEmpireInfo = JSON.parse(game.cache.text.get('equalEmpire'));
+  fortuneFederationInfo = JSON.parse(game.cache.text.get('fortuneFederation'));
+  remoteRealmInfo = JSON.parse(game.cache.text.get('remoteRealm'));
+  securitySyndicateInfo = JSON.parse(game.cache.text.get('securitySyndicate'));
+
+
+  archeryRangeInfo = JSON.parse(game.cache.text.get('archeryRange'));
+  barracksInfo = JSON.parse(game.cache.text.get('barracks'));
+  castleInfo = JSON.parse(game.cache.text.get('castle'));
+  machineryInfo = JSON.parse(game.cache.text.get('machinery'));
+  templeInfo = JSON.parse(game.cache.text.get('temple'));
+  mineInfo = JSON.parse(game.cache.text.get('mine'));
+  townCenterInfo = JSON.parse(game.cache.text.get('townCenter'));
+
+  archerInfo = JSON.parse(game.cache.text.get('archer'));
+  catapultInfo = JSON.parse(game.cache.text.get('catapult'));
+  minerInfo = JSON.parse(game.cache.text.get('miner'));
+  priestInfo = JSON.parse(game.cache.text.get('priest'));
+  royaltyInfo = JSON.parse(game.cache.text.get('royalty'));
+  swordsmanInfo = JSON.parse(game.cache.text.get('swordsman'));
+  villagerInfo = JSON.parse(game.cache.text.get('villager'));
+}
+
+function getObjectFilePaths(objectName){
+  let filePath = "docs/";
+  objectName = objectName.replace("_", " ");
+
+  if(_kingdomList.includes(objectName)){
+    filePath+="kingdom_information/"+objectName+".txt";
+  }
+  else{
+
+    //capitalize first letter of the string
+    //https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
+    let capitalizedObject = objectName[0].toUpperCase() + objectName.slice(1);
+
+    if(_unitList.includes(capitalizedObject)){
+      filePath+="unit_information\\"+objectName+".txt";
+    }
+    else{
+      filePath+="structure_information\\"+objectName+".txt";
+    }
+  }
+
+  return filePath;
+}
+
+function createTextFiles(game){
+
+
+  for(let object of _objectList){
+    let path = getObjectFilePaths(object);
+
+    game.load.text({
+      key: object,
+      url: path
+    });
+  }
+}
+
 function onTenMinutesUp() {
     // stop the timer and set time to 0
     console.log("Time is up!");

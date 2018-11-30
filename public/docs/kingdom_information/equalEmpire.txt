@@ -1,4 +1,4 @@
-var equalEmpireInfo = {
+{
   "type" : "Equal Empire",
   "gold" : 200,
   "unitAmount": 14,
@@ -23,4 +23,4 @@ var equalEmpireInfo = {
     "machinery": 0,
     "walls": 0
   }
-};
+}

@@ -110,6 +110,9 @@ class Preload extends Phaser.Scene {
       // "Level3" assets
       this.load.tilemapTiledJSON('map3', 'Graphics/maps/Level_3.json');
 
+      //unit/structure/kingdom information
+      createTextFiles(this);
+
       // Animation
       createUnitSprites(this);    // found in scenes/util/createSpriteImages.js
       createStructureSprites(this); // found in scenes/util/createSpriteImages.js
@@ -132,6 +135,7 @@ class Preload extends Phaser.Scene {
 
     create() {
       createUnitAnims(this);
+      getObjectInformation(this);
       this.scene.start('Title');
       console.log("[Preload] Finished Loading Game Assets");
     }

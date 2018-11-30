@@ -1,2 +1,0 @@
-var minerInfo = {"texture": "miner", "baseType": "Unit", "type" : "Miner", "health" : 25, "cost": 30,
-  "buildingProduced": "Mine", "attack": -1, "range": 1, "state": "Idle"};

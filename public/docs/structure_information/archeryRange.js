@@ -1,2 +1,0 @@
-var archeryRangeInfo = {"texture": "archeryRange", "baseType": "Structure", "type" : "Archery Range", "health" : 50, "cost": 150,
-  "unitProduced": "Archer"};
