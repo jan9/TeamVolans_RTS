@@ -409,6 +409,26 @@ getStructureInfo(buildingType){
     }
   }
 
+  //function to check if the kingdom has a villager
+  hasVillager(){
+    let villagerFound = false;
+    for(let unit of this.units){
+      if(unit.getType() === "Villager"){
+        villagerFound = true;
+      }
+    }
+
+    return villagerFound;
+  }
+
+  //builds an emergency villager for 60 gold
+  buildEmergencyVillager(){
+    let villagerInfo = this.getUnitInfo("Villager");
+    var unit = new Unit(villagerInfo, this.startingX+10, this.startingY+10, this.game, this.isPlayer(), this, villagerInfo.health);
+    this.units.push(unit);
+    this.removeGold(60);
+  }
+
   receiveCastleGold(){
     this.gold+=12;
   }
@@ -486,7 +506,13 @@ getStructureInfo(buildingType){
       else if(unit.player_selected  === false){
         unit.playerStopMovement();
       }
+    }
 
+    //if the player wants to build, but has no villager, create a villager for 60 gold
+    if(optionClicked === "build" && (!this.hasVillager())){
+        if(this.gold > 60){
+          this.buildEmergencyVillager();
+        }
     }
   }
 }

@@ -352,11 +352,15 @@ class Unit extends Phaser.GameObjects.Sprite{
   //starts building the structure
   startBuildStructure(buildingType, kingdom, game){
 
+    let buildingTypeString = buildingType.toLowerCase();
+
     var buildingInfo = kingdom.getStructureInfo(buildingType);
 
     //royalty can make the castle
     //only build if not already building - once you start building the unit is LOCKED INTO BUILDING THAT ITEM. THE unit cannot change
-    if((this.type === "Villager" || this.buildingProduced === buildingType) && this.getState() !== "Build" && this.getState() !== "Move"){
+    if(((this.type === "Villager" && buildingTypeString !== "castle")
+    || ((this.getType() === "Royalty" && buildingTypeString === "castle" )))
+    && this.getState() !== "Build" && this.getState() !== "Move"){
 
     //can only build if the money is there for it
       if(buildingInfo.cost <= kingdom.getGold()){
