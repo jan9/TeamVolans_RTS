@@ -356,7 +356,7 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     //royalty can make the castle
     //only build if not already building - once you start building the unit is LOCKED INTO BUILDING THAT ITEM. THE unit cannot change
-    if((this.type === "Villager" || this.buildingProduced === buildingType) && this.getState() !== "Build"){
+    if((this.type === "Villager" || this.buildingProduced === buildingType) && this.getState() !== "Build" && this.getState() !== "Move"){
 
     //can only build if the money is there for it
       if(buildingInfo.cost <= kingdom.getGold()){
@@ -452,7 +452,7 @@ class Unit extends Phaser.GameObjects.Sprite{
   mine(kingdom, game){
 
     if(this.type === "Villager" || this.type === "Miner"){
-      if(this.isInMine(kingdom) && this.getState()!=="Mine"){
+      if(this.isInMine(kingdom) && this.getState()!=="Mine" && this.getState()!=="Move"){
 
         this.setState("Mine");
         this.unitAnimations("Action");
