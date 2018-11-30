@@ -9,6 +9,7 @@ class Gameover extends Phaser.Scene {
   create() {
     currentLevel = 0;
     pausedBeforeQuit =0;
+    controls.stop();
     this.scene.setVisible(false,'gameHUD');
     this.scene.stop('gameHUD');
     // add background image

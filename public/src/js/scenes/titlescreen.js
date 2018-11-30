@@ -14,6 +14,7 @@ class Title extends Phaser.Scene {
     this.add.image(_width*0.5, _height*0.78,'box').setDisplaySize(_width/2,_height/2.5);
     // add the buttons
     this.buttons();
+    if(controls === true && controls.active === true) { controls.stop(); }
     check_gameover = 0;
     loadingSavedGame = false;
     loadinglevel = 0;
@@ -24,6 +25,7 @@ class Title extends Phaser.Scene {
   }
 
   update() {
+
   }
 
   /* Helper functions  */

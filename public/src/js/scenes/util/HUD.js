@@ -28,7 +28,7 @@ class gameHUD extends Phaser.Scene {
 
   create() {
     // where the info is displayed
-    var topHUD = this.add.rectangle(0, 0, _width-32, 50, 0x161616).setStrokeStyle(4, 0xefc53f).setOrigin(0,0);
+    var topHUD = this.add.rectangle(0, 0, _width, 50, 0x161616).setStrokeStyle(4, 0xefc53f).setOrigin(0,0);
     topHUD.alpha = 0.5;
     homeButton(this);
     //this.button_Quit();
@@ -100,6 +100,7 @@ class gameHUD extends Phaser.Scene {
       timeElapsed -= currentData.currentGameTime;
     }
     if(timeElapsed === _timeLimit_s){ //600 = 10 minute
+      controls.stop();
       playerWon = calculateWinner(player, ai);
       if (playerWon === true) {
         if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
@@ -125,13 +126,13 @@ class gameHUD extends Phaser.Scene {
         }
       }
       if (getPopulation(currentPopulation, player) === 0 ) {  // if num of units is 0
-        playerWon = false; check_gameover = 1;
+        playerWon = false; controls.stop(); check_gameover = 1;
       } else if (player.buildings.length === 0) { // if num of buildings is 0
-        playerWon = false; check_gameover = 1;
+        playerWon = false; controls.stop(); check_gameover = 1;
       } else if (castleCount === 0){  // if num of castles is 0
-        playerWon = false; check_gameover = 1;
+        playerWon = false; controls.stop(); check_gameover = 1;
       } else if (aiCastleCount === 0) {
-          playerWon = true;
+          playerWon = true; controls.stop();
           if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
             this.button_goToLevelX(goto);
           } else if (currentLevel === 3 && playerWon === true) {
@@ -417,7 +418,7 @@ class gameHUD extends Phaser.Scene {
   button_goToLevelX(goto) {
     var lvlComplete_logo = this.add.sprite(_width*0.5, _height*0.5,'levelComplete');
 
-    var buttonToLevelX = this.add.sprite(_width*0.9,26,'button');
+    var buttonToLevelX = this.add.sprite(_width-buttonToLevelX.x,26,'button');
     var textLevelX = this.add.text(_width*0.9,25, "Next Level", {fontSize: '25px'}).setOrigin(0.5,0.5);
 
     buttonToLevelX.setInteractive({useHandCursor:true});

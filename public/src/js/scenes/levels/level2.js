@@ -51,10 +51,11 @@ class Level2 extends Phaser.Scene {
         up: W,
         down: S,
         acceleration: 0.001,
-        drag: 0.0005,
-        maxSpeed: 0.2
+        drag: 0.007,
+        maxSpeed: 0.1
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+    controls.start();
 
     // Random assignment of the AI kingdom
     value = Phaser.Math.Between(0, 4);  // Phaser's random number generator

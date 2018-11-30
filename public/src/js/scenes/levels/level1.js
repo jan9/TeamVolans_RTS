@@ -65,10 +65,12 @@ class Level1 extends Phaser.Scene {
         up: W,
         down: S,
         acceleration: 0.001,
-        drag: 0.0005,
-        maxSpeed: 0.2
+        drag: 0.007,
+        maxSpeed: 0.1
     };
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
+    //controls = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
+    controls.start();
 
     currentData = "";
     if (loadingSavedGame === true) {

@@ -1,9 +1,11 @@
+// Resizing reference: https://github.com/samme/phaser3-faq/wiki#how-do-i-scaleresize-the-game-canvas
 // global variables
 var _width = window.innerWidth;//screen.width;  // game screen width
-var _height = window.innerHeight - 30; //screen.height; // game screen height
+var _height = window.innerHeight; //screen.height; // game screen height
+
 
 // Phaser game config
-const config = {
+var config = {
   type: Phaser.AUTO,
   width: _width,
   height: _height,
@@ -12,8 +14,14 @@ const config = {
   physics: {
     default: 'arcade'
   },
-  scene:[Preload,Title,Selection,Load,Level1,Level2,Level3,Gameover,Instructions,gameHUD]
-}
+  scene:[Preload,Title,Selection,Load,Level1,Level2,Level3,Gameover,Instructions,gameHUD],
+  callbacks: {
+    postBoot: function (game) {
+      game.canvas.style.width = '100%';
+      game.canvas.style.height = '100%';
+    }
+  }
+};
 
-// create a game
-const game = new Phaser.Game(config);
+// create a game with resizing ability
+window.game = new Phaser.Game(config);
