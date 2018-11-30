@@ -63,8 +63,7 @@ class AIKingdom extends Kingdom{
 
   hardModeBonus(){
     if(this.isHardMode){
-      console.log("IS HARD MODE");
-
+      
       //ai has starting bonus if game is hardmode
       this.hardModeStartingBonus();
 

@@ -459,6 +459,7 @@ class gameHUD extends Phaser.Scene {
       if (player.gold >= archeryRangeInfo.cost) {
         this.removeSelected();
         buildButton_archeryRange.setTexture('buttonArcheryRange_selected');
+        build_signal = 1;
       } else if (archeryRangeInfo.cost > player.gold){ notEnoughGold = 1; }
     }, this);
 
