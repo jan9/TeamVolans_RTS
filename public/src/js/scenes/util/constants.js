@@ -24,7 +24,7 @@ const _options = [{"key": "T", "name": "travel"}, {"key": "B", "name": "build"},
                   {"key": "N", "name": "none"}, {"key": "H", "name": "heal"}];
 
 //let _timeLimit_ms = 15000, _timeLimit_s = 15;
-const _timeLimit_s = 15; //600
+const _timeLimit_s = 600; //600
 let _timeLimit_ms = _timeLimit_s*1000;
 
 //variables to hold the different unit/structure info
