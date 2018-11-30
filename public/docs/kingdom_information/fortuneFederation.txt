@@ -3,9 +3,9 @@
   "gold" : 400,
   "unitAmount": 10,
   "buildingAmount": 2,
-  "buildOrder": ["Miner", "Mine", "Barracks", "Miner", "Miner", "Town Center", "Swordsman",
+  "buildOrder": ["Miner", "Barracks", "Miner", "Miner", "Town Center", "Swordsman",
   "Miner", "Swordsman", "Swordsman", "Temple", "Priest", "Swordsman", "Villager",
-  "Swordsman", "Miner", "Priest", "Castle"],
+  "Swordsman", "Miner", "Priest", "Royalty", "Castle"],
   "units":{
     "swordsman": 3,
     "archer": 1,

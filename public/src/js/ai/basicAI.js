@@ -29,23 +29,23 @@ function royaltyAI(royal, kingdom){
   var castle = royal.isInCastle(kingdom);
   let currentBuildItem = kingdom.getCurrentBuild();
 
-  if(currentBuildItem === "Castle" && royal.isIdle()){
+  if(currentBuildItem === "Castle"){
     var structureInfo = kingdom.getStructureInfo(currentBuildItem);
 
       //only increase currentBuild if we have enough gold to make the structure
-      if(structureInfo.cost < kingdom.getGold()){
+      if(structureInfo.cost <= kingdom.getGold() && !kingdom.waitingOnIncrement){
         let coordinates = kingdom.findOpenArea(kingdom.startingX, kingdom.startingY);
-        royal.move(coordinates.x+32, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
-        kingdom.incrementBuildOrder();
+        royal.move(coordinates.x, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
+        kingdom.waitingOnIncrement = true;
       }
   }
   //if not in a castle, find a castle and start the bonus
-  else if(!castle){
+  else if(!castle && royal.isIdle()){
     let foundCastle = royal.findCastle(kingdom);
     royal.royalBonus(foundCastle, kingdom);
   }
   //if in a castle, start the bonus
-  else if(castle){
+  else if(castle && royal.isIdle()){
     royal.royalBonus(castle, kingdom);
   }
 }
@@ -66,10 +66,10 @@ function villagerAI(villager, kingdom){
 
       var structureInfo = kingdom.getStructureInfo(currentBuildItem);
       //only increase currentBuild if we have enough gold to make the structure
-      if(structureInfo.cost < kingdom.getGold()){
-        kingdom.incrementBuildOrder();
+      if(structureInfo.cost < kingdom.getGold() && !kingdom.waitingOnIncrement){
         let coordinates = kingdom.findOpenArea(kingdom.startingX, kingdom.startingY);
-        villager.move(coordinates.x+32, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
+        villager.move(coordinates.x, coordinates.y-32, kingdom.game, {"name": "Build", "kingdom": kingdom, "buildingType": currentBuildItem});
+        kingdom.waitingOnIncrement = true;
       }
 
     }

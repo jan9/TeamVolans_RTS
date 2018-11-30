@@ -6,6 +6,8 @@ class AIKingdom extends Kingdom{
       this.currentBuild = 0;
       this.isHardMode = isHardMode;
       this.receivedStartingBonus = false;
+      this.buildingRoyalty = false;
+      this.waitingOnIncrement = false;
 
       //attack group which attacks whoever is closest to the castle
       this.closestTargetAttackGroup = [];
@@ -48,6 +50,16 @@ class AIKingdom extends Kingdom{
       }
     }
 
+    hasRoyalty(){
+      let royaltyFound = false;
+
+      for(let unit of this.units){
+        if(unit.getType() === "Royalty"){
+          royaltyFound = true;
+        }
+      }
+      return royaltyFound;
+    }
     //checks to see whether or not the kingdom has 1 of the structure
     hasStructure(structure){
 
@@ -467,6 +479,7 @@ class AIKingdom extends Kingdom{
     }
   }
 
+
  incrementBuildOrder(){
    this.currentBuild++;
  }
@@ -490,6 +503,7 @@ class AIKingdom extends Kingdom{
     }
   }
 
+  //check to see if a priest is already in an attack group
   priestInGroup(groupArr){
     let inGroup = false;
     for(let member of groupArr){
@@ -503,6 +517,43 @@ class AIKingdom extends Kingdom{
 
   //updates the ai kingdom
     updateAIKingdom(enemyKingdom){
+
+    //  console.log(this.getCurrentBuild());
+    //  console.log(this.currentBuild);
+
+      //if the current build is a structure we already have (besides a castles), skip it
+      if(_buildingList.includes(this.getCurrentBuild())){
+        if(this.hasStructure(this.getCurrentBuild()) && this.getCurrentBuild() !== "Castle"){
+          this.incrementBuildOrder();
+        }
+      }
+
+      //if the current build order is a unit and that unit cannot be built
+      //(because the structure to build it doesn't exist) then skip that build order
+      if(_unitList.includes(this.getCurrentBuild())){
+        if(!this.canBuildUnit(this.getCurrentBuild())){
+          this.incrementBuildOrder();
+        }
+      }
+
+      //if the current build is a structure and we have no villagers, build a villager for 60 gold
+      if(_buildingList.includes(this.getCurrentBuild())){
+        if(!this.hasVillager() && this.getCurrentBuild() !== "Castle"){
+            this.buildEmergencyVillager();
+        }
+
+        //if the current build is castle and there are no royalty, add royalty before the castle in the build order array
+        if(!this.hasRoyalty() && this.getCurrentBuild() === "Castle" && !this.buildingRoyalty){
+          this.buildingRoyalty = true;
+          this.buildOrder.splice(this.currentBuild, 0, "Royalty");
+        }
+      }
+
+      //make sure to set this.buildingRoyalty to false when the kingdom has royalty
+      if(this.hasRoyalty()){
+        this.buildingRoyalty = false;
+      }
+
 
       if((!this.receivedStartingBonus) && this.isHardMode){
         this.receivedStartingBonus = true;
@@ -552,13 +603,5 @@ class AIKingdom extends Kingdom{
       }
 
       this.attackGroupAI();
-
-      //if the current build order is a unit and that unit cannot be built
-      //(because the structure to build it doesn't exist) then skip that build order
-      if(_unitList.includes(this.getCurrentBuild())){
-        if(!this.canBuildUnit(this.getCurrentBuild())){
-          this.incrementBuildOrder();
-        }
-      }
     }
 }

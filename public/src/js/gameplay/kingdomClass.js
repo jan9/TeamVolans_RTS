@@ -423,10 +423,12 @@ getStructureInfo(buildingType){
 
   //builds an emergency villager for 60 gold
   buildEmergencyVillager(){
-    let villagerInfo = this.getUnitInfo("Villager");
-    var unit = new Unit(villagerInfo, this.startingX+10, this.startingY+10, this.game, this.isPlayer(), this, villagerInfo.health);
-    this.units.push(unit);
-    this.removeGold(60);
+    if(this.gold >= 60){
+      let villagerInfo = this.getUnitInfo("Villager");
+      var unit = new Unit(villagerInfo, this.startingX+10, this.startingY+10, this.game, this.isPlayer(), this, villagerInfo.health);
+      this.units.push(unit);
+      this.removeGold(60);
+    }
   }
 
   receiveCastleGold(){
@@ -510,9 +512,7 @@ getStructureInfo(buildingType){
 
     //if the player wants to build, but has no villager, create a villager for 60 gold
     if(optionClicked === "build" && (!this.hasVillager())){
-        if(this.gold > 60){
           this.buildEmergencyVillager();
-        }
     }
   }
 }

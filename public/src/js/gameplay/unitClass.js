@@ -372,6 +372,12 @@ class Unit extends Phaser.GameObjects.Sprite{
         //takes the gold right away from the kingdom
         kingdom.removeGold(buildingInfo.cost);
 
+        //if this is an ai kingdom, then increment the build order
+        if(!this.isPlayerObj()){
+          kingdom.incrementBuildOrder();
+          kingdom.waitingOnIncrement = false;
+        }
+
         //builds the structure in 30 seconds
       var buildingEvent = game.time.addEvent({ delay: 30000, callback: this.finishBuildStructure,
         callbackScope: this, loop: false, args: [buildingInfo, kingdom, game, this.stateNum] });
