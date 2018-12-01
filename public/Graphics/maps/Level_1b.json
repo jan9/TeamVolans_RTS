@@ -53,8 +53,8 @@
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":866,
-                 "y":1279
+                 "x":868,
+                 "y":1245
                 }, 
                 {
                  "height":160,
@@ -65,7 +65,7 @@
                  "visible":true,
                  "width":160,
                  "x":578,
-                 "y":1437
+                 "y":1372
                 }, 
                 {
                  "height":128,
@@ -76,7 +76,7 @@
                  "visible":true,
                  "width":128,
                  "x":899,
-                 "y":1
+                 "y":61
                 }, 
                 {
                  "height":160,
@@ -87,12 +87,12 @@
                  "visible":true,
                  "width":160,
                  "x":641,
-                 "y":34
+                 "y":66
                 }, 
                 {
                  "height":96,
                  "id":6,
-                 "name":"Gold_1",
+                 "name":"Enemy_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -103,13 +103,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":1344,
-                 "y":35
+                 "x":1282,
+                 "y":62
                 }, 
                 {
                  "height":96,
                  "id":7,
-                 "name":"Gold_2",
+                 "name":"Enemy_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -120,30 +120,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":64,
-                 "y":33
-                }, 
-                {
-                 "height":96,
-                 "id":8,
-                 "name":"Gold_3",
-                 "properties":[
-                        {
-                         "name":"isMine",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":1055,
-                 "y":641
+                 "x":198,
+                 "y":95
                 }, 
                 {
                  "height":96,
                  "id":9,
-                 "name":"Gold_4",
+                 "name":"Player_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -160,7 +143,7 @@
                 {
                  "height":96,
                  "id":10,
-                 "name":"Gold_5",
+                 "name":"Player_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -182,8 +165,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":864,
-                 "y":1472
+                 "x":865,
+                 "y":1440
                 }, 
                 {
                  "height":32,
@@ -204,8 +187,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1055,
-                 "y":1535
+                 "x":1059,
+                 "y":1345
                 }, 
                 {
                  "height":32,
@@ -226,8 +209,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":992,
-                 "y":1535
+                 "x":994,
+                 "y":1503
                 }, 
                 {
                  "height":32,
@@ -237,8 +220,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":993,
-                 "y":1472
+                 "x":994,
+                 "y":1441
                 }, 
                 {
                  "height":32,
@@ -248,8 +231,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":930,
-                 "y":1536
+                 "x":931,
+                 "y":1505
                 }, 
                 {
                  "height":32,
@@ -260,7 +243,7 @@
                  "visible":true,
                  "width":32,
                  "x":864,
-                 "y":1537
+                 "y":1505
                 }, 
                 {
                  "height":32,
@@ -271,7 +254,7 @@
                  "visible":true,
                  "width":32,
                  "x":931,
-                 "y":1472
+                 "y":1440
                 }, 
                 {
                  "height":32,
@@ -303,8 +286,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1122,
-                 "y":1536
+                 "x":1123,
+                 "y":1346
                 }, 
                 {
                  "height":32,
@@ -314,8 +297,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1284,
-                 "y":161
+                 "x":1248,
+                 "y":191
                 }, 
                 {
                  "height":32,
@@ -325,8 +308,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1119,
-                 "y":33
+                 "x":1120,
+                 "y":97
                 }, 
                 {
                  "height":32,
@@ -336,8 +319,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1248,
-                 "y":31
+                 "x":1216,
+                 "y":97
                 }, 
                 {
                  "height":32,
@@ -347,8 +330,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":287,
-                 "y":31
+                 "x":355,
+                 "y":128
                 }, 
                 {
                  "height":32,
@@ -369,8 +352,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":929,
-                 "y":160
+                 "x":868,
+                 "y":193
                 }, 
                 {
                  "height":32,
@@ -380,8 +363,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":512,
-                 "y":95
+                 "x":515,
+                 "y":129
                 }, 
                 {
                  "height":32,
@@ -402,8 +385,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1121,
-                 "y":96
+                 "x":1058,
+                 "y":159
                 }, 
                 {
                  "height":32,
@@ -413,8 +396,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":386,
-                 "y":32
+                 "x":414,
+                 "y":67
                 }, 
                 {
                  "height":32,
@@ -424,8 +407,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":578,
-                 "y":33
+                 "x":576,
+                 "y":159
                 }, 
                 {
                  "height":32,
@@ -436,7 +419,51 @@
                  "visible":true,
                  "width":32,
                  "x":481,
-                 "y":32
+                 "y":65
+                }, 
+                {
+                 "height":32,
+                 "id":39,
+                 "name":"Enemy_Unit13",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":507,
+                 "y":210
+                }, 
+                {
+                 "height":32,
+                 "id":40,
+                 "name":"Enemy_Unit14",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":864,
+                 "y":258
+                }, 
+                {
+                 "height":32,
+                 "id":42,
+                 "name":"Player_Unit13",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1185,
+                 "y":1347
+                }, 
+                {
+                 "height":32,
+                 "id":43,
+                 "name":"Player_Unit14",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1183,
+                 "y":1412
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -444,8 +471,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":39,
+ "nextlayerid":9,
+ "nextobjectid":44,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.0",
@@ -454,7 +481,7 @@
         {
          "columns":12,
          "firstgid":1,
-         "image":"..\/..\/..\/..\/Graphics\/TileSets\/water.png",
+         "image":"..\/TileSets\/water.png",
          "imageheight":331,
          "imagewidth":410,
          "margin":0,
@@ -2440,7 +2467,7 @@
         {
          "columns":30,
          "firstgid":121,
-         "image":"..\/..\/..\/..\/Graphics\/TileSets\/Background5.png",
+         "image":"..\/TileSets\/Background5.png",
          "imageheight":960,
          "imagewidth":960,
          "margin":0,
@@ -3830,7 +3857,7 @@
         {
          "columns":30,
          "firstgid":1021,
-         "image":"..\/..\/..\/..\/Graphics\/TileSets\/Background2.png",
+         "image":"..\/TileSets\/Background2.png",
          "imageheight":960,
          "imagewidth":960,
          "margin":0,
@@ -5260,7 +5287,7 @@
         {
          "columns":30,
          "firstgid":1921,
-         "image":"..\/..\/..\/..\/Graphics\/TileSets\/Background1.png",
+         "image":"..\/TileSets\/Background1.png",
          "imageheight":960,
          "imagewidth":960,
          "margin":0,

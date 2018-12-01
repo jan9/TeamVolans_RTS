@@ -128,17 +128,17 @@ class gameHUD extends Phaser.Scene {
         }
       }
       if (getPopulation(currentPopulation, player) === 0 ) {  // if num of units is 0
-        controls.stop(); check_gameover = 1; //console.log("[HUD] #130");
+        controls.stop(); check_gameover = 1; aiGameOver = 1; //console.log("[HUD] #130");
       } else if (player.buildings.length === 0) { // if num of buildings is 0
-        controls.stop(); check_gameover = 1; //console.log("[HUD] #132");
+        controls.stop(); check_gameover = 1; aiGameOver = 1; //console.log("[HUD] #132");
       } else if (castleCount === 0){  // if num of castles is 0
-        controls.stop(); check_gameover = 1; //console.log("[HUD] #134");
+        controls.stop(); check_gameover = 1; aiGameOver = 1; //console.log("[HUD] #134");
       } else if (aiCastleCount === 0 || getPopulation(currentPopulation, ai) === 0) {
-        playerWon = true; controls.stop();
+        playerWon = true; controls.stop(); aiGameOver = 1;
         if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
-          this.button_goToLevelX(goto);
+          this.button_goToLevelX(goto); aiGameOver = 1;
         } else if (currentLevel === 3 && playerWon === true) {
-          this.button_endReached();
+          this.button_endReached(); aiGameOver = 1;
         }
       }
     }

@@ -12,6 +12,7 @@ class Level2 extends Phaser.Scene {
   }
 
   create() {
+
     //this.scene.sendToBack('Level1');
     this.map = this.add.tilemap('map2');
     var tileset =[this.map.addTilesetImage('BackgroundComplete', 'tiles')];
@@ -57,6 +58,8 @@ class Level2 extends Phaser.Scene {
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
     controls.start();
 
+    optionClicked = "none";
+    aiGameOver = 0;
     // Random assignment of the AI kingdom
     value = Phaser.Math.Between(0, 4);  // Phaser's random number generator
     opponentKingdom = kingdomPool[value];

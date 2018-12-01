@@ -30,29 +30,12 @@
         {
          "draworder":"topdown",
          "id":4,
-         "name":"ObjectLayer",
+         "name":"GameObjects",
          "objects":[
                 {
                  "height":96,
-                 "id":1,
-                 "name":"Gold_5",
-                 "properties":[
-                        {
-                         "name":"isMine",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":96,
-                 "x":231,
-                 "y":1410
-                }, 
-                {
-                 "height":96,
                  "id":4,
-                 "name":"Gold_4",
+                 "name":"Enemy_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -63,13 +46,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":2047,
-                 "y":54
+                 "x":1985,
+                 "y":128
                 }, 
                 {
                  "height":96,
                  "id":5,
-                 "name":"Gold_3",
+                 "name":"Enemy_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -80,13 +63,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":39,
-                 "y":254
+                 "x":167,
+                 "y":245
                 }, 
                 {
                  "height":96,
                  "id":6,
-                 "name":"Gold_2",
+                 "name":"Player_Gold_1",
                  "properties":[
                         {
                          "name":"isMine",
@@ -97,13 +80,13 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":24,
-                 "y":1956
+                 "x":391,
+                 "y":1980
                 }, 
                 {
                  "height":96,
                  "id":7,
-                 "name":"Gold_1",
+                 "name":"Player_Gold_2",
                  "properties":[
                         {
                          "name":"isMine",
@@ -114,8 +97,8 @@
                  "type":"",
                  "visible":true,
                  "width":96,
-                 "x":2180,
-                 "y":1547
+                 "x":2081,
+                 "y":1632
                 }, 
                 {
                  "height":160,
@@ -191,8 +174,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1858,
-                 "y":2112
+                 "x":1888,
+                 "y":1923
                 }, 
                 {
                  "height":32,
@@ -202,8 +185,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1697,
-                 "y":2112
+                 "x":1567,
+                 "y":1856
                 }, 
                 {
                  "height":32,
@@ -213,8 +196,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1570,
-                 "y":2112
+                 "x":1470,
+                 "y":1951
                 }, 
                 {
                  "height":32,
@@ -301,8 +284,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":830,
-                 "y":33
+                 "x":799,
+                 "y":288
                 }, 
                 {
                  "height":32,
@@ -334,8 +317,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":384,
-                 "y":28
+                 "x":255,
+                 "y":191
                 }, 
                 {
                  "height":32,
@@ -424,6 +407,50 @@
                  "width":32,
                  "x":608,
                  "y":63
+                }, 
+                {
+                 "height":32,
+                 "id":35,
+                 "name":"Player_Unit13",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1895,
+                 "y":2121
+                }, 
+                {
+                 "height":32,
+                 "id":36,
+                 "name":"Player_Unit14",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1534,
+                 "y":2076
+                }, 
+                {
+                 "height":32,
+                 "id":37,
+                 "name":"Enemy_Unit13",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":356,
+                 "y":318
+                }, 
+                {
+                 "height":32,
+                 "id":38,
+                 "name":"Enemy_Unit14",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":446,
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -445,7 +472,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":35,
+ "nextobjectid":39,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.0",
@@ -454,7 +481,7 @@
         {
          "columns":30,
          "firstgid":1,
-         "image":"..\/..\/..\/..\/Graphics\/TileSets\/BackgroundComplete.png",
+         "image":"..\/TileSets\/BackgroundComplete.png",
          "imageheight":3392,
          "imagewidth":960,
          "margin":0,

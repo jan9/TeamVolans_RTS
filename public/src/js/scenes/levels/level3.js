@@ -37,7 +37,6 @@ class Level3 extends Phaser.Scene {
     //getMiniMap(this, -160, 260, 375, 375, 0.065);
 
 
-
     this.input.on('gameobjectdown', onObjectClicked, this.scene);
 
     var W = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -58,6 +57,8 @@ class Level3 extends Phaser.Scene {
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
     controls.start();
 
+    optionClicked = "none";
+    aiGameOver = 0;
     // Random assignment of the AI kingdom
     value = Phaser.Math.Between(0, 4);  // Phaser's random number generator
     opponentKingdom = kingdomPool[value];

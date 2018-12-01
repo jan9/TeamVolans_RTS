@@ -11,6 +11,7 @@ var controls;
 var selectedUnit;
 var aiObjectSelected;
 var dragSelect_Rect;
+var aiGameOver = 0;
 class Level1 extends Phaser.Scene {
 
   constructor() {

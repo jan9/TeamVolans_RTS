@@ -493,6 +493,8 @@ class Unit extends Phaser.GameObjects.Sprite{
         else if (this.type === "Miner"){
           kingdom.addGold(12);
         }
+
+        this.mine(kingdom, kingdom.game);
       }
     }
   }
@@ -588,8 +590,11 @@ class Unit extends Phaser.GameObjects.Sprite{
 
   playerAttack(game, enemyObj, i){
     if(this.checkWithinRange(enemyObj)){
-      this.playerStopMovement();
+      if(this.getState() === "Move"){
+        this.playerStopMovement();
+      }
       this.attackEnemy(enemyObj);
+
     }
     else{
       let coordinates = spiralLocation(i);
@@ -630,8 +635,10 @@ class Unit extends Phaser.GameObjects.Sprite{
     let closestInjuredUnit = this.closestInjured(unitsList);
     if(closestInjuredUnit){
       if(distance(closestInjuredUnit.x, closestInjuredUnit.y, this.x, this.y) < radius){
-        if(this.checkWithinRange(closestInjuredUnit)){
-          this.playerStopMovement();
+        if(this.checkWithinRange(closestInjuredUnit) && this.getState() === "Move"){
+          if(this.getState() === "Move"){
+            this.playerStopMovement();
+          }
           this.healUnit(closestInjuredUnit);
         }
         else{
@@ -701,7 +708,7 @@ class Unit extends Phaser.GameObjects.Sprite{
       this.unitAnimations("Action");
       //every 30 seconds the royal adds to the health of the castle
       var royalEvent = kingdom.game.time.addEvent({ delay: 30*1000, callback: this.endRoyalBonus,
-        callbackScope: this, loop: true, args: [castle, kingdom, this.stateNum] });
+        callbackScope: this, loop: false, args: [castle, kingdom, this.stateNum] });
       }
   }
 
@@ -709,6 +716,8 @@ class Unit extends Phaser.GameObjects.Sprite{
 
     if(this.isInCastle(kingdom) === castle && this.getState() === "Train" && this.stateNum == originalStateNum){
       castle.updateHealth(5);
+      this.startRoyalBonus(castle, kingdom);
     }
+
   }
 }

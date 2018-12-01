@@ -68,6 +68,10 @@ class Structure extends Phaser.GameObjects.Sprite{
     if (this.health < 0) {
       this.health = 0;
     }
+    //cap castle health at 250
+    else if(this.health > 250){
+      this.health = 250;
+    }
     this.updateHealthBar();
   }
 

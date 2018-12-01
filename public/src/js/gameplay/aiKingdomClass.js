@@ -8,6 +8,7 @@ class AIKingdom extends Kingdom{
       this.receivedStartingBonus = false;
       this.buildingRoyalty = false;
       this.waitingOnIncrement = false;
+      this.startAttack = false;
 
       //attack group which attacks whoever is closest to the castle
       this.closestTargetAttackGroup = [];
@@ -34,8 +35,15 @@ class AIKingdom extends Kingdom{
       this.closestEnemyUtilityObj;
 
       this.addStartingUnitsToGroup();
+
+      //give the player 10 seconds before the ai units start to attack
+      var attackGroupEvent = game.time.addEvent({ delay: 1000 * 10, callback: this.startAIAttack,
+        callbackScope: this, loop: false, args: [] });
     }
 
+    startAIAttack(){
+      this.startAttack = true;
+    }
     //checks to see whether the kingdom can build the unit (aka has the necessary structure built)
     canBuildUnit(unit){
       return this.hasStructure(unit.buildingProduced);
@@ -108,8 +116,6 @@ class AIKingdom extends Kingdom{
   }
 
   hardModeMiddleBonus(){
-
-    console.log("MIDDLE BONUS RECEIVED");
 
     //gets a bonus of one of each unit type
     for(let unitName of _unitList){
@@ -518,90 +524,100 @@ class AIKingdom extends Kingdom{
   //updates the ai kingdom
     updateAIKingdom(enemyKingdom){
 
-    //  console.log(this.getCurrentBuild());
-    //  console.log(this.currentBuild);
+      if(aiGameOver == 0){
 
-      //if the current build is a structure we already have (besides a castles), skip it
-      if(_buildingList.includes(this.getCurrentBuild())){
-        if(this.hasStructure(this.getCurrentBuild()) && this.getCurrentBuild() !== "Castle"){
-          this.incrementBuildOrder();
-        }
-      }
+      //  console.log(this.getCurrentBuild());
+      //  console.log(this.currentBuild);
 
-      //if the current build order is a unit and that unit cannot be built
-      //(because the structure to build it doesn't exist) then skip that build order
-      if(_unitList.includes(this.getCurrentBuild())){
-        if(!this.canBuildUnit(this.getCurrentBuild())){
-          this.incrementBuildOrder();
-        }
-      }
-
-      //if the current build is a structure and we have no villagers, build a villager for 60 gold
-      if(_buildingList.includes(this.getCurrentBuild())){
-        if(!this.hasVillager() && this.getCurrentBuild() !== "Castle"){
-            this.buildEmergencyVillager();
+        //if the current build is a structure we already have (besides a castles), skip it
+        if(_buildingList.includes(this.getCurrentBuild())){
+          if(this.hasStructure(this.getCurrentBuild()) && this.getCurrentBuild() !== "Castle"){
+            this.incrementBuildOrder();
+          }
         }
 
-        //if the current build is castle and there are no royalty, add royalty before the castle in the build order array
-        if(!this.hasRoyalty() && this.getCurrentBuild() === "Castle" && !this.buildingRoyalty){
-          this.buildingRoyalty = true;
-          this.buildOrder.splice(this.currentBuild, 0, "Royalty");
-        }
-      }
-
-      //make sure to set this.buildingRoyalty to false when the kingdom has royalty
-      if(this.hasRoyalty()){
-        this.buildingRoyalty = false;
-      }
-
-
-      if((!this.receivedStartingBonus) && this.isHardMode){
-        this.receivedStartingBonus = true;
-        this.hardModeBonus();
-      }
-
-      //resets the buildOrder when the end is reached
-      if(this.currentBuild >= this.buildOrder.length){
-        this.currentBuild = 0;
-      }
-
-      //have the miners mine
-      for(var i = 0; i < this.units.length; i++){
-        var currentUnit = this.units[i];
-
-        //have the miner mine
-        if(currentUnit.getType() === "Miner"){
-          minerAI(currentUnit, this);
+        //if the current build order is a unit and that unit cannot be built
+        //(because the structure to build it doesn't exist) then skip that build order
+        if(_unitList.includes(this.getCurrentBuild())){
+          if(!this.canBuildUnit(this.getCurrentBuild())){
+            this.incrementBuildOrder();
+          }
         }
 
-        //if the unit is not already in a group, add it to one
-        else if((currentUnit.getType()==="Swordsman"
-        ||currentUnit.getType()==="Archer"
-        ||currentUnit.getType()==="Catapult"
-        ||currentUnit.getType() === "Priest") && !this.unitInGroup(currentUnit)){
-            this.findBestFitGroup(currentUnit);
-        }
-
-        //have the Villager build structures
-        else if(currentUnit.getType() === "Villager"){
-            villagerAI(currentUnit, this);
+        //if the current build is a structure and we have no villagers, build a villager for 60 gold
+        if(_buildingList.includes(this.getCurrentBuild())){
+          if(!this.hasVillager() && this.getCurrentBuild() !== "Castle"){
+              this.buildEmergencyVillager();
           }
 
-        //have royalty go to castles and support them
-        else if(currentUnit.getType() === "Royalty"){
-          royaltyAI(currentUnit, this);
+          //if the current build is castle and there are no royalty, add royalty before the castle in the build order array
+          if(!this.hasRoyalty() && this.getCurrentBuild() === "Castle" && !this.buildingRoyalty){
+            this.buildingRoyalty = true;
+            this.buildOrder.splice(this.currentBuild, 0, "Royalty");
+          }
+        }
+
+        //make sure to set this.buildingRoyalty to false when the kingdom has royalty
+        if(this.hasRoyalty()){
+          this.buildingRoyalty = false;
+        }
+
+
+        if((!this.receivedStartingBonus) && this.isHardMode){
+          this.receivedStartingBonus = true;
+          this.hardModeBonus();
+        }
+
+        //resets the buildOrder when the end is reached
+        if(this.currentBuild >= this.buildOrder.length){
+          this.currentBuild = 0;
+        }
+
+        //have the miners mine
+        for(var i = 0; i < this.units.length; i++){
+          var currentUnit = this.units[i];
+
+          //have the miner mine
+          if(currentUnit.getType() === "Miner"){
+            minerAI(currentUnit, this);
+          }
+
+          //if the unit is not already in a group, add it to one
+          else if((currentUnit.getType()==="Swordsman"
+          ||currentUnit.getType()==="Archer"
+          ||currentUnit.getType()==="Catapult"
+          ||currentUnit.getType() === "Priest") && !this.unitInGroup(currentUnit)){
+              this.findBestFitGroup(currentUnit);
+          }
+
+          //have the Villager build structures
+          else if(currentUnit.getType() === "Villager"){
+              villagerAI(currentUnit, this);
+            }
+
+          //have royalty go to castles and support them
+          else if(currentUnit.getType() === "Royalty"){
+            royaltyAI(currentUnit, this);
+          }
+        }
+
+
+        //goes through the list of buildings and if the building is able to make
+        //the current item in the build order and is currently idle,
+        //then build the unit
+        for( var i = 0; i < this.buildings.length; i++){
+          var currentBuilding = this.buildings[i];
+            structureAI(currentBuilding, this);
+        }
+
+        if(this.startAttack){
+          this.attackGroupAI();
         }
       }
-
-
-      //goes through the list of buildings and if the building is able to make
-      //the current item in the build order and is currently idle,
-      //then build the unit
-      for( var i = 0; i < this.buildings.length; i++){
-        var currentBuilding = this.buildings[i];
-          structureAI(currentBuilding, this);
+      else{
+        for(let unit of this.units){
+          unit.playerStopMovement();
+        }
       }
-
-      this.attackGroupAI();
     }
 }
