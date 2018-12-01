@@ -72,6 +72,9 @@ class Level1 extends Phaser.Scene {
     controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
     //controls = new Phaser.Cameras.Controls.FixedKeyControl(controlConfig);
     controls.start();
+    aiGameOver = 0;
+    optionClicked = "none";
+
 
     currentData = "";
     if (loadingSavedGame === true) {
