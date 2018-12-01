@@ -101,7 +101,7 @@ class gameHUD extends Phaser.Scene {
     }
     if(timeElapsed === (_timeLimit_ms/1000)){ //600 = 10 minute
       timeElapsed = 0;
-      controls.stop();
+
       playerWon = calculateWinner(player, ai);
       if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
         this.button_goToLevelX(goto);
@@ -128,19 +128,76 @@ class gameHUD extends Phaser.Scene {
         }
       }
       if (getPopulation(currentPopulation, player) === 0 ) {  // if num of units is 0
-        controls.stop(); check_gameover = 1; aiGameOver = 1; //console.log("[HUD] #130");
+         this.stopGameFinished();
+         check_gameover = 1;
+         aiGameOver = 1; //console.log("[HUD] #130");
       } else if (player.buildings.length === 0) { // if num of buildings is 0
-        controls.stop(); check_gameover = 1; aiGameOver = 1; //console.log("[HUD] #132");
+         this.stopGameFinished();
+         check_gameover = 1;
+         aiGameOver = 1; //console.log("[HUD] #132");
       } else if (castleCount === 0){  // if num of castles is 0
-        controls.stop(); check_gameover = 1; aiGameOver = 1; //console.log("[HUD] #134");
+         this.stopGameFinished();
+         check_gameover = 1;
+         aiGameOver = 1; //console.log("[HUD] #134");
       } else if (aiCastleCount === 0 || getPopulation(currentPopulation, ai) === 0) {
-        playerWon = true; controls.stop(); aiGameOver = 1;
+        playerWon = true;
+        aiGameOver = 1;
+        this.stopGameFinished();
         if ((currentLevel === 1 && playerWon === true)|| (currentLevel === 2&& playerWon === true)){
-          this.button_goToLevelX(goto); aiGameOver = 1;
+          this.button_goToLevelX(goto);
+          aiGameOver = 1;
+          this.stopGameFinished();
         } else if (currentLevel === 3 && playerWon === true) {
-          this.button_endReached(); aiGameOver = 1;
+          this.button_endReached();
+          aiGameOver = 1;
+          this.stopGameFinished();
         }
       }
+    }
+  }
+
+// stops the timer
+  stopGameFinished(){
+    this.scene.pause('Level'+currentLevel);
+    //timer.paused = true;
+    //var temp = player.gold; player.gold = temp;
+    //var temp_ai = ai.gold; ai.gold = temp_ai;
+    //timer.reset({delay: 0, elapsed: 0 });
+    //timer.remove(onTenMinutesUp);
+  }
+
+  button_endReached() {
+    var youWin_logo = this.add.sprite(_width*0.5, _height*0.5,'win');
+    var buttonToReturn = this.add.sprite(_width*0.9,26,'button');
+
+    var buttonToMainMenu= this.add.sprite(_width*0.821,0,'mainmenuButton').setOrigin(0,0).setDisplaySize(200,50);
+    buttonToMainMenu.setInteractive({useHandCursor:true});
+    if(goto != ""){
+      buttonToMainMenu.on('pointerdown', function(pointer) {
+        this.scene.stop('Level'+ currentLevel.toString());
+        loadingSavedGame = false;
+        this.scene.resume('Level3');
+        _timeLimit_ms=_timeLimit_s*1000; // for testing
+        backToMainMenu = 1;
+        this.scene.start('Title');
+      }, this);
+    }
+  }
+
+  button_goToLevelX(goto) {
+    var lvlComplete_logo = this.add.sprite(_width*0.5, _height*0.5,'levelComplete');
+
+    var buttonToLevelX = this.add.sprite(_width*0.92,26,'button');
+    var textLevelX = this.add.text(_width*0.92,25, "Next Level", {fontSize: '25px'}).setOrigin(0.5,0.5);
+
+    buttonToLevelX.setInteractive({useHandCursor:true});
+    if(goto != ""){
+      buttonToLevelX.on('pointerdown', function(pointer) {
+        this.scene.stop('Level'+ currentLevel.toString());
+        loadingSavedGame = false;
+        _timeLimit_ms = _timeLimit_s*1000;
+        this.scene.start(goto);
+      }, this);
     }
   }
 
@@ -238,7 +295,8 @@ class gameHUD extends Phaser.Scene {
             visible: player.buildings[i].visible,
             width: player.buildings[i].width,
             x: player.buildings[i].x,
-            y: player.buildings[i].y
+            y: player.buildings[i].y,
+            health: player.buildings[i].getHealth()
           }
         }
       }
@@ -283,7 +341,8 @@ class gameHUD extends Phaser.Scene {
           visible: ai.buildings[i].visible,
           width: ai.buildings[i].width,
           x: ai.buildings[i].x,
-          y: ai.buildings[i].y
+          y: ai.buildings[i].y,
+          health: ai.buildings[i].getHealth()
         }
       }
 
@@ -397,44 +456,9 @@ class gameHUD extends Phaser.Scene {
       }, this);
   }
 
-  button_endReached() {
-    var youWin_logo = this.add.sprite(_width*0.5, _height*0.5,'win');
-    var buttonToReturn = this.add.sprite(_width*0.9,26,'button');
-
-    var buttonToMainMenu= this.add.sprite(_width*0.821,0,'mainmenuButton').setOrigin(0,0).setDisplaySize(200,50);
-    buttonToMainMenu.setInteractive({useHandCursor:true});
-    if(goto != ""){
-      buttonToMainMenu.on('pointerdown', function(pointer) {
-        this.scene.stop('Level'+ currentLevel.toString());
-        loadingSavedGame = false;
-        _timeLimit_ms=_timeLimit_s*1000; // for testing
-        timer.reset({delay: 0, elapsed: 0 }); timer.remove(onTenMinutesUp);
-        backToMainMenu = 1;
-        this.scene.start('Title');
-      }, this);
-    }
-  }
-
   removeSelected(){
     for(let button of buttons){
       button.setTexture('button'+button.name);
-    }
-  }
-
-  button_goToLevelX(goto) {
-    var lvlComplete_logo = this.add.sprite(_width*0.5, _height*0.5,'levelComplete');
-
-    var buttonToLevelX = this.add.sprite(_width*0.92,26,'button');
-    var textLevelX = this.add.text(_width*0.92,25, "Next Level", {fontSize: '25px'}).setOrigin(0.5,0.5);
-
-    buttonToLevelX.setInteractive({useHandCursor:true});
-    if(goto != ""){
-      buttonToLevelX.on('pointerdown', function(pointer) {
-        this.scene.stop('Level'+ currentLevel.toString());
-        loadingSavedGame = false;
-        _timeLimit_ms = _timeLimit_s*1000;
-        this.scene.start(goto);
-      }, this);
     }
   }
 

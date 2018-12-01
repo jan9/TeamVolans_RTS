@@ -13,7 +13,7 @@ class Level2 extends Phaser.Scene {
 
   create() {
 
-    //this.scene.sendToBack('Level1');
+    this.scene.sendToBack('Level1');
     this.map = this.add.tilemap('map2');
     var tileset =[this.map.addTilesetImage('BackgroundComplete', 'tiles')];
     this.map.createDynamicLayer("Layer1", tileset);

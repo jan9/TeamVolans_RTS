@@ -22,7 +22,7 @@ class Level1 extends Phaser.Scene {
   }
 
   create() {
-    //this.scene.sendToBack('Load');
+    this.scene.sendToBack('Load');
     this.map = this.add.tilemap('map');
     var tileset =[this.map.addTilesetImage('Background1', 'tiles1'),
     this.map.addTilesetImage('Background2', 'tiles2'),
@@ -157,13 +157,13 @@ class Level1 extends Phaser.Scene {
       _timeLimit_ms = temp*1000;
       //console.log(_timeLimit_s, _timeLimit_ms);
     }
+
     // set up a 10 minute timer
     if (timer) {
       timer.remove(onTenMinutesUp);
       timer.reset({delay: 0, elapsed: 0 });
     }
     timer = this.time.delayedCall(_timeLimit_ms, onTenMinutesUp, [], this);
-
 
     console.log('[Level1] create() complete');
   }

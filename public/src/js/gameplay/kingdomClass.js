@@ -215,8 +215,8 @@ getStructureInfo(buildingType){
                  x: keys[i].x,
                  y: keys[i].y
                }
-
-            var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this);
+            var structHealth = keys[i].health;
+            var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this, structHealth);
 
              //set the statting x and y to the castle's position
              if(structure.type === "Castle"){
@@ -244,7 +244,8 @@ getStructureInfo(buildingType){
                x: keys[i].x,
                y: keys[i].y
             }
-             var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this);
+            var structHealth = keys[i].health;
+             var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this, structHealth);
 
            //set the statting x and y to the castle's position
            if(structure.type === "Castle"){
@@ -271,7 +272,7 @@ getStructureInfo(buildingType){
            this.buildingsAmount++;
 
           structureCoords = this.findStartingPosition(buildingInfo, this.buildingsAmount, startingObjectsList);
-           var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this);
+           var structure = new Structure(buildingInfo, structureCoords.x, structureCoords.y, this.game, this.isPlayer(), this, 0);
 
            //add the structure to the group
           // this.add(structure);

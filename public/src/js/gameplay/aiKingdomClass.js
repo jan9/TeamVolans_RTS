@@ -107,7 +107,7 @@ class AIKingdom extends Kingdom{
       }
       else{
         let structCoords = this.findOpenArea(this.startingX, this.startingY);
-        let structure = new Structure(this.getStructureInfo(currentBuildOrder), structCoords.x, structCoords.y, this.game);
+        let structure = new Structure(this.getStructureInfo(currentBuildOrder), structCoords.x, structCoords.y, this.game, this.isPlayer(), this, 0);
         this.buildings.push(structure);
         this.buildingsAmount++;
       }

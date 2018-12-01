@@ -1,10 +1,11 @@
 class Structure extends Phaser.GameObjects.Sprite{
 
-  constructor(structureInformation, xCoord, yCoord, scene, playerCheck, kingdom) {
+  constructor(structureInformation, xCoord, yCoord, scene, playerCheck, kingdom, structHealth) {
     super(scene, xCoord, yCoord, structureInformation.texture);
     this.type = structureInformation.type;
+    if(structHealth != 0) { this.health = structHealth; }
+    else if (structHealth === 0 ) {this.health = structureInformation.health;}
     this.baseType = structureInformation.baseType;
-    this.health = structureInformation.health;
     this.cost = structureInformation.cost;
     this.unitProduced = structureInformation.unitProduced;
     this.state = "Idle";
@@ -16,6 +17,7 @@ class Structure extends Phaser.GameObjects.Sprite{
     this.maxHealth = structureInformation.health; // store max health of a unit
 
     this.bar = new Phaser.GameObjects.Sprite(scene, xCoord, yCoord-80, 'healthBar100');
+    if(loadingSavedGame === true) { this.updateHealthBar(); }
 
     scene.add.existing(this.bar);
     this.bar.setSize(16,16);

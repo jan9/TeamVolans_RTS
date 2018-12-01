@@ -402,7 +402,7 @@ class Unit extends Phaser.GameObjects.Sprite{
       }
 
 
-      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, this.isPlayerObj(), this);
+      var structure = new Structure(buildingInfo, coordinates.x, coordinates.y, game, this.isPlayerObj(), this, 0);
 
       //add the structure to the Group
       kingdom.add(structure);
