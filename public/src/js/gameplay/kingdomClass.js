@@ -80,7 +80,7 @@ class Kingdom extends Phaser.Physics.Arcade.Group{
 
 getStructureInfo(buildingType){
 
-  var buildingTypeLower =buildingType.toLowerCase();
+  var buildingTypeLower = buildingType.toLowerCase();
   var buildingInfo;
 
   switch(buildingTypeLower) {
@@ -91,6 +91,9 @@ getStructureInfo(buildingType){
       buildingInfo= castleInfo;
       break;
     case "archery_range":
+      buildingInfo=archeryRangeInfo;
+      break;
+    case "archery range":
       buildingInfo=archeryRangeInfo;
       break;
     case "machinery":

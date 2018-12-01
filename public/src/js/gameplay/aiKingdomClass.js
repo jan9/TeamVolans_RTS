@@ -218,12 +218,13 @@ class AIKingdom extends Kingdom{
 
     let closeDistance = false;
 
+
     //If the group is close to the unit or the castle, have the unit join the group
-    if(distance((unitToCheck.x, unitToCheck.y, group[0].x, group[0].y) <= 200 || distance(this.startingX, this.startingY, group[0].x, group[0].y) <= 200)){
+    if((distance(unitToCheck.x, unitToCheck.y, group[0].x, group[0].y) <= 200) || (distance(this.startingX, this.startingY, group[0].x, group[0].y) <= 200)){
       closeDistance = true;
     }
 
-    return closeDistance
+    return closeDistance;
   }
 
 
@@ -316,19 +317,6 @@ class AIKingdom extends Kingdom{
     if(!this.closestEnemyAttackUnit){
       this.closestEnemyAttackUnit = this.closestEnemyUtilityObj;
     }
-
-
-/*
-    console.log("Attack group:");
-    console.log(this.closestTargetAttackGroup);
-    console.log("SupportGroup:");
-    console.log(this.supportAttackGroup);
-    console.log("Utility group:");
-    console.log(this.utilityTargetsAttackGroup);
-    console.log("Castle group:");
-    console.log(this.castleAttackGroup);
-    */
-
   };
 
   //find the closest enemy's castle
@@ -526,6 +514,7 @@ class AIKingdom extends Kingdom{
 
       if(aiGameOver == 0){
 
+
       //  console.log(this.getCurrentBuild());
       //  console.log(this.currentBuild);
 
@@ -539,8 +528,10 @@ class AIKingdom extends Kingdom{
         //if the current build order is a unit and that unit cannot be built
         //(because the structure to build it doesn't exist) then skip that build order
         if(_unitList.includes(this.getCurrentBuild())){
-          if(!this.canBuildUnit(this.getCurrentBuild())){
-            this.incrementBuildOrder();
+
+          let unitInformation = this.getUnitInfo(this.getCurrentBuild());
+          if(!(this.canBuildUnit(unitInformation))){
+            this.buildOrder.splice(this.currentBuild, 0, unitInformation.buildingProduced);
           }
         }
 
