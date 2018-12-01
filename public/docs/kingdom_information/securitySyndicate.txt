@@ -4,7 +4,7 @@
   "unitAmount": 10,
   "buildingAmount": 3,
   "buildOrder": ["Mine", "Miner", "Barracks", "Miner", "Miner", "Swordsman",
-  "Miner", "Priest", "Swordsman", "Royalty", "Swordsman", "Town Center",
+  "Miner", "Temple", "Priest", "Swordsman", "Royalty", "Swordsman", "Town Center",
   "Villager", "Royalty", "Swordsman", "Priest", "Castle"],
   "units":{
     "swordsman": 3,
